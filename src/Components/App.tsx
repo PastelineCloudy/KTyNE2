@@ -3,6 +3,7 @@ import fullModListRaw from "../fullList(Apr 13 2025).json";
 import { useCallback, useState } from "react";
 import ModSearch from "./ModSearch";
 import Manuals from "./Manuals";
+import Notepad from "./Notepad";
 
 const fullModList: Map<string, string[]> = new Map(
   Object.entries(fullModListRaw)
@@ -36,7 +37,7 @@ function App() {
     []
   );
 
-  const handleOpenMod = (modName: string) => {
+  const handleOpenMod = (modName: string, changeCurrent: boolean = true) => {
     const modManual = getModManual(modName);
     if (!modManual) return;
 
@@ -44,7 +45,7 @@ function App() {
       modName,
       Array.from(openManuals.keys())
     );
-    setCurrentManual(finalModName);
+    if (changeCurrent) setCurrentManual(finalModName);
     setOpenManuals(
       new Map<string, string>(openManuals).set(finalModName, modManual)
     );
@@ -52,7 +53,7 @@ function App() {
 
   return (
     <>
-      <div className="h-screen flex flex-col">
+      <div className="h-screen flex flex-col font-[special-elite]">
         <header className="h-[60px] bg-jet">
           <ModSearch handleOpenMod={handleOpenMod} />
         </header>
@@ -64,7 +65,7 @@ function App() {
             handleModClose={memoizedHandleModClose}
           />
           <Manuals currentManual={currentManual} openManuals={openManuals} />
-          <div className="w-[600px] bg-amber-400">Notepad</div>
+          <Notepad />
         </main>
       </div>
     </>

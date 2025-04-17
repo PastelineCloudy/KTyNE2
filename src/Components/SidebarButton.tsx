@@ -1,6 +1,6 @@
 import { memo } from "react";
 import { useState } from "react";
-import { CircleMinus } from "lucide-react";
+import { SquareX } from "lucide-react";
 
 const SidebarButton = ({
   modName,
@@ -22,10 +22,10 @@ const SidebarButton = ({
         isCurrentManual ? "bg-gray-200" : ""
       }`}
     >
-      <CircleMinus
+      <SquareX
         size={20}
         onClick={() => handleModClose(modName, isCurrentManual)}
-        className="hover:text-red-500 self-end"
+        className="hover:text-red-500"
       />
       <button
         className="w-full text-left text-1 text-nowrap text-ellipsis overflow-hidden cursor-pointer"
