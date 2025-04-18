@@ -14,6 +14,7 @@ const ModSearch = ({
   const [filteredMods, setFilteredMods] = useState<string[]>(modNames);
 
   let lastHovered: string = "";
+  console.log(modNames);
 
   const handleSearchInput = (newQuery: string) => {
     const newFilteredMods = getFilteredMods(modNames, newQuery);

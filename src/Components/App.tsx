@@ -5,7 +5,6 @@ import ModSearch from "./ModSearch";
 import Manuals from "./Manuals";
 import Notepad from "./Notepad";
 import EdgeworkModal from "./EdgeworkModal";
-import EdgeworkButton from "./EdgeworkButton";
 import Calculator from "./Calculator";
 import HeaderButton from "./HeaderButton";
 
@@ -61,10 +60,10 @@ function App() {
   };
 
   return (
-    <div className="h-screen w-screen flex flex-col font-[special-elite]">
+    <div className="h-screen w-screen flex flex-col font-[special-elite] relative overflow-hidden">
       <header className="min-h-[75px] bg-jet flex items-center">
         <ModSearch
-          modNames={Object.keys(fullModList).sort()}
+          modNames={Array.from(fullModList.keys()).sort()}
           handleOpenMod={handleOpenMod}
         />
         <div className="flex gap-2">
@@ -86,7 +85,7 @@ function App() {
           />
         </div>
       </header>
-      <main className="flex h-[calc(100vh-60px)] bg-(--color-bg) relative">
+      <main className="flex h-[calc(100vh-60px)] bg-(--color-bg)">
         <Sidebar
           openModList={Array.from(openManuals.keys()).sort()}
           currentManual={currentManual}
@@ -97,7 +96,7 @@ function App() {
         <Notepad />
       </main>
 
-      {calcIsOpen && <Calculator />}
+      <Calculator />
     </div>
   );
 }

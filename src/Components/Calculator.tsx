@@ -1,26 +1,25 @@
-import { RefObject, useRef, useState } from "react";
+import { useState } from "react";
 import { evaluate } from "mathjs";
-import Draggable from "react-draggable";
+import { Rnd } from "react-rnd";
 
 const Calculator = () => {
   const [calcInput, setCalcInput] = useState<string>("");
-  const calcRef = useRef<HTMLDivElement>(null);
+  const [draggingDisabled, setDraggingDisabled] = useState<boolean>(false);
 
   const output: EvalRes = evalInput(calcInput);
+
   return (
-    <Draggable
-      nodeRef={calcRef as RefObject<HTMLDivElement>}
+    <Rnd
+      minWidth={260}
+      minHeight={130}
+      style={{ display: "flex" }}
       bounds="parent"
-      cancel="textarea"
+      disableDragging={draggingDisabled}
     >
       <div
-        ref={calcRef}
-        className="
-          absolute right-4 bottom-4
-          min-w-[120px] w-[250px] min-h-[180px] h-[180px]
-        bg-jet
+        className="bg-jet
         border-2 border-bg rounded-2 p-[10px] text-bg
-        flex flex-col"
+        flex flex-col grow"
       >
         <div className="">Text-Field Calculator</div>
         <textarea
@@ -31,11 +30,16 @@ const Calculator = () => {
           autoCorrect="off"
           spellCheck={false}
           value={calcInput}
-          onMouseEnter={(e) => e.stopPropagation()}
+          onMouseEnter={() => setDraggingDisabled(true)}
+          onMouseLeave={() => setDraggingDisabled(false)}
           onChange={(e) => setCalcInput(e.target.value)}
-          className="resize-none bg-bg mb-2 text-jet grow p-2"
+          className="resize-none bg-bg mb-2 text-jet grow"
         ></textarea>
-        <div>
+        <div
+          className="w-fit pr-10"
+          onMouseEnter={() => setDraggingDisabled(true)}
+          onMouseLeave={() => setDraggingDisabled(false)}
+        >
           Output:{" "}
           {
             <span
@@ -46,7 +50,7 @@ const Calculator = () => {
           }
         </div>
       </div>
-    </Draggable>
+    </Rnd>
   );
 };
 
