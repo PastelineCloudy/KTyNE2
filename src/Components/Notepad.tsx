@@ -7,7 +7,8 @@ const Notepad = () => {
       pl-2
       leading-[1.4]
       font-[NotoSansMono]
-      outline-none"
+      outline-none
+      resize-none"
       id="notepad-textarea"
       spellCheck="false"
       onKeyDown={(e) => {

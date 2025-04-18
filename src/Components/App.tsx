@@ -6,6 +6,8 @@ import Manuals from "./Manuals";
 import Notepad from "./Notepad";
 import EdgeworkModal from "./EdgeworkModal";
 import EdgeworkButton from "./EdgeworkButton";
+import Calculator from "./Calculator";
+import HeaderButton from "./HeaderButton";
 
 const fullModList: Map<string, string[]> = new Map(
   Object.entries(fullModListRaw)
@@ -19,6 +21,8 @@ function App() {
   const [edgework, setEdgework] = useState<ReactNode>(null);
   const [edgeworkModalIsOpen, setEdgeworkModalIsOpen] =
     useState<boolean>(false);
+
+  const [calcIsOpen, setCalcIsOpen] = useState<boolean>(false);
 
   const memoizedHandleModClose = useCallback(
     (modToClose: string, isCurrent: boolean) => {
@@ -57,37 +61,44 @@ function App() {
   };
 
   return (
-    <>
-      <div className="h-screen flex flex-col font-[special-elite]">
-        <header className="min-h-[75px] bg-jet flex items-center">
-          <ModSearch
-            modNames={Object.keys(fullModList).sort()}
-            handleOpenMod={handleOpenMod}
+    <div className="h-screen w-screen flex flex-col font-[special-elite]">
+      <header className="min-h-[75px] bg-jet flex items-center">
+        <ModSearch
+          modNames={Object.keys(fullModList).sort()}
+          handleOpenMod={handleOpenMod}
+        />
+        <div className="flex gap-2">
+          <HeaderButton
+            text="Edgework"
+            onClick={() => setEdgeworkModalIsOpen(true)}
           />
-          <EdgeworkButton setEdgeworkModalIsOpen={setEdgeworkModalIsOpen}>
-            Edgework
-          </EdgeworkButton>
-          <div className="ml-auto flex content-center flex-wrap">
-            {edgework}
-            <EdgeworkModal
-              edgeworkModalIsOpen={edgeworkModalIsOpen}
-              setEdgeworkModalIsOpen={setEdgeworkModalIsOpen}
-              setEdgework={setEdgework}
-            />
-          </div>
-        </header>
-        <main className="flex h-[calc(100vh-60px)] bg-(--color-bg)">
-          <Sidebar
-            openModList={Array.from(openManuals.keys()).sort()}
-            currentManual={currentManual}
-            handleModChange={memoizedHandleModChange}
-            handleModClose={memoizedHandleModClose}
+          <HeaderButton
+            text="Calculator"
+            onClick={() => setCalcIsOpen(!calcIsOpen)}
           />
-          <Manuals currentManual={currentManual} openManuals={openManuals} />
-          <Notepad />
-        </main>
-      </div>
-    </>
+        </div>
+        <div className="ml-auto flex content-center flex-wrap">
+          {edgework}
+          <EdgeworkModal
+            edgeworkModalIsOpen={edgeworkModalIsOpen}
+            setEdgeworkModalIsOpen={setEdgeworkModalIsOpen}
+            setEdgework={setEdgework}
+          />
+        </div>
+      </header>
+      <main className="flex h-[calc(100vh-60px)] bg-(--color-bg) relative">
+        <Sidebar
+          openModList={Array.from(openManuals.keys()).sort()}
+          currentManual={currentManual}
+          handleModChange={memoizedHandleModChange}
+          handleModClose={memoizedHandleModClose}
+        />
+        <Manuals currentManual={currentManual} openManuals={openManuals} />
+        <Notepad />
+      </main>
+
+      {calcIsOpen && <Calculator />}
+    </div>
   );
 }
 
