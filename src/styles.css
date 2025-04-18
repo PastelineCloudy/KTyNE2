@@ -2,6 +2,7 @@
 
 @theme {
   --color-jet: #353535;
+  --color-bg: #d2d7df;
 }
 
 @font-face {
@@ -9,7 +10,7 @@
   src: url("/fonts/SpecialElite-Regular.ttf") format("truetype");
 }
 @font-face {
-  font-family: "anonymous pro";
+  font-family: "anonymouspro";
   src: url("/fonts/AnonymousPro-Regular.ttf") format("truetype");
 }
 @font-face {

@@ -8,7 +8,7 @@ const Notepad = () => {
       leading-[1.4]
       font-[NotoSansMono]
       outline-none"
-      // contentEditable="plaintext-only"
+      id="notepad-textarea"
       spellCheck="false"
       onKeyDown={(e) => {
         if (e.key == "Tab") handleTabPress(e as unknown as EType);

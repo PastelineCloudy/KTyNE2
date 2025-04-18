@@ -1,11 +1,11 @@
 import { Search } from "lucide-react";
-import fullModList from "../fullList(Apr 13 2025).json";
 import { useState } from "react";
 
-const modNames = Object.keys(fullModList).sort();
 const ModSearch = ({
+  modNames,
   handleOpenMod,
 }: {
+  modNames: string[];
   handleOpenMod: (modName: string, changeCurrent?: boolean) => void;
 }) => {
   const [query, setQuery] = useState<string>("");
@@ -81,7 +81,8 @@ const ModSearch = ({
           setIsOpen(true);
           handleSearchInput(e.target.value);
         }}
-        placeholder="  -- Search Mods --"
+        placeholder="Search Mods"
+        autoComplete="off"
       />
       {isOpen && (
         <div className="bg-gray-200 p-2 border-2 border-black absolute top-7 rounded-md w-full ">

@@ -8,7 +8,7 @@ const Manuals = ({
   const openManualsList = Array.from(openManuals);
   return (
     <div
-      className={`grow ${
+      className={`grow border-l-2 border-r-2 border-black ${
         currentManual ? "" : "bg-[url(/images/web-background.jpg)]"
       }`}
     >

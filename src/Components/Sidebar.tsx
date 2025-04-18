@@ -12,7 +12,7 @@ const Sidebar = ({
   handleModClose: (modName: string, isCurrent: boolean) => void;
 }) => {
   return (
-    <div className="w-50 m-2 flex flex-col">
+    <div className="w-50 m-2 flex flex-col ">
       <h2 className="text-xl">Open Mods</h2>
       <ul className="overflow-auto no-scrollbar">
         {openModList.map((modName) => (
