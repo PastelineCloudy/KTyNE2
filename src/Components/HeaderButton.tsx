@@ -7,7 +7,7 @@ const HeaderButton = ({
 }) => {
   return (
     <button
-      className="cursor-pointer text-white border-2 p-2 border-white rounded-md h-fit"
+      className="cursor-pointer text-white border-2 p-2 border-white rounded-md h-fit ml-1 mr-1"
       onClick={onClick}
     >
       {text}

@@ -2,22 +2,21 @@ import { Search } from "lucide-react";
 import { useState } from "react";
 
 const ModSearch = ({
-  modNames,
+  modList,
   handleOpenMod,
 }: {
-  modNames: string[];
+  modList: string[];
   handleOpenMod: (modName: string, changeCurrent?: boolean) => void;
 }) => {
   const [query, setQuery] = useState<string>("");
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [bestMatchIndex, setBestMatchIndex] = useState<number>(0);
-  const [filteredMods, setFilteredMods] = useState<string[]>(modNames);
+  const [filteredMods, setFilteredMods] = useState<string[]>(modList);
 
   let lastHovered: string = "";
-  console.log(modNames);
 
   const handleSearchInput = (newQuery: string) => {
-    const newFilteredMods = getFilteredMods(modNames, newQuery);
+    const newFilteredMods = getFilteredMods(modList, newQuery);
     setQuery(newQuery);
     setBestMatchIndex(getBestMatchIndex(newFilteredMods, newQuery));
     setFilteredMods(newFilteredMods);

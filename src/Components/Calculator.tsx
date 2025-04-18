@@ -1,8 +1,16 @@
-import { useState } from "react";
+import { RefObject, useState } from "react";
 import { evaluate } from "mathjs";
 import { Rnd } from "react-rnd";
 
-const Calculator = () => {
+const initialWidth = 260;
+const initialHeight = 130;
+const Calculator = ({
+  pageRef,
+  isOpen,
+}: {
+  pageRef: RefObject<HTMLDivElement | null>;
+  isOpen: boolean;
+}) => {
   const [calcInput, setCalcInput] = useState<string>("");
   const [draggingDisabled, setDraggingDisabled] = useState<boolean>(false);
 
@@ -10,16 +18,24 @@ const Calculator = () => {
 
   return (
     <Rnd
-      minWidth={260}
-      minHeight={130}
-      style={{ display: "flex" }}
-      bounds="parent"
+      minWidth={initialWidth}
+      minHeight={initialHeight}
+      default={{
+        x: window.innerWidth - initialWidth,
+        y: window.innerHeight - initialHeight,
+        width: initialWidth,
+        height: initialHeight,
+      }}
+      style={{
+        display: "flex",
+      }}
+      bounds={pageRef?.current || "parent"}
       disableDragging={draggingDisabled}
     >
       <div
-        className="bg-jet
+        className={`bg-jet
         border-2 border-bg rounded-2 p-[10px] text-bg
-        flex flex-col grow"
+        flex flex-col grow ${isOpen ? "" : "hidden"}`}
       >
         <div className="">Text-Field Calculator</div>
         <textarea
