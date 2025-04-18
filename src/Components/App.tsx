@@ -10,12 +10,15 @@ const fullModList: Map<string, string[]> = new Map(
 );
 
 const modList = Array.from(fullModList.keys()).sort();
+const sidebarWidth = 200;
+const defaultNotepadWidth = window.innerWidth * 0.3;
 
 function App() {
   const [currentManual, setCurrentManual] = useState<string | null>(null);
   const [openManuals, setOpenManuals] = useState<Map<string, string>>(
     new Map<string, string>()
   );
+  const [coverManual, setCoverManual] = useState<boolean>(false);
 
   const pageRef = useRef(null);
 
@@ -71,9 +74,20 @@ function App() {
           currentManual={currentManual}
           handleModChange={memoizedHandleModChange}
           handleModClose={memoizedHandleModClose}
+          sidebarWidth={sidebarWidth}
         />
-        <Manuals currentManual={currentManual} openManuals={openManuals} />
-        <Notepad />
+        <div className="relative grow">
+          <div
+            className={`absolute w-full h-full bg-transparent ${
+              coverManual ? "" : "hidden"
+            } `}
+          ></div>
+          <Manuals currentManual={currentManual} openManuals={openManuals} />
+        </div>
+        <Notepad
+          setCoverManual={setCoverManual}
+          defaultWidth={defaultNotepadWidth}
+        />
       </main>
     </div>
   );

@@ -1,20 +1,55 @@
-const Notepad = () => {
+import { SyntheticEvent, useRef, useState } from "react";
+import { Resizable } from "react-resizable";
+
+type ResizeCallbackData = {
+  node: HTMLElement;
+  size: { width: number; height: number };
+  handle: ResizeHandleAxis;
+};
+type ResizeHandleAxis = "s" | "w" | "e" | "n" | "sw" | "nw" | "se" | "ne";
+
+const Notepad = ({
+  defaultWidth = 600,
+  setCoverManual,
+}: {
+  defaultWidth?: number;
+  setCoverManual: (val: boolean) => void;
+}) => {
+  const textareaRef = useRef(null);
+  const [width, setWidth] = useState(defaultWidth);
+
+  const onResize = (_event: SyntheticEvent, { size }: ResizeCallbackData) => {
+    setWidth(size.width);
+  };
+
   return (
-    <textarea
-      className="p-1 w-[35vw] bg-size-[100%_1.4em] 
-      bg-local bg-linear-to-t from-[#85c1e9] from-[0.1em] to-[#d2d7df] to-[0.1em]
-      pt-[0.2rem]
-      pl-2
-      leading-[1.4]
-      font-[NotoSansMono]
-      outline-none
-      resize-none"
-      id="notepad-textarea"
-      spellCheck="false"
-      onKeyDown={(e) => {
-        if (e.key == "Tab") handleTabPress(e as unknown as EType);
-      }}
-    ></textarea>
+    <Resizable
+      width={width}
+      axis="x"
+      resizeHandles={["w"]}
+      onResize={onResize}
+      onResizeStart={() => setCoverManual(true)}
+      onResizeStop={() => setCoverManual(false)}
+    >
+      <div className="" style={{ width: width + "px" }}>
+        <textarea
+          className="p-1 w-full h-full bg-size-[100%_1.4em]
+          bg-local bg-linear-to-t from-[#85c1e9] from-[0.1em] to-[#d2d7df] to-[0.1em]
+          pt-[0.2rem]
+          pl-2
+          leading-[1.4]
+          font-[NotoSansMono]
+          outline-none
+          resize-none"
+          id="notepad-textarea"
+          spellCheck="false"
+          onKeyDown={(e) => {
+            if (e.key == "Tab") handleTabPress(e as unknown as EType);
+          }}
+          ref={textareaRef}
+        ></textarea>
+      </div>
+    </Resizable>
   );
 };
 

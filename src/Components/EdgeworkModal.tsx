@@ -12,8 +12,8 @@ const EdgeworkModal = ({
 }) => {
   const [batteries, setBatteries] = useState("");
   const [holders, setHolders] = useState("");
-  const [litInds, setLitInds] = useState<Ind[]>([]);
-  const [unlitInds, setUnlitInds] = useState<Ind[]>([]);
+  const [litInds, setLitInds] = useState<string>("");
+  const [unlitInds, setUnlitInds] = useState<string>("");
   const [portPlates, setPortPlates] = useState<string>("");
   const [serial, setSerial] = useState("");
 
@@ -45,8 +45,8 @@ const EdgeworkModal = ({
   const resetEdgework = () => {
     setBatteries("");
     setHolders("");
-    setLitInds([]);
-    setUnlitInds([]);
+    setLitInds("");
+    setUnlitInds("");
     setPortPlates("");
     setSerial("");
   };
@@ -99,23 +99,15 @@ const EdgeworkModal = ({
               labelText="Lit Indicators"
               id="lit-inds"
               placeholder="ex: FRK CLR"
-              value={litInds.join(" ")}
-              setValue={(newVal) =>
-                setLitInds(
-                  newVal.split(" ").filter((ind) => ind !== "") as Ind[]
-                )
-              }
+              value={litInds}
+              setValue={(newVal) => setLitInds(newVal)}
             />
             <LabelInput
               labelText="Unlit Indicators"
               id="unlit-inds"
               placeholder="ex: SIG NSA"
-              value={unlitInds.join(" ")}
-              setValue={(newVal) =>
-                setUnlitInds(
-                  newVal.split(" ").filter((ind) => ind !== "") as Ind[]
-                )
-              }
+              value={unlitInds}
+              setValue={(newVal) => setUnlitInds(newVal)}
             />
           </div>
           <LabelInput
@@ -200,8 +192,9 @@ const parsePorts = (portString: string): Port[][] => {
   return ports as Port[][];
 };
 
-const parseInds = (indList: string[]): Ind[] => {
+const parseInds = (indList: string): Ind[] => {
   return indList
+    .split(" ")
     .map((ind) => ind.toLowerCase())
     .filter((ind) => isValidInd(ind))
     .map((ind) => ind as Ind);
