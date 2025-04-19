@@ -71,7 +71,6 @@ const Notearea = ({
         outline-none
         resize-none
         ${className}`}
-        id="notepad-textarea"
         spellCheck="false"
         onKeyDown={(e) => {
           if (e.key == "Tab") handleTabPress(e as unknown as EType);

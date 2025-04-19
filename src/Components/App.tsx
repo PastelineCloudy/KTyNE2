@@ -1,31 +1,15 @@
 import Sidebar from "./Sidebar";
-import fullModListRaw from "../fullList(Apr 13 2025).json";
 import { useCallback, useEffect, useState } from "react";
 import Manuals from "./Manuals";
 import Notepad from "./Notepad";
 import Header from "./Header";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
-
-const fullModList: Map<string, string[]> = new Map(
-  Object.entries(fullModListRaw)
-);
-
-const modList = Array.from(fullModList.keys()).sort();
-
-const getOpenManualsFromLocal = () => {
-  const localOpenManuals = localStorage.getItem("KTyNE:openManuals");
-  const localOpenManualsObj = JSON.parse(localOpenManuals ?? "{}");
-  if (localOpenManuals && Object.keys(localOpenManualsObj).length !== 0) {
-    return new Map<string, string>(Object.entries(localOpenManualsObj));
-  } else {
-    return new Map<string, string>();
-  }
-};
+import { getLocalStorageMap } from "../Utils/LocalStorageUtils";
 
 function App() {
   const [currentManual, setCurrentManual] = useState<string | null>(null);
-  const [openManuals, setOpenManuals] = useState<Map<string, string>>(
-    getOpenManualsFromLocal()
+  const [openManuals, setOpenManuals] = useState<Map<string, string>>(() =>
+    getLocalStorageMap("KTyNE:openManuals")
   );
   const [iframeCovered, setIframeCovered] = useState<boolean>(false);
 
@@ -58,18 +42,19 @@ function App() {
     []
   );
 
-  const handleOpenMod = (modName: string, changeCurrent: boolean = true) => {
-    const modManual = getModManual(modName);
-    if (!modManual) return;
-
-    const finalModName = getFinalModName(
-      modName,
-      Array.from(openManuals.keys())
-    );
-    if (changeCurrent) setCurrentManual(finalModName);
+  const handleOpenMod = (
+    modName: string,
+    manualUrl: string,
+    changeCurrent: boolean = true
+  ) => {
+    if (changeCurrent) setCurrentManual(modName);
+    if (Object.entries(openManuals).length >= 500) {
+      console.log("Mod limit reached");
+      return;
+    }
     const newOpenManuals = new Map<string, string>(openManuals).set(
-      finalModName,
-      modManual
+      modName,
+      manualUrl
     );
     setOpenManuals(newOpenManuals);
   };
@@ -77,13 +62,12 @@ function App() {
   return (
     <div className="h-screen w-screen flex flex-col font-[special-elite] relative overflow-hidden">
       <Header
-        modList={modList}
         handleOpenMod={handleOpenMod}
         setIframeCovered={setIframeCovered}
       />
       <main className="flex h-[calc(100vh-60px)] bg-(--color-bg)">
         <PanelGroup direction="horizontal" autoSaveId="main-ktyne">
-          <Panel minSize={5} maxSize={11} collapsible>
+          <Panel minSize={5} defaultSize={10} collapsible>
             <Sidebar
               openModList={Array.from(openManuals.keys()).sort()}
               currentManual={currentManual}
@@ -110,22 +94,6 @@ function App() {
       </main>
     </div>
   );
-}
-
-const getFinalModName = (modName: string, openModList: string[]): string => {
-  if (!openModList.includes(modName)) return modName;
-
-  let firstAvailableNumber = 2;
-  while (openModList.includes(`${modName} (${firstAvailableNumber})`))
-    firstAvailableNumber++;
-
-  return `${modName} (${firstAvailableNumber})`;
-};
-
-function getModManual(modName: string): string | null {
-  const mod = fullModList.get(modName);
-  if (mod) return mod[0];
-  else return null;
 }
 
 export default App;

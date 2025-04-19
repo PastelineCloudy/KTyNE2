@@ -18,14 +18,14 @@ const SidebarButton = ({
 
   return (
     <li
-      className={`pt-0.5 max-w-48 flex cursor-pointer hover:bg-gray-200 ${
+      className={`pt-0.5 flex cursor-pointer hover:bg-gray-200 ${
         isCurrentManual ? "bg-gray-200" : ""
       }`}
     >
       <SquareX
         size={20}
         onClick={() => handleModClose(modName, isCurrentManual)}
-        className="hover:text-red-500"
+        className="hover:text-red-500 pr-1"
       />
       <button
         className="w-full text-left text-1 text-nowrap text-ellipsis overflow-hidden cursor-pointer"
