@@ -1,32 +1,60 @@
 import { Search } from "lucide-react";
-import { useState } from "react";
+import { Ref, useCallback, useRef, useState } from "react";
+import useOutsideClickTracker from "../Hooks/useOutsideClickTracker";
+
+type ItemSelectEvent = {
+  key?: string;
+  target: EventTarget | Element | null;
+  shiftKey: boolean;
+  ctrlKey: boolean;
+  preventDefault: () => void;
+};
 
 const ModSearch = ({
   modList,
   handleOpenMod,
+  setIframeCovered,
 }: {
   modList: string[];
   handleOpenMod: (modName: string, changeCurrent?: boolean) => void;
+  setIframeCovered: (bool: boolean) => void;
 }) => {
   const [query, setQuery] = useState<string>("");
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isOpen, _setIsOpen] = useState<boolean>(false);
   const [bestMatchIndex, setBestMatchIndex] = useState<number>(0);
-  const [filteredMods, setFilteredMods] = useState<string[]>(modList);
+  const highlightedRef = useRef<HTMLLIElement>(null);
 
-  let lastHovered: string = "";
+  const getFilteredModsCallback = useCallback(
+    () => getFilteredMods(modList, query),
+    [query, modList]
+  );
+  const filteredMods = getFilteredModsCallback();
 
   const handleSearchInput = (newQuery: string) => {
     const newFilteredMods = getFilteredMods(modList, newQuery);
     setQuery(newQuery);
     setBestMatchIndex(getBestMatchIndex(newFilteredMods, newQuery));
-    setFilteredMods(newFilteredMods);
   };
 
-  const handleKeyDown = (e: {
-    key: string;
-    shiftKey: boolean;
-    ctrlKey: boolean;
-  }) => {
+  const setIsOpen = (status: boolean) => {
+    _setIsOpen(status);
+    setIframeCovered(status);
+  };
+
+  const resetModSearch = () => {
+    setQuery("");
+    setIsOpen(false);
+    setBestMatchIndex(0);
+    highlightedRef.current = null;
+  };
+
+  const modSearchComponentRef = useRef(null);
+  useOutsideClickTracker(isOpen, setIsOpen, modSearchComponentRef);
+
+  const handleKeyPress = (e: ItemSelectEvent) => {
+    if (!e.target) return;
+    const htmlTarget = e.target as HTMLElement;
+    const modName = htmlTarget.dataset.modName;
     switch (e.key) {
       case "Escape": {
         setQuery("");
@@ -34,36 +62,84 @@ const ModSearch = ({
         break;
       }
       case "Enter": {
-        handleOpenMod(filteredMods[bestMatchIndex], !e.ctrlKey);
-        setQuery("");
-        if (!e.shiftKey) setIsOpen(false);
+        if (modName) openMod(modName, e);
         break;
       }
       case "ArrowDown": {
+        if (highlightedRef.current)
+          highlightedRef.current.scrollIntoView({
+            block: "center",
+          });
         if (bestMatchIndex < filteredMods.length - 1)
           setBestMatchIndex(bestMatchIndex + 1);
         break;
       }
       case "ArrowUp": {
+        if (highlightedRef.current)
+          highlightedRef.current.scrollIntoView({
+            block: "center",
+          });
         if (bestMatchIndex > 0) setBestMatchIndex(bestMatchIndex - 1);
         break;
       }
     }
   };
 
+  const openMod = (modName: string, e?: ItemSelectEvent) => {
+    handleOpenMod(modName, e ? !e.ctrlKey : false);
+    if (!e || !e.shiftKey) resetModSearch();
+  };
+
+  // Keydown pressed while list opened
+  const handleItemSelect = (e: ItemSelectEvent) => {
+    const htmlTarget = e.target as HTMLElement;
+    const modName = htmlTarget.dataset.modName;
+
+    if (e.key) {
+      switch (e.key) {
+        case "Escape": {
+          setQuery("");
+          setIsOpen(false);
+          break;
+        }
+        case "Enter": {
+          if (modName) openMod(modName, e);
+          break;
+        }
+        case "ArrowDown": {
+          if (highlightedRef.current)
+            highlightedRef.current.scrollIntoView(false);
+          if (bestMatchIndex < filteredMods.length - 1)
+            setBestMatchIndex(bestMatchIndex + 1);
+          break;
+        }
+        case "ArrowUp": {
+          if (highlightedRef.current)
+            highlightedRef.current.scrollIntoView(false);
+          if (bestMatchIndex > 0) setBestMatchIndex(bestMatchIndex - 1);
+          break;
+        }
+      }
+    } else {
+      if (modName) {
+        openMod(modName, e);
+      } else {
+        console.error(`Could not open mod ${modName}`);
+      }
+    }
+  };
+
   return (
     <div
-      className="relative w-48 m-2"
+      className="relative w-48 m-2 backdrop:backdrop-blur-3xl"
       onFocus={() => setIsOpen(true)}
-      onBlur={() => {
-        if (lastHovered) {
-          handleOpenMod(lastHovered);
-          setQuery("");
-          setBestMatchIndex(0);
-        }
-        setIsOpen(false);
-      }}
-      onKeyDown={(e) => handleKeyDown(e)}
+      onKeyDown={(e) =>
+        handleKeyPress({
+          ...e,
+          target: highlightedRef.current,
+        })
+      }
+      ref={modSearchComponentRef}
     >
       <label
         htmlFor="mod-list-select"
@@ -86,26 +162,48 @@ const ModSearch = ({
       />
       {isOpen && (
         <div className="bg-gray-200 p-2 border-2 border-black absolute top-7 rounded-md w-full ">
-          <ul className="overflow-auto no-scrollbar max-h-[80vh] ">
-            {filteredMods.map((mod) => {
-              return (
-                <li
-                  key={mod}
-                  className={`hover:bg-gray-400 ${
-                    mod === filteredMods[bestMatchIndex] ? "bg-blue-300" : ""
-                  } cursor-pointer`}
-                  // lastHovered used because parent onBlur fires before child onClick
-                  onMouseOver={() => (lastHovered = mod)}
-                  onMouseOut={() => (lastHovered = "")}
-                >
-                  {mod}
-                </li>
-              );
-            })}
+          {/* 40vh used for scrollInto */}
+          <ul className="overflow-auto no-scrollbar max-h-[40vh] ">
+            {filteredMods.slice(0, 100).map((modName, i) => (
+              <SearchListItem
+                key={modName}
+                modName={modName}
+                isHighlighted={i === bestMatchIndex}
+                handleItemSelect={handleItemSelect}
+                highlightedRef={highlightedRef}
+              />
+            ))}
           </ul>
         </div>
       )}
     </div>
+  );
+};
+
+const SearchListItem = ({
+  modName,
+  isHighlighted,
+  handleItemSelect,
+  highlightedRef,
+}: {
+  modName: string;
+  isHighlighted: boolean;
+  handleItemSelect: (e: ItemSelectEvent) => void;
+  highlightedRef: Ref<HTMLLIElement>;
+}) => {
+  return (
+    <li
+      className={`hover:bg-gray-400 cursor-pointer ${
+        isHighlighted ? "bg-blue-300" : ""
+      }`}
+      onClick={handleItemSelect}
+      data-mod-name={modName}
+      ref={isHighlighted ? highlightedRef : null}
+    >
+      <div className="flex justify-between" data-mod-name={modName}>
+        {modName}
+      </div>
+    </li>
   );
 };
 

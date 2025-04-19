@@ -6,7 +6,7 @@ const Calculator = ({ isOpen }: { isOpen: boolean }) => {
   const [calcInput, setCalcInput] = useState<string>("");
 
   return (
-    <DraggableResizeable isOpen={isOpen} corner={"bottom-right"}>
+    <DraggableResizeable isOpen={isOpen} corner={"bottom-right"} yOffset={100}>
       <div
         className={`bg-jet w-full h-full
         border-2 border-bg rounded-2 p-[10px] text-bg

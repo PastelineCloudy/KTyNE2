@@ -6,11 +6,15 @@ const DraggableResizeable = ({
   corner = "top-left",
   disableResize = false,
   children,
+  xOffset = 0,
+  yOffset = 0,
 }: {
   isOpen?: boolean;
   corner?: "top-left" | "top-right" | "bottom-right" | "bottom-left";
   disableResize?: boolean;
   children: string | ReactNode;
+  xOffset?: number;
+  yOffset?: number;
 }) => {
   const rndRef = useRef<Rnd>(null);
 
@@ -39,8 +43,8 @@ const DraggableResizeable = ({
             newX = viewportWidth - elementWidth;
             break;
           case "bottom-right":
-            newX = viewportWidth - elementWidth;
-            newY = viewportHeight - elementHeight;
+            newX = viewportWidth - elementWidth - xOffset;
+            newY = viewportHeight - elementHeight - yOffset;
             break;
           case "bottom-left":
             newY = viewportHeight - elementHeight;

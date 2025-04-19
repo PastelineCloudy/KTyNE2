@@ -1,6 +1,6 @@
 import Sidebar from "./Sidebar";
 import fullModListRaw from "../fullList(Apr 13 2025).json";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Manuals from "./Manuals";
 import Notepad from "./Notepad";
 import Header from "./Header";
@@ -12,11 +12,29 @@ const fullModList: Map<string, string[]> = new Map(
 
 const modList = Array.from(fullModList.keys()).sort();
 
+const getOpenManualsFromLocal = () => {
+  const localOpenManuals = localStorage.getItem("KTyNE:openManuals");
+  const localOpenManualsObj = JSON.parse(localOpenManuals ?? "{}");
+  if (localOpenManuals && Object.keys(localOpenManualsObj).length !== 0) {
+    return new Map<string, string>(Object.entries(localOpenManualsObj));
+  } else {
+    return new Map<string, string>();
+  }
+};
+
 function App() {
   const [currentManual, setCurrentManual] = useState<string | null>(null);
   const [openManuals, setOpenManuals] = useState<Map<string, string>>(
-    new Map<string, string>()
+    getOpenManualsFromLocal()
   );
+  const [iframeCovered, setIframeCovered] = useState<boolean>(false);
+
+  useEffect(() => {
+    localStorage.setItem(
+      "KTyNE:openManuals",
+      JSON.stringify(Object.fromEntries(openManuals))
+    );
+  }, [openManuals]);
 
   const memoizedHandleModClose = useCallback(
     (modToClose: string, isCurrent: boolean) => {
@@ -49,14 +67,20 @@ function App() {
       Array.from(openManuals.keys())
     );
     if (changeCurrent) setCurrentManual(finalModName);
-    setOpenManuals(
-      new Map<string, string>(openManuals).set(finalModName, modManual)
+    const newOpenManuals = new Map<string, string>(openManuals).set(
+      finalModName,
+      modManual
     );
+    setOpenManuals(newOpenManuals);
   };
 
   return (
     <div className="h-screen w-screen flex flex-col font-[special-elite] relative overflow-hidden">
-      <Header modList={modList} handleOpenMod={handleOpenMod} />
+      <Header
+        modList={modList}
+        handleOpenMod={handleOpenMod}
+        setIframeCovered={setIframeCovered}
+      />
       <main className="flex h-[calc(100vh-60px)] bg-(--color-bg)">
         <PanelGroup direction="horizontal" autoSaveId="main-ktyne">
           <Panel minSize={5} maxSize={11} collapsible>
@@ -72,7 +96,11 @@ function App() {
             defaultSize={55}
             className="border-l-2 border-r-2 border-black"
           >
-            <Manuals currentManual={currentManual} openManuals={openManuals} />
+            <Manuals
+              currentManual={currentManual}
+              openManuals={openManuals}
+              covered={iframeCovered}
+            />
           </Panel>
           <PanelResizeHandle />
           <Panel>
