@@ -130,7 +130,7 @@ const ModSearch = ({
         autoComplete="off"
       />
       {isOpen && (
-        <div className="bg-gray-200 p-2 border-2 border-black absolute top-7 rounded-md z-1 absolute">
+        <div className="bg-gray-200 p-2 border-2 border-black absolute top-7 rounded-md z-1">
           <ul className="overflow-auto no-scrollbar max-h-[80vh]">
             {filteredMods.slice(0, maxListSize).map((modName, i) => (
               <SearchListItem
@@ -195,7 +195,7 @@ const SearchListItem = ({
         </div>
         <ChevronDown
           onClick={handleDropDownClick}
-          className={`${dropDownEnabled ? "rotate-180" : ""}`}
+          className={`${dropDownEnabled ? "rotate-180" : ""} hover:text-white`}
         />
       </div>
       {dropDownEnabled && (
@@ -251,7 +251,7 @@ const AlternativeManualItem = ({
             }}
             className={`ml-4 cursor-pointer border-2 border-black text-center text-xs ${
               isDefault ? "opacity-0" : ""
-            }`}
+            } hover:text-white`}
           >
             Set Default
           </button>

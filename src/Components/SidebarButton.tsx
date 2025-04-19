@@ -29,7 +29,12 @@ const SidebarButton = ({
       />
       <button
         className="w-full text-left text-1 text-nowrap text-ellipsis overflow-hidden cursor-pointer"
-        onClick={() => handleModChange(modName, isCurrentManual)}
+        onClick={() => {
+          handleModChange(modName, isCurrentManual);
+        }}
+        onMouseDown={(e) => {
+          if (e.button === 1) handleModClose(modName, isCurrentManual);
+        }}
       >
         {modName}
       </button>
