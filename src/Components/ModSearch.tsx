@@ -81,7 +81,7 @@ const ModSearch = ({
           setIsOpen(true);
           handleSearchInput(e.target.value);
         }}
-        placeholder="Search Mods"
+        placeholder="Search Modules"
         autoComplete="off"
       />
       {isOpen && (

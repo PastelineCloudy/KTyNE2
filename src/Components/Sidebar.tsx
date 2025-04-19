@@ -5,20 +5,15 @@ const Sidebar = ({
   currentManual,
   handleModChange,
   handleModClose,
-  sidebarWidth,
 }: {
   openModList: string[];
   currentManual: string | null;
   handleModChange: (modName: string, isCurrent: boolean) => void;
   handleModClose: (modName: string, isCurrent: boolean) => void;
-  sidebarWidth: number;
 }) => {
   return (
-    <div
-      style={{ minWidth: `${sidebarWidth}px` }}
-      className="min-w-50 m-2 flex flex-col"
-    >
-      <h2 className="text-xl">Open Mods</h2>
+    <div className="p-2 flex flex-col">
+      <h2 className="text-xl">Open Modules</h2>
       <ul className="overflow-auto no-scrollbar">
         {openModList.map((modName) => (
           <SidebarButton

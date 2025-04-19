@@ -4,23 +4,19 @@ import { useCallback, useState } from "react";
 import Manuals from "./Manuals";
 import Notepad from "./Notepad";
 import Header from "./Header";
+import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 
 const fullModList: Map<string, string[]> = new Map(
   Object.entries(fullModListRaw)
 );
 
 const modList = Array.from(fullModList.keys()).sort();
-const sidebarWidth = 200;
-const minManualWidth = 360;
-const maxNotepadWidth = window.innerWidth - minManualWidth - sidebarWidth;
-const defaultNotepadWidth = window.innerWidth * 0.3;
 
 function App() {
   const [currentManual, setCurrentManual] = useState<string | null>(null);
   const [openManuals, setOpenManuals] = useState<Map<string, string>>(
     new Map<string, string>()
   );
-  const [coverManual, setCoverManual] = useState<boolean>(false);
 
   const memoizedHandleModClose = useCallback(
     (modToClose: string, isCurrent: boolean) => {
@@ -62,26 +58,27 @@ function App() {
     <div className="h-screen w-screen flex flex-col font-[special-elite] relative overflow-hidden">
       <Header modList={modList} handleOpenMod={handleOpenMod} />
       <main className="flex h-[calc(100vh-60px)] bg-(--color-bg)">
-        <Sidebar
-          openModList={Array.from(openManuals.keys()).sort()}
-          currentManual={currentManual}
-          handleModChange={memoizedHandleModChange}
-          handleModClose={memoizedHandleModClose}
-          sidebarWidth={sidebarWidth}
-        />
-        <div className="relative grow border-l-2 border-r-2 border-black">
-          <div
-            className={`absolute w-full h-full bg-transparent ${
-              coverManual ? "" : "hidden"
-            } `}
-          ></div>
-          <Manuals currentManual={currentManual} openManuals={openManuals} />
-        </div>
-        <Notepad
-          setCoverManual={setCoverManual}
-          defaultWidth={defaultNotepadWidth}
-          maxWidth={maxNotepadWidth}
-        />
+        <PanelGroup direction="horizontal" autoSaveId="main-ktyne">
+          <Panel minSize={5} maxSize={11} collapsible>
+            <Sidebar
+              openModList={Array.from(openManuals.keys()).sort()}
+              currentManual={currentManual}
+              handleModChange={memoizedHandleModChange}
+              handleModClose={memoizedHandleModClose}
+            />
+          </Panel>
+          <PanelResizeHandle />
+          <Panel
+            defaultSize={55}
+            className="border-l-2 border-r-2 border-black"
+          >
+            <Manuals currentManual={currentManual} openManuals={openManuals} />
+          </Panel>
+          <PanelResizeHandle />
+          <Panel>
+            <Notepad />
+          </Panel>
+        </PanelGroup>
       </main>
     </div>
   );
