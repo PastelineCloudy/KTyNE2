@@ -1,16 +1,16 @@
-import { ReactNode, RefObject, useState } from "react";
+import { ReactNode, useState } from "react";
 import Calculator from "./Calculator";
 import EdgeworkModal from "./EdgeworkModal";
 import HeaderButton from "./HeaderButton";
+import Alphabet from "./Alphabet";
 
 const Popups = ({
-  pageRef,
   setEdgework,
 }: {
-  pageRef: RefObject<HTMLDivElement | null>;
   setEdgework: (newVal: ReactNode) => void;
 }) => {
   const [calcIsOpen, setCalcIsOpen] = useState<boolean>(false);
+  const [alphaIsOpen, setAlphaIsOpen] = useState<boolean>(false);
 
   const [edgeworkModalIsOpen, setEdgeworkModalIsOpen] =
     useState<boolean>(false);
@@ -24,7 +24,12 @@ const Popups = ({
         text="Calculator"
         onClick={() => setCalcIsOpen(!calcIsOpen)}
       />
-      <Calculator pageRef={pageRef} isOpen={calcIsOpen} />
+      <HeaderButton
+        text="Alphabet"
+        onClick={() => setAlphaIsOpen(!alphaIsOpen)}
+      />
+      <Calculator isOpen={calcIsOpen} />
+      <Alphabet isOpen={alphaIsOpen} />
       <div className="ml-auto flex content-center flex-wrap">
         <EdgeworkModal
           edgeworkModalIsOpen={edgeworkModalIsOpen}

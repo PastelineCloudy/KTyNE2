@@ -1,6 +1,6 @@
 import Sidebar from "./Sidebar";
 import fullModListRaw from "../fullList(Apr 13 2025).json";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useState } from "react";
 import Manuals from "./Manuals";
 import Notepad from "./Notepad";
 import Header from "./Header";
@@ -21,8 +21,6 @@ function App() {
     new Map<string, string>()
   );
   const [coverManual, setCoverManual] = useState<boolean>(false);
-
-  const pageRef = useRef(null);
 
   const memoizedHandleModClose = useCallback(
     (modToClose: string, isCurrent: boolean) => {
@@ -61,15 +59,8 @@ function App() {
   };
 
   return (
-    <div
-      ref={pageRef}
-      className="h-screen w-screen flex flex-col font-[special-elite] relative overflow-hidden"
-    >
-      <Header
-        pageRef={pageRef}
-        modList={modList}
-        handleOpenMod={handleOpenMod}
-      />
+    <div className="h-screen w-screen flex flex-col font-[special-elite] relative overflow-hidden">
+      <Header modList={modList} handleOpenMod={handleOpenMod} />
       <main className="flex h-[calc(100vh-60px)] bg-(--color-bg)">
         <Sidebar
           openModList={Array.from(openManuals.keys()).sort()}
