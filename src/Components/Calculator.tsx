@@ -1,4 +1,4 @@
-import { RefObject, useState } from "react";
+import { RefObject, useEffect, useRef, useState } from "react";
 import { evaluate } from "mathjs";
 import { Rnd } from "react-rnd";
 
@@ -14,28 +14,44 @@ const Calculator = ({
   const [calcInput, setCalcInput] = useState<string>("");
   const [draggingDisabled, setDraggingDisabled] = useState<boolean>(false);
 
-  const output: EvalRes = evalInput(calcInput);
+  const rndRef = useRef<Rnd>(null);
 
+  // Sets initial position to bottom right of window and sets retriggers on window resize
+  useEffect(() => {
+    const setBottomRightPosition = () => {
+      if (rndRef.current) {
+        const x = window.innerWidth - initialWidth;
+        const y = window.innerHeight - initialHeight;
+
+        rndRef.current.updatePosition({ x, y });
+      }
+    };
+
+    setBottomRightPosition();
+    window.addEventListener("resize", setBottomRightPosition);
+
+    return () => {
+      window.removeEventListener("resize", setBottomRightPosition);
+    };
+  }, []);
+
+  const output: EvalRes = evalInput(calcInput);
   return (
     <Rnd
       minWidth={initialWidth}
       minHeight={initialHeight}
-      default={{
-        x: window.innerWidth - initialWidth,
-        y: window.innerHeight - initialHeight,
-        width: initialWidth,
-        height: initialHeight,
-      }}
       style={{
-        display: "flex",
+        display: isOpen ? "flex" : "none",
+        zIndex: 1,
       }}
+      ref={rndRef}
       bounds={pageRef?.current || "parent"}
       disableDragging={draggingDisabled}
     >
       <div
-        className={`bg-jet
+        className={`bg-jet w-full h-full
         border-2 border-bg rounded-2 p-[10px] text-bg
-        flex flex-col grow ${isOpen ? "" : "hidden"}`}
+        flex flex-col`}
       >
         <div className="">Text-Field Calculator</div>
         <textarea

@@ -11,6 +11,8 @@ const fullModList: Map<string, string[]> = new Map(
 
 const modList = Array.from(fullModList.keys()).sort();
 const sidebarWidth = 200;
+const minManualWidth = 360;
+const maxNotepadWidth = window.innerWidth - minManualWidth - sidebarWidth;
 const defaultNotepadWidth = window.innerWidth * 0.3;
 
 function App() {
@@ -76,7 +78,7 @@ function App() {
           handleModClose={memoizedHandleModClose}
           sidebarWidth={sidebarWidth}
         />
-        <div className="relative grow">
+        <div className="relative grow border-l-2 border-r-2 border-black">
           <div
             className={`absolute w-full h-full bg-transparent ${
               coverManual ? "" : "hidden"
@@ -87,6 +89,7 @@ function App() {
         <Notepad
           setCoverManual={setCoverManual}
           defaultWidth={defaultNotepadWidth}
+          maxWidth={maxNotepadWidth}
         />
       </main>
     </div>

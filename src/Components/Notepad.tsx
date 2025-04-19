@@ -9,10 +9,12 @@ type ResizeCallbackData = {
 type ResizeHandleAxis = "s" | "w" | "e" | "n" | "sw" | "nw" | "se" | "ne";
 
 const Notepad = ({
-  defaultWidth = 600,
+  defaultWidth,
+  maxWidth,
   setCoverManual,
 }: {
-  defaultWidth?: number;
+  defaultWidth: number;
+  maxWidth: number;
   setCoverManual: (val: boolean) => void;
 }) => {
   const textareaRef = useRef(null);
@@ -30,6 +32,7 @@ const Notepad = ({
       onResize={onResize}
       onResizeStart={() => setCoverManual(true)}
       onResizeStop={() => setCoverManual(false)}
+      maxConstraints={[maxWidth, 1]} // second value is a dummy value
     >
       <div className="" style={{ width: width + "px" }}>
         <textarea

@@ -8,7 +8,7 @@ const Manuals = ({
   const openManualsList = Array.from(openManuals);
   return (
     <div
-      className={`h-full border-l-2 border-r-2 border-black ${
+      className={`h-full min-w-[360px] ${
         currentManual ? "" : "bg-[url(/images/web-background.jpg)]"
       }`}
     >
