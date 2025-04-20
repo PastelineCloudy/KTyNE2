@@ -49,7 +49,7 @@ ${sidebarOpen ? "" : "rotate-180"}`}
             ))}
         </ul>
         <div
-          className={`mt-auto flex justify-center border-t-2 pt-2 ${
+          className={`mt-auto flex justify-center border-t-2 p-2 m-2 ${
             sidebarOpen ? "" : "hidden"
           }`}
         >

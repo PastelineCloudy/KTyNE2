@@ -11,7 +11,8 @@ const HeaderButton = ({
       text-white border-2 p-2 border-white rounded-md h-fit hover:text-gray-400 hover:border-gray-400"
       onClick={onClick}
     >
-      {text}
+      <span className="underline">{text.slice(0, 1)}</span>
+      {text.slice(1)}
     </button>
   );
 };

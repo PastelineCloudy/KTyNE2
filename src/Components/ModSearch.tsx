@@ -1,5 +1,5 @@
 import { ChevronDown, Search } from "lucide-react";
-import { Ref, useRef, useState } from "react";
+import { Ref, useCallback, useEffect, useRef, useState } from "react";
 import useOutsideClickTracker from "../Hooks/useOutsideClickTracker";
 import { getLocalStorageMap } from "../Utils/LocalStorageUtils";
 import fullModListRaw from "../fullList(Apr 13 2025).json";
@@ -43,10 +43,13 @@ const ModSearch = ({
     setBestMatchIndex(getBestMatchIndex(newFilteredMods, newQuery));
   };
 
-  const setIsOpen = (status: boolean) => {
-    _setIsOpen(status);
-    setIframeCovered(status);
-  };
+  const setIsOpen = useCallback(
+    (status: boolean) => {
+      _setIsOpen(status);
+      setIframeCovered(status);
+    },
+    [setIframeCovered]
+  );
 
   const resetModSearch = () => {
     setQuery("");
@@ -55,8 +58,31 @@ const ModSearch = ({
     highlightedRef.current = null;
   };
 
-  const modSearchComponentRef = useRef(null);
+  const modSearchComponentRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   useOutsideClickTracker(isOpen, setIsOpen, modSearchComponentRef);
+
+  useEffect(() => {
+    const handleShortcut = (event: KeyboardEvent) => {
+      if (event.altKey) {
+        switch (event.key) {
+          case "n": {
+            event.preventDefault();
+            if (isOpen) {
+              setIsOpen(false);
+              inputRef.current?.blur();
+            } else inputRef.current?.focus();
+            break;
+          }
+        }
+      }
+    };
+    window.addEventListener("keydown", handleShortcut);
+
+    return () => {
+      window.removeEventListener("keydown", handleShortcut);
+    };
+  }, [isOpen, setIsOpen]);
 
   // Keydown pressed while list opened
   const handleKeyPress = (e: ItemSelectEvent) => {
@@ -89,7 +115,6 @@ const ModSearch = ({
     const htmlTarget = e.target as HTMLElement;
     const modName = htmlTarget.dataset.modName;
     const manualUrl = htmlTarget.dataset.manualUrl;
-    console.log(e && !e.ctrlKey);
     if (modName && manualUrl) {
       handleOpenMod(modName, manualUrl, e && !e.ctrlKey);
       resetModSearch();
@@ -128,6 +153,7 @@ const ModSearch = ({
         }}
         placeholder="Open New Manual"
         autoComplete="off"
+        ref={inputRef}
       />
       {isOpen && (
         <div className="bg-gray-200 p-2 border-2 border-black absolute top-7 rounded-md z-1">
