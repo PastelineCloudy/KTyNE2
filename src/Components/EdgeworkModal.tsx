@@ -53,8 +53,8 @@ const EdgeworkModal = ({
 
   const widgetCount =
     (parseInt(holders) | 0) +
-    litInds.length +
-    unlitInds.length +
+    parseInds(litInds).length +
+    parseInds(unlitInds).length +
     parsePorts(portPlates).length;
 
   return (
