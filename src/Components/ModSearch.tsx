@@ -7,7 +7,6 @@ import fullModListRaw from "../fullList(Apr 13 2025).json";
 type ItemSelectEvent = {
   key?: string;
   target: EventTarget | Element | null;
-  shiftKey: boolean;
   ctrlKey: boolean;
   preventDefault: () => void;
 };
@@ -87,12 +86,11 @@ const ModSearch = ({
 
   const openMod = (e: ItemSelectEvent) => {
     const htmlTarget = e.target as HTMLElement;
-    console.log(htmlTarget);
     const modName = htmlTarget.dataset.modName;
     const manualUrl = htmlTarget.dataset.manualUrl;
     if (modName && manualUrl) {
-      handleOpenMod(modName, manualUrl, e ? !e.ctrlKey : false);
-      if (!e || !e.shiftKey) resetModSearch();
+      handleOpenMod(modName, manualUrl, e && !e.ctrlKey);
+      resetModSearch();
     } else {
       console.error(`Could not open mod ${modName}`);
     }

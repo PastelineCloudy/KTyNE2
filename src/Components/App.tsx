@@ -49,7 +49,7 @@ function App() {
   ) => {
     if (changeCurrent) setCurrentManual(modName);
     if (Object.entries(openManuals).length >= 500) {
-      console.log("Mod limit reached");
+      console.warn("Mod limit reached");
       return;
     }
     const newOpenManuals = new Map<string, string>(openManuals).set(
@@ -73,6 +73,7 @@ function App() {
               currentManual={currentManual}
               handleModChange={memoizedHandleModChange}
               handleModClose={memoizedHandleModClose}
+              setOpenManuals={setOpenManuals}
             />
           </Panel>
           <PanelResizeHandle />
