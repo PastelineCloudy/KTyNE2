@@ -47,15 +47,19 @@ function App() {
     manualUrl: string,
     changeCurrent: boolean = true
   ) => {
-    if (changeCurrent) setCurrentManual(modName);
+    const finalModName = getFinalModName(
+      modName,
+      Array.from(openManuals.keys())
+    );
     if (Object.entries(openManuals).length >= 500) {
       console.warn("Mod limit reached");
       return;
     }
     const newOpenManuals = new Map<string, string>(openManuals).set(
-      getFinalModName(modName, Array.from(openManuals.keys())),
+      finalModName,
       manualUrl
     );
+    if (changeCurrent) setCurrentManual(finalModName);
     setOpenManuals(newOpenManuals);
   };
 

@@ -89,6 +89,7 @@ const ModSearch = ({
     const htmlTarget = e.target as HTMLElement;
     const modName = htmlTarget.dataset.modName;
     const manualUrl = htmlTarget.dataset.manualUrl;
+    console.log(e && !e.ctrlKey);
     if (modName && manualUrl) {
       handleOpenMod(modName, manualUrl, e && !e.ctrlKey);
       resetModSearch();
