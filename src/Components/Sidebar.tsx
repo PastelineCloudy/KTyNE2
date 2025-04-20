@@ -8,13 +8,13 @@ const Sidebar = ({
   currentManual,
   handleModChange,
   handleModClose,
-  setOpenManuals,
+  closeAllMods,
 }: {
   openModList: string[];
   currentManual: string | null;
   handleModChange: (modName: string, isCurrent: boolean) => void;
   handleModClose: (modName: string, isCurrent: boolean) => void;
-  setOpenManuals: (newVal: Map<string, string>) => void;
+  closeAllMods: () => void;
 }) => {
   const closeAllDialogRef = useRef<HTMLDialogElement>(null);
   const [filter, setFilter] = useState<string>("");
@@ -76,7 +76,7 @@ ${sidebarOpen ? "" : "rotate-180"}`}
               <button
                 className="border-2 border-black cursor-pointer hover:bg-gray-200 p-1 w-20 rounded-md"
                 onClick={() => {
-                  setOpenManuals(new Map<string, string>());
+                  closeAllMods();
                   closeAllDialogRef.current?.close();
                 }}
               >

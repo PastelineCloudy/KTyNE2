@@ -34,6 +34,11 @@ function App() {
     [openManuals]
   );
 
+  const closeAllMods = () => {
+    setCurrentManual(null);
+    setOpenManuals(new Map<string, string>());
+  };
+
   const memoizedHandleModChange = useCallback(
     (modName: string, isCurrent: boolean): void => {
       if (isCurrent) setCurrentManual(null);
@@ -84,7 +89,7 @@ function App() {
           currentManual={currentManual}
           handleModChange={memoizedHandleModChange}
           handleModClose={memoizedHandleModClose}
-          setOpenManuals={setOpenManuals}
+          closeAllMods={closeAllMods}
         />
         <PanelGroup direction="horizontal" autoSaveId="main-ktyne">
           <Panel

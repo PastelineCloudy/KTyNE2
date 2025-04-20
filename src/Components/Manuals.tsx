@@ -17,7 +17,7 @@ const Manuals = ({
       ></div>
       <div
         className={`h-full min-w-[360px] ${
-          currentManual ? "" : "bg-[url(/images/web-background.jpg)]"
+          currentManual ? "bg-white" : "bg-[url(/images/web-background.jpg)]"
         }`}
       >
         {openManualsList.length > 0 &&
