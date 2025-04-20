@@ -15,7 +15,7 @@ const Header = ({
 }) => {
   const [edgework, setEdgework] = useState<ReactNode>(null);
   return (
-    <header className="min-h-[75px] bg-jet flex items-center">
+    <header className="min-h-[75px] bg-jet flex items-center p-2">
       <ModSearch
         handleOpenMod={handleOpenMod}
         setIframeCovered={setIframeCovered}

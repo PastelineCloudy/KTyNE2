@@ -18,21 +18,23 @@ const Popups = ({
     useState<boolean>(false);
   return (
     <>
-      <HeaderButton
-        text="Edgework"
-        onClick={() => setEdgeworkModalIsOpen(true)}
-      />
-      <HeaderButton
-        text="Calculator"
-        onClick={() => setCalcIsOpen(!calcIsOpen)}
-      />
-      <HeaderButton
-        text="Alphabet"
-        onClick={() => setAlphaIsOpen(!alphaIsOpen)}
-      />
-      <Calculator isOpen={calcIsOpen} setIframeCovered={setIframeCovered} />
-      <Alphabet isOpen={alphaIsOpen} setIframeCovered={setIframeCovered} />
-      <div className="ml-auto absolute flex content-center flex-wrap">
+      <div className="flex flex-wrap justify-around gap-2">
+        <HeaderButton
+          text="Edgework"
+          onClick={() => setEdgeworkModalIsOpen(true)}
+        />
+        <HeaderButton
+          text="Calculator"
+          onClick={() => setCalcIsOpen(!calcIsOpen)}
+        />
+        <HeaderButton
+          text="Alphabet"
+          onClick={() => setAlphaIsOpen(!alphaIsOpen)}
+        />
+        <Calculator isOpen={calcIsOpen} setIframeCovered={setIframeCovered} />
+        <Alphabet isOpen={alphaIsOpen} setIframeCovered={setIframeCovered} />
+      </div>
+      <div className="ml-auto absolute flex flex-wrap content-center ">
         <EdgeworkModal
           edgeworkModalIsOpen={edgeworkModalIsOpen}
           setEdgeworkModalIsOpen={setEdgeworkModalIsOpen}
