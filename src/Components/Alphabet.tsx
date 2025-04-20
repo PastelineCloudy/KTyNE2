@@ -1,3 +1,4 @@
+import { useState } from "react";
 import DraggableResizeable from "./DraggableResizeable";
 
 const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -8,6 +9,7 @@ const Alphabet = ({
   isOpen: boolean;
   setIframeCovered: (newVal: boolean) => void;
 }) => {
+  const [indexByZero, setIndexByZero] = useState(false);
   return (
     <DraggableResizeable
       isOpen={isOpen}
@@ -22,11 +24,21 @@ const Alphabet = ({
         {alphabet.split("").map((letter, i) => {
           return (
             <span
-              className={`${i < 10 ? "pl-[1ch]" : ""} text-lg`}
+              className={`${
+                i < (indexByZero ? 10 : 9) ? "pl-[1ch]" : ""
+              } text-lg`}
               key={letter}
-            >{`${i}:${letter}`}</span>
+            >{`${indexByZero ? i : i + 1}:${letter}`}</span>
           );
         })}
+        <span className="col-span-4">
+          <button
+            className="border-2 border-white p-1 rounded-md cursor-pointer hover:text-gray-400 hover:border-gray-400"
+            onClick={() => setIndexByZero(!indexByZero)}
+          >
+            Index By {indexByZero ? "1" : "0"}
+          </button>
+        </span>
       </div>
     </DraggableResizeable>
   );
