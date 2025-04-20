@@ -2,7 +2,7 @@ import { ChevronDown, Search } from "lucide-react";
 import { Ref, useCallback, useEffect, useRef, useState } from "react";
 import useOutsideClickTracker from "../Hooks/useOutsideClickTracker";
 import { getLocalStorageMap } from "../Utils/LocalStorageUtils";
-import fullModListRaw from "../fullList(Apr 13 2025).json";
+import fullModListRaw from "../fullList(Apr 20 2025).json";
 import { getFilteredMods } from "../Utils/FilterUtils";
 
 type ItemSelectEvent = {
