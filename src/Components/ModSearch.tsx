@@ -167,6 +167,15 @@ const ModSearch = ({
                 highlightedRef={highlightedRef}
               />
             ))}
+            {filteredMods.length === 0 && (
+              <SearchListItem
+                key={0}
+                modName={"New Repo Tab"}
+                onClick={openMod}
+                isHighlighted={true}
+                highlightedRef={highlightedRef}
+              />
+            )}
           </ul>
         </div>
       )}
@@ -219,10 +228,14 @@ const SearchListItem = ({
         >
           {modName}
         </div>
-        <ChevronDown
-          onClick={handleDropDownClick}
-          className={`${dropDownEnabled ? "rotate-180" : ""} hover:text-white`}
-        />
+        {manualList.length > 0 && (
+          <ChevronDown
+            onClick={handleDropDownClick}
+            className={`${
+              dropDownEnabled ? "rotate-180" : ""
+            } hover:text-white`}
+          />
+        )}
       </div>
       {dropDownEnabled && (
         <ul className="">
