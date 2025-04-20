@@ -2,11 +2,22 @@ import { useState } from "react";
 import { evaluate } from "mathjs";
 import DraggableResizeable from "./DraggableResizeable";
 
-const Calculator = ({ isOpen }: { isOpen: boolean }) => {
+const Calculator = ({
+  isOpen,
+  setIframeCovered,
+}: {
+  isOpen: boolean;
+  setIframeCovered: (newVal: boolean) => void;
+}) => {
   const [calcInput, setCalcInput] = useState<string>("");
 
   return (
-    <DraggableResizeable isOpen={isOpen} corner={"bottom-right"} yOffset={100}>
+    <DraggableResizeable
+      isOpen={isOpen}
+      corner={"bottom-right"}
+      yOffset={120}
+      setIframeCovered={setIframeCovered}
+    >
       <div
         className={`bg-jet w-full h-full
         border-2 border-bg rounded-2 p-[10px] text-bg

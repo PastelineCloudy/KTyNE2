@@ -6,8 +6,10 @@ import Alphabet from "./Alphabet";
 
 const Popups = ({
   setEdgework,
+  setIframeCovered,
 }: {
   setEdgework: (newVal: ReactNode) => void;
+  setIframeCovered: (newVal: boolean) => void;
 }) => {
   const [calcIsOpen, setCalcIsOpen] = useState<boolean>(false);
   const [alphaIsOpen, setAlphaIsOpen] = useState<boolean>(false);
@@ -28,9 +30,9 @@ const Popups = ({
         text="Alphabet"
         onClick={() => setAlphaIsOpen(!alphaIsOpen)}
       />
-      <Calculator isOpen={calcIsOpen} />
-      <Alphabet isOpen={alphaIsOpen} />
-      <div className="ml-auto flex content-center flex-wrap">
+      <Calculator isOpen={calcIsOpen} setIframeCovered={setIframeCovered} />
+      <Alphabet isOpen={alphaIsOpen} setIframeCovered={setIframeCovered} />
+      <div className="ml-auto absolute flex content-center flex-wrap">
         <EdgeworkModal
           edgeworkModalIsOpen={edgeworkModalIsOpen}
           setEdgeworkModalIsOpen={setEdgeworkModalIsOpen}

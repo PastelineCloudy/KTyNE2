@@ -20,7 +20,7 @@ const Header = ({
         handleOpenMod={handleOpenMod}
         setIframeCovered={setIframeCovered}
       />
-      <Popups setEdgework={setEdgework} />
+      <Popups setEdgework={setEdgework} setIframeCovered={setIframeCovered} />
       <div className="ml-auto flex content-center flex-wrap">{edgework}</div>
     </header>
   );

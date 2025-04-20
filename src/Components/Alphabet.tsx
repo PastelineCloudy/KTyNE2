@@ -1,17 +1,23 @@
 import DraggableResizeable from "./DraggableResizeable";
 
 const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-const Alphabet = ({ isOpen }: { isOpen: boolean }) => {
+const Alphabet = ({
+  isOpen,
+  setIframeCovered,
+}: {
+  isOpen: boolean;
+  setIframeCovered: (newVal: boolean) => void;
+}) => {
   return (
     <DraggableResizeable
       isOpen={isOpen}
       corner={"bottom-right"}
-      disableResize={true}
+      setIframeCovered={setIframeCovered}
     >
       <div
         className={`bg-jet text-bg w-full h-full
         border-2 border-bg rounded-2 p-[10px] 
-        grid grid-cols-[repeat(10,5ch)]`}
+        grid grid-cols-10 place-items-center gap-2`}
       >
         {alphabet.split("").map((letter, i) => {
           return (

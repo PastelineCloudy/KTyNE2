@@ -8,6 +8,7 @@ const DraggableResizeable = ({
   children,
   xOffset = 0,
   yOffset = 0,
+  setIframeCovered,
 }: {
   isOpen?: boolean;
   corner?: "top-left" | "top-right" | "bottom-right" | "bottom-left";
@@ -15,6 +16,7 @@ const DraggableResizeable = ({
   children: string | ReactNode;
   xOffset?: number;
   yOffset?: number;
+  setIframeCovered: (newVal: boolean) => void;
 }) => {
   const rndRef = useRef<Rnd>(null);
 
@@ -82,6 +84,8 @@ const DraggableResizeable = ({
       bounds="window"
       cancel=".cancel-drag"
       enableResizing={disableResize ? resizeNone : resizeAll}
+      onDragStart={() => setIframeCovered(true)}
+      onDragStop={() => setIframeCovered(false)}
     >
       {children}
     </Rnd>
