@@ -52,7 +52,7 @@ function App() {
     manualUrl: string,
     changeCurrent: boolean = true
   ) => {
-    const modLimit = 5;
+    const modLimit = 250;
     const modsOpen = openManuals.size;
     const finalModName = getFinalModName(
       modName,
