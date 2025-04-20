@@ -46,17 +46,22 @@ const Sidebar = ({
         >
           Close all
         </button>
-        <dialog ref={closeAllDialogRef} className="m-auto p-2">
-          <p>Close all open modules?</p>
+        <dialog
+          ref={closeAllDialogRef}
+          className="m-auto p-8 border-black border-2 rounded-md"
+        >
+          <p className="mb-8">
+            Are you sure you want to close all open manuals?
+          </p>
           <div className="flex justify-around">
             <button
-              className="border-2 border-black cursor-pointer hover:bg-gray-200 p-1 w-12 rounded-md"
+              className="border-2 border-black cursor-pointer hover:bg-gray-200 p-1 w-20 rounded-md"
               onClick={() => closeAllDialogRef.current?.close()}
             >
               No
             </button>
             <button
-              className="border-2 border-black cursor-pointer hover:bg-gray-200 p-1 w-12 rounded-md"
+              className="border-2 border-black cursor-pointer hover:bg-gray-200 p-1 w-20 rounded-md"
               onClick={() => {
                 setOpenManuals(new Map<string, string>());
                 closeAllDialogRef.current?.close();
