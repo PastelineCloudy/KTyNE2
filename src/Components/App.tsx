@@ -47,13 +47,22 @@ function App() {
     manualUrl: string,
     changeCurrent: boolean = true
   ) => {
+    const modLimit = 5;
+    const modsOpen = openManuals.size;
     const finalModName = getFinalModName(
       modName,
       Array.from(openManuals.keys())
     );
-    if (Object.entries(openManuals).length >= 500) {
-      console.warn("Mod limit reached");
-      return;
+    if (modsOpen >= modLimit) {
+      const lastVal = openManuals.keys().next().value;
+      let warnMessage = "Mod limit reached.";
+
+      if (lastVal) {
+        if (currentManual === lastVal) setCurrentManual(null);
+        if (openManuals.delete(lastVal))
+          warnMessage += ` Closing oldest mod (${lastVal})`;
+      }
+      console.warn(warnMessage);
     }
     const newOpenManuals = new Map<string, string>(openManuals).set(
       finalModName,
