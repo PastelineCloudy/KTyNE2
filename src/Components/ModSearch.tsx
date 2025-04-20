@@ -3,6 +3,7 @@ import { Ref, useRef, useState } from "react";
 import useOutsideClickTracker from "../Hooks/useOutsideClickTracker";
 import { getLocalStorageMap } from "../Utils/LocalStorageUtils";
 import fullModListRaw from "../fullList(Apr 13 2025).json";
+import { getFilteredMods } from "../Utils/FilterUtils";
 
 type ItemSelectEvent = {
   key?: string;
@@ -124,7 +125,7 @@ const ModSearch = ({
           setIsOpen(true);
           handleSearchInput(e.target.value);
         }}
-        placeholder="Search Modules"
+        placeholder="Open New Manual"
         autoComplete="off"
       />
       {isOpen && (
@@ -229,7 +230,7 @@ const AlternativeManualItem = ({
 }) => {
   return (
     <li
-      className="cursor-pointer"
+      className="cursor-pointer mb-1"
       data-mod-name={modName}
       data-manual-url={manualUrl}
     >
@@ -287,12 +288,6 @@ const parseAlternativeManualName = (text: string) => {
   const URL_PREFIX = "https://ktane.timwi.de/HTML/";
   if (!text.includes(URL_PREFIX)) return text;
   return decodeURIComponent(text).replace(URL_PREFIX, "").replace(".html", "");
-};
-
-const getFilteredMods = (list: string[], queryTerm: string) => {
-  return list.filter((mod) =>
-    mod.toLowerCase().includes(queryTerm.toLowerCase())
-  );
 };
 
 const getBestMatchIndex = (list: string[], queryTerm: string) => {

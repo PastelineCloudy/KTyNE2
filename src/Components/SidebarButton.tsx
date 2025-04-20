@@ -13,19 +13,20 @@ const SidebarButton = ({
   handleModChange: (modName: string, isCurrent: boolean) => void;
   handleModClose: (modName: string, isCurrent: boolean) => void;
 }) => {
-  const [completionStatus, setCompletionStatus] = useState<number>(0);
-  const completionColors = ["bg-yellow-400", "bg-green-400"];
+  const [hover, setHover] = useState(false);
 
   return (
     <li
-      className={`pt-0.5 flex cursor-pointer hover:bg-gray-200 ${
+      className={`pt-0.5 flex cursor-pointer hover:bg-gray-200 max-w-50 ${
         isCurrentManual ? "bg-gray-200" : ""
       }`}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
     >
       <SquareX
         size={20}
         onClick={() => handleModClose(modName, isCurrentManual)}
-        className="hover:text-red-500 pr-1"
+        className={`hover:text-red-500 pr-1 ${hover ? "" : "opacity-0"}`}
       />
       <button
         className="w-full text-left text-1 text-nowrap text-ellipsis overflow-hidden cursor-pointer"
@@ -38,12 +39,6 @@ const SidebarButton = ({
       >
         {modName}
       </button>
-      <div
-        onClick={() =>
-          setCompletionStatus((completionStatus + 1) % completionColors.length)
-        }
-        className={`w-3 ${completionColors[completionStatus]} hover:border-black border-transparent border-1`}
-      ></div>
     </li>
   );
 };

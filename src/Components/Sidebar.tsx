@@ -1,5 +1,6 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import SidebarButton from "./SidebarButton";
+import { getFilteredMods } from "../Utils/FilterUtils";
 
 const Sidebar = ({
   openModList,
@@ -15,12 +16,32 @@ const Sidebar = ({
   setOpenManuals: (newVal: Map<string, string>) => void;
 }) => {
   const closeAllDialogRef = useRef<HTMLDialogElement>(null);
+  const [filter, setFilter] = useState<string>("");
   return (
     <div className="p-2 flex flex-col">
-      <h2 className="text-xl">Open Modules</h2>
-      <div>
+      <input
+        type="text"
+        value={filter}
+        className="bg-white rounded-md pl-1 border-2 w-full"
+        placeholder="Filter Manuals"
+        onChange={(e) => setFilter(e.target.value)}
+      />
+      <ul className="overflow-auto no-scrollbar mt-2 mb-2">
+        {getFilteredMods(openModList, filter)
+          .sort()
+          .map((modName) => (
+            <SidebarButton
+              key={modName}
+              modName={modName}
+              isCurrentManual={currentManual === modName}
+              handleModChange={handleModChange}
+              handleModClose={handleModClose}
+            />
+          ))}
+      </ul>
+      <div className="mt-auto flex justify-center border-t-2 pt-2">
         <button
-          className="border-2 border-black rounded-md p-1 mb-1 cursor-pointer"
+          className="heartbeat"
           onClick={() => closeAllDialogRef.current?.showModal()}
         >
           Close all
@@ -46,17 +67,6 @@ const Sidebar = ({
           </div>
         </dialog>
       </div>
-      <ul className="overflow-auto no-scrollbar">
-        {openModList.sort().map((modName) => (
-          <SidebarButton
-            key={modName}
-            modName={modName}
-            isCurrentManual={currentManual === modName}
-            handleModChange={handleModChange}
-            handleModClose={handleModClose}
-          />
-        ))}
-      </ul>
     </div>
   );
 };

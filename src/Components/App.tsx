@@ -53,30 +53,27 @@ function App() {
       return;
     }
     const newOpenManuals = new Map<string, string>(openManuals).set(
-      modName,
+      getFinalModName(modName, Array.from(openManuals.keys())),
       manualUrl
     );
     setOpenManuals(newOpenManuals);
   };
 
   return (
-    <div className="h-screen w-screen flex flex-col font-[special-elite] relative overflow-hidden">
+    <div className="h-[100vh] flex flex-col font-[special-elite] relative overflow-hidden">
       <Header
         handleOpenMod={handleOpenMod}
         setIframeCovered={setIframeCovered}
       />
-      <main className="flex h-[calc(100vh-60px)] bg-(--color-bg)">
+      <main className="flex h-[calc(100vh-75px)] bg-(--color-bg)">
+        <Sidebar
+          openModList={Array.from(openManuals.keys()).sort()}
+          currentManual={currentManual}
+          handleModChange={memoizedHandleModChange}
+          handleModClose={memoizedHandleModClose}
+          setOpenManuals={setOpenManuals}
+        />
         <PanelGroup direction="horizontal" autoSaveId="main-ktyne">
-          <Panel minSize={5} defaultSize={10} collapsible>
-            <Sidebar
-              openModList={Array.from(openManuals.keys()).sort()}
-              currentManual={currentManual}
-              handleModChange={memoizedHandleModChange}
-              handleModClose={memoizedHandleModClose}
-              setOpenManuals={setOpenManuals}
-            />
-          </Panel>
-          <PanelResizeHandle />
           <Panel
             defaultSize={55}
             className="border-l-2 border-r-2 border-black"
@@ -96,5 +93,15 @@ function App() {
     </div>
   );
 }
+
+const getFinalModName = (modName: string, openModList: string[]): string => {
+  if (!openModList.includes(modName)) return modName;
+
+  let firstAvailableNumber = 2;
+  while (openModList.includes(`${modName} (${firstAvailableNumber})`))
+    firstAvailableNumber++;
+
+  return `${modName} (${firstAvailableNumber})`;
+};
 
 export default App;
