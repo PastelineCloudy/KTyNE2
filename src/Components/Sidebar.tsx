@@ -18,7 +18,7 @@ const Sidebar = ({
 }) => {
   const closeAllDialogRef = useRef<HTMLDialogElement>(null);
   const [filter, setFilter] = useState<string>("");
-  const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
+  const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
   return (
     <div className="relative">
       <PanelLeftClose
