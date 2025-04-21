@@ -1,17 +1,18 @@
 import { ChevronDown, Search } from "lucide-react";
 import { Ref, useCallback, useRef, useState } from "react";
 import useOutsideClickTracker from "../Hooks/useOutsideClickTracker";
-import { getLocalStorageMap } from "../Utils/LocalStorageUtils";
 import fullModListRaw from "../fullList(Apr 20 2025).json";
 import { getFilteredMods } from "../Utils/FilterUtils";
 import OptionPopup from "./OptionPopup";
-
-type ItemSelectEvent = {
-  key?: string;
-  target: EventTarget | Element | null;
-  ctrlKey: boolean;
-  preventDefault: () => void;
-};
+import {
+  getBestMatchIndex,
+  getFinalModName,
+  getManualUrl,
+  ItemSelectEvent,
+  ModInfo,
+  parseAlternativeManualName,
+  setDefaultManualUrl,
+} from "../Utils/ModSearchUtils";
 
 const fullModList: Map<string, string[]> = new Map(
   Object.entries(fullModListRaw)
@@ -35,17 +36,6 @@ const ModSearch = ({
 }) => {
   const [query, setQuery] = useState<string>("");
   const [isOpen, _setIsOpen] = useState<boolean>(false);
-  const [bestMatchIndex, setBestMatchIndex] = useState<number>(0);
-  const highlightedRef = useRef<HTMLLIElement>(null);
-
-  const filteredMods = getFilteredMods(modList, query);
-
-  const handleSearchInput = (newQuery: string) => {
-    const newFilteredMods = getFilteredMods(modList, newQuery);
-    setQuery(newQuery);
-    setBestMatchIndex(getBestMatchIndex(newFilteredMods, newQuery));
-  };
-
   const setIsOpen = useCallback(
     (status: boolean) => {
       _setIsOpen(status);
@@ -53,6 +43,22 @@ const ModSearch = ({
     },
     [setIframeCovered]
   );
+  const [bestMatchIndex, setBestMatchIndex] = useState<number>(0);
+  const [tryingToOpen, setTryingToOpen] = useState<ModInfo | null>(null);
+
+  const highlightedRef = useRef<HTMLLIElement>(null);
+  const modSearchComponentRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const filteredMods = getFilteredMods(modList, query);
+
+  useOutsideClickTracker(isOpen, setIsOpen, modSearchComponentRef);
+
+  const handleSearchInput = (newQuery: string) => {
+    const newFilteredMods = getFilteredMods(modList, newQuery);
+    setQuery(newQuery);
+    setBestMatchIndex(getBestMatchIndex(newFilteredMods, newQuery));
+  };
 
   const resetModSearch = () => {
     setQuery("");
@@ -60,10 +66,6 @@ const ModSearch = ({
     setBestMatchIndex(0);
     highlightedRef.current = null;
   };
-
-  const modSearchComponentRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
-  useOutsideClickTracker(isOpen, setIsOpen, modSearchComponentRef);
 
   // Keydown pressed while list opened
   const handleKeyPress = (e: ItemSelectEvent) => {
@@ -92,12 +94,6 @@ const ModSearch = ({
     }
   };
 
-  type ModInfo = {
-    modName: string;
-    manualUrl: string;
-    changeCurrent?: boolean;
-  };
-  const [tryingToOpen, setTryingToOpen] = useState<ModInfo | null>(null);
   const openMod = (e: ItemSelectEvent) => {
     const htmlTarget = e.target as HTMLElement;
     const modName = htmlTarget.dataset.modName;
@@ -295,7 +291,7 @@ const AlternativeManualItem = ({
       data-mod-name={modName}
       data-manual-url={manualUrl}
     >
-      <div className={`flex justify-between  hover:bg-gray-400`}>
+      <div className={`flex justify-between  hover:bg-gray-300`}>
         <div
           onClick={onClick}
           data-mod-name={modName}
@@ -309,66 +305,16 @@ const AlternativeManualItem = ({
               e.stopPropagation();
               handleDefaultManualChange(manualUrl);
             }}
-            className={`ml-4 cursor-pointer border-2 border-black text-center text-xs ${
-              isDefault ? "opacity-0" : ""
-            } hover:text-white`}
+            className={`ml-4 cursor-pointer border-2 w-20 border-black text-center text-xs ${
+              isDefault ? "text-green-700" : ""
+            } hover:text-white hover:bg-gray-400`}
           >
-            Set Default
+            {isDefault ? "Default" : "Set Default"}
           </button>
         </div>
       </div>
     </li>
   );
-};
-
-const setDefaultManualUrl = (modName: string, manualUrl: string) => {
-  const defaultManuals = getLocalStorageMap<string>("KTyNE:defaultManuals");
-  defaultManuals.set(modName, manualUrl);
-  localStorage.setItem(
-    "KTyNE:defaultManuals",
-    JSON.stringify(Object.fromEntries(defaultManuals))
-  );
-};
-
-const getDefaulManualUrl = (modName: string): string | undefined => {
-  const defaultManuals = getLocalStorageMap<string>("KTyNE:defaultManuals");
-  return defaultManuals.get(modName);
-};
-
-const getManualUrl = (modName: string): string => {
-  const defaultManual = getDefaulManualUrl(modName);
-  if (defaultManual) return defaultManual;
-
-  const mapEntry = fullModList.get(modName);
-  if (mapEntry) return mapEntry[0];
-
-  return "https://ktane.timwi.de/";
-};
-
-const parseAlternativeManualName = (text: string) => {
-  const URL_PREFIX = "https://ktane.timwi.de/HTML/";
-  if (!text.includes(URL_PREFIX)) return text;
-  return decodeURIComponent(text).replace(URL_PREFIX, "").replace(".html", "");
-};
-
-const getBestMatchIndex = (list: string[], queryTerm: string) => {
-  const lowerCaseList = list.map((item) => item.toLowerCase());
-  const query = queryTerm.toLowerCase().trim();
-
-  if (lowerCaseList.includes(query)) return lowerCaseList.indexOf(query);
-  const startsWithQuery = lowerCaseList.find((item) => item.startsWith(query));
-  if (startsWithQuery) return lowerCaseList.indexOf(startsWithQuery);
-  return 0;
-};
-
-const getFinalModName = (modName: string, openModList: string[]): string => {
-  if (!openModList.includes(modName)) return modName;
-
-  let firstAvailableNumber = 2;
-  while (openModList.includes(`${modName} (${firstAvailableNumber})`))
-    firstAvailableNumber++;
-
-  return `${modName} (${firstAvailableNumber})`;
 };
 
 export default ModSearch;

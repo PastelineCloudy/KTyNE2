@@ -39,7 +39,10 @@ const OptionPopup = ({
 
   return (
     triggerState && (
-      <div className="fixed z-1 w-full h-full top-0 left-0 bg-black/50 flex">
+      <div
+        className="fixed z-1 w-full h-full top-0 left-0 bg-black/50 flex"
+        onClick={() => closeCallback()}
+      >
         <div className="m-auto p-8 border-black border-2 rounded-md z-1 bg-white">
           <p className="mb-8">{popupMessage}</p>
           <div className="flex justify-around">
