@@ -22,7 +22,7 @@ const DraggableResizeable = ({
 
   useEffect(() => {
     const setBottomRightPosition = () => {
-      if (isOpen && rndRef.current && rndRef.current.getSelfElement()) {
+      if (rndRef.current && rndRef.current.getSelfElement()) {
         const initialRect = rndRef.current
           .getSelfElement()!
           .getBoundingClientRect();
@@ -66,16 +66,10 @@ const DraggableResizeable = ({
     return () => {
       window.removeEventListener("resize", setBottomRightPosition);
     };
-  }, [isOpen, corner]);
+  }, [isOpen, corner, xOffset, yOffset]);
 
   return (
     <Rnd
-      default={{
-        x: 10,
-        y: 10,
-        width: "auto",
-        height: "auto",
-      }}
       style={{
         display: isOpen ? "flex" : "none",
         zIndex: 1,
