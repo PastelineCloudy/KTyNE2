@@ -1,3 +1,5 @@
+import { OpenManual } from "../Utils/Types";
+
 const Manuals = ({
   covered = false,
   currentManual,
@@ -5,7 +7,7 @@ const Manuals = ({
 }: {
   covered: boolean;
   currentManual: string | null;
-  openManuals: Map<string, string>;
+  openManuals: Map<string, OpenManual>;
 }) => {
   const openManualsList = Array.from(openManuals);
   return (
@@ -23,9 +25,9 @@ const Manuals = ({
         {openManualsList.length > 0 &&
           openManualsList.map(([name, manual]) => (
             <ManualIframe
-              key={name}
+              key={manual.id}
               name={name}
-              manual={manual}
+              manualUrl={manual.manualUrl}
               isCurrentManual={currentManual === name}
             />
           ))}
@@ -35,16 +37,16 @@ const Manuals = ({
 };
 
 const ManualIframe = ({
-  manual,
+  manualUrl,
   isCurrentManual,
 }: {
   name: string;
-  manual: string;
+  manualUrl: string;
   isCurrentManual: boolean;
 }) => {
   return (
     <iframe
-      src={manual}
+      src={manualUrl}
       className={isCurrentManual ? "w-full h-full" : "hidden"}
     ></iframe>
   );
