@@ -150,7 +150,7 @@ const ModSearch = ({
                 key={0}
                 modName={"New Repo Tab"}
                 onClick={openMod}
-                isHighlighted={true}
+                isHighlighted={false}
                 highlightedRef={highlightedRef}
               />
             )}

@@ -31,8 +31,10 @@ ${sidebarOpen ? "" : "rotate-180"}`}
           type="text"
           value={filter}
           className={`bg-white rounded-md pl-1 border-2 w-full
-        ${sidebarOpen ? "" : "hidden"}`}
-          placeholder="Filter Manuals"
+        ${sidebarOpen ? "" : "hidden"} ${
+            openModList.length === 0 ? "opacity-0" : ""
+          }`}
+          placeholder="Filter Open Manuals"
           onChange={(e) => setFilter(e.target.value)}
         />
         <ul className="overflow-auto no-scrollbar mt-2 mb-2">
