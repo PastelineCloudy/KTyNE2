@@ -1,5 +1,5 @@
 import { ChevronDown, Search } from "lucide-react";
-import { Ref, useCallback, useEffect, useRef, useState } from "react";
+import { Ref, useCallback, useRef, useState } from "react";
 import useOutsideClickTracker from "../Hooks/useOutsideClickTracker";
 import { getLocalStorageMap } from "../Utils/LocalStorageUtils";
 import fullModListRaw from "../fullList(Apr 20 2025).json";
@@ -61,28 +61,6 @@ const ModSearch = ({
   const modSearchComponentRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   useOutsideClickTracker(isOpen, setIsOpen, modSearchComponentRef);
-
-  useEffect(() => {
-    const handleShortcut = (event: KeyboardEvent) => {
-      if (event.altKey) {
-        switch (event.key) {
-          case "n": {
-            event.preventDefault();
-            if (isOpen) {
-              setIsOpen(false);
-              inputRef.current?.blur();
-            } else inputRef.current?.focus();
-            break;
-          }
-        }
-      }
-    };
-    window.addEventListener("keydown", handleShortcut);
-
-    return () => {
-      window.removeEventListener("keydown", handleShortcut);
-    };
-  }, [isOpen, setIsOpen]);
 
   // Keydown pressed while list opened
   const handleKeyPress = (e: ItemSelectEvent) => {

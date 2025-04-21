@@ -20,28 +20,11 @@ const EdgeworkModal = ({
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
-    const handleShortcut = (event: KeyboardEvent) => {
-      if (event.altKey) {
-        switch (event.key) {
-          case "e": {
-            event.preventDefault();
-            setEdgeworkModalIsOpen(!edgeworkModalIsOpen);
-            break;
-          }
-        }
-      }
-    };
-
     if (edgeworkModalIsOpen) {
       dialogRef.current?.showModal();
     } else {
       dialogRef.current?.close();
     }
-    window.addEventListener("keydown", handleShortcut);
-
-    return () => {
-      window.removeEventListener("keydown", handleShortcut);
-    };
   }, [edgeworkModalIsOpen, setEdgeworkModalIsOpen]);
 
   const handleFormSubmit = (e: SyntheticEvent) => {
@@ -66,6 +49,7 @@ const EdgeworkModal = ({
     setUnlitInds("");
     setPortPlates("");
     setSerial("");
+    setEdgework(null);
   };
 
   const widgetCount =

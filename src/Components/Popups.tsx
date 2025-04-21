@@ -30,8 +30,6 @@ const Popups = ({
             setAlphaIsOpen(!alphaIsOpen);
             break;
           }
-          // case "e" - handled inside edgework modal component
-          // case "n" - handled inside mod search component
         }
       }
     };
@@ -46,14 +44,17 @@ const Popups = ({
       <div className="flex flex-wrap justify-around gap-2">
         <HeaderButton
           text="Edgework"
+          underlineFirst={false}
           onClick={() => setEdgeworkModalIsOpen(true)}
         />
         <HeaderButton
           text="Calculator"
+          underlineFirst={true}
           onClick={() => setCalcIsOpen(!calcIsOpen)}
         />
         <HeaderButton
           text="Alphabet"
+          underlineFirst={true}
           onClick={() => setAlphaIsOpen(!alphaIsOpen)}
         />
         <Calculator isOpen={calcIsOpen} setIframeCovered={setIframeCovered} />
