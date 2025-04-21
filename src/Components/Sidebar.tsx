@@ -1,7 +1,8 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import SidebarButton from "./SidebarButton";
 import { getFilteredMods } from "../Utils/FilterUtils";
 import { PanelLeftClose } from "lucide-react";
+import OptionPopup from "./OptionPopup";
 
 const Sidebar = ({
   openModList,
@@ -16,9 +17,9 @@ const Sidebar = ({
   handleModClose: (modName: string, isCurrent: boolean) => void;
   closeAllMods: () => void;
 }) => {
-  const closeAllDialogRef = useRef<HTMLDialogElement>(null);
   const [filter, setFilter] = useState<string>("");
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
+  const [closingAll, setClosingAll] = useState<boolean>(false);
   return (
     <div className="relative">
       <PanelLeftClose
@@ -55,37 +56,24 @@ ${sidebarOpen ? "" : "rotate-180"}`}
             sidebarOpen ? "" : "hidden"
           }`}
         >
-          <button
-            className="heartbeat"
-            onClick={() => closeAllDialogRef.current?.showModal()}
-          >
-            Close all
-          </button>
-          <dialog
-            ref={closeAllDialogRef}
-            className="m-auto p-8 border-black border-2 rounded-md"
-          >
-            <p className="mb-8">
-              Are you sure you want to close all open manuals?
-            </p>
-            <div className="flex justify-around">
-              <button
-                className="border-2 border-black cursor-pointer hover:bg-gray-200 p-1 w-20 rounded-md"
-                onClick={() => closeAllDialogRef.current?.close()}
-              >
-                No
-              </button>
-              <button
-                className="border-2 border-black cursor-pointer hover:bg-gray-200 p-1 w-20 rounded-md"
-                onClick={() => {
-                  closeAllMods();
-                  closeAllDialogRef.current?.close();
-                }}
-              >
-                Yes
-              </button>
-            </div>
-          </dialog>
+          {openModList.length > 0 && (
+            <button className="heartbeat" onClick={() => setClosingAll(true)}>
+              Close all
+            </button>
+          )}
+
+          <OptionPopup
+            triggerState={closingAll}
+            popupMessage="Are you sure you want to close all open manuals?"
+            options={["Cancel", "Yes, I'm sure"]}
+            optionCallbacks={[
+              () => {},
+              () => {
+                closeAllMods();
+              },
+            ]}
+            closeCallback={() => setClosingAll(false)}
+          />
         </div>
       </div>
     </div>

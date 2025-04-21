@@ -5,6 +5,7 @@ import Popups from "./Popups";
 const Header = ({
   handleOpenMod,
   setIframeCovered,
+  openManuals,
 }: {
   handleOpenMod: (
     modName: string,
@@ -12,6 +13,7 @@ const Header = ({
     changeCurrent?: boolean
   ) => void;
   setIframeCovered: (bool: boolean) => void;
+  openManuals: string[];
 }) => {
   const [edgework, setEdgework] = useState<ReactNode>(null);
   return (
@@ -19,6 +21,7 @@ const Header = ({
       <ModSearch
         handleOpenMod={handleOpenMod}
         setIframeCovered={setIframeCovered}
+        openManuals={openManuals}
       />
       <Popups setEdgework={setEdgework} setIframeCovered={setIframeCovered} />
       <div className="ml-auto flex content-center flex-wrap">{edgework}</div>

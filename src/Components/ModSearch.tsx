@@ -4,6 +4,7 @@ import useOutsideClickTracker from "../Hooks/useOutsideClickTracker";
 import { getLocalStorageMap } from "../Utils/LocalStorageUtils";
 import fullModListRaw from "../fullList(Apr 20 2025).json";
 import { getFilteredMods } from "../Utils/FilterUtils";
+import OptionPopup from "./OptionPopup";
 
 type ItemSelectEvent = {
   key?: string;
@@ -22,6 +23,7 @@ const maxListSize = 100;
 const ModSearch = ({
   handleOpenMod,
   setIframeCovered,
+  openManuals,
 }: {
   handleOpenMod: (
     modName: string,
@@ -29,6 +31,7 @@ const ModSearch = ({
     changeCurrent?: boolean
   ) => void;
   setIframeCovered: (bool: boolean) => void;
+  openManuals: string[];
 }) => {
   const [query, setQuery] = useState<string>("");
   const [isOpen, _setIsOpen] = useState<boolean>(false);
@@ -89,75 +92,115 @@ const ModSearch = ({
     }
   };
 
+  type ModInfo = {
+    modName: string;
+    manualUrl: string;
+    changeCurrent?: boolean;
+  };
+  const [tryingToOpen, setTryingToOpen] = useState<ModInfo | null>(null);
   const openMod = (e: ItemSelectEvent) => {
     const htmlTarget = e.target as HTMLElement;
     const modName = htmlTarget.dataset.modName;
     const manualUrl = htmlTarget.dataset.manualUrl;
     if (modName && manualUrl) {
-      handleOpenMod(modName, manualUrl, e && !e.ctrlKey);
+      if (openManuals.includes(modName)) {
+        setTryingToOpen({ modName, manualUrl, changeCurrent: e && !e.ctrlKey });
+      } else {
+        handleOpenMod(modName, manualUrl, e && !e.ctrlKey);
+      }
       resetModSearch();
     } else {
       console.error(`Could not open mod ${modName}`);
     }
   };
 
+  const handleOpenOption = (replace: boolean) => {
+    inputRef.current?.blur();
+    if (tryingToOpen) {
+      handleOpenMod(
+        replace
+          ? tryingToOpen.modName
+          : getFinalModName(tryingToOpen.modName, openManuals),
+        tryingToOpen.manualUrl,
+        tryingToOpen.changeCurrent
+      );
+      setTryingToOpen(null);
+      setTimeout(() => {
+        // tiny timeout before refocus to prevent keydown inputs from becoming query
+        inputRef.current?.focus();
+      }, 10);
+    }
+  };
+
   return (
-    <div
-      className="relative m-2 backdrop:backdrop-blur-3xl"
-      onFocus={() => setIsOpen(true)}
-      onKeyDown={(e) =>
-        handleKeyPress({
-          ...e,
-          target: highlightedRef.current,
-        })
-      }
-      ref={modSearchComponentRef}
-    >
-      <label
-        htmlFor="mod-list-select"
-        className="absolute left-0 ml-1 mt-0.5 cursor-pointer"
-      >
-        <Search size="20" />
-      </label>
-      <input
-        type="text"
-        name="mod-list-select"
-        id="mod-list-select"
-        className="bg-white pl-6 rounded-md w-48 pt-[0.2rem]"
-        value={query}
-        onChange={(e) => {
-          setIsOpen(true);
-          handleSearchInput(e.target.value);
-        }}
-        placeholder="Open New Manual"
-        autoComplete="off"
-        ref={inputRef}
+    <>
+      <OptionPopup
+        triggerState={tryingToOpen != null}
+        popupMessage={`"${tryingToOpen?.modName}" is already open. What would you like to do?`}
+        options={["Replace", "Open Another"]}
+        optionCallbacks={[
+          () => handleOpenOption(true),
+          () => handleOpenOption(false),
+        ]}
+        closeCallback={() => setTryingToOpen(null)}
       />
-      {isOpen && (
-        <div className="bg-gray-200 p-2 border-2 border-black absolute top-7 rounded-md z-1">
-          <ul className="overflow-auto no-scrollbar max-h-[80vh]">
-            {filteredMods.slice(0, maxListSize).map((modName, i) => (
-              <SearchListItem
-                key={modName}
-                modName={modName}
-                onClick={openMod}
-                isHighlighted={i === bestMatchIndex}
-                highlightedRef={highlightedRef}
-              />
-            ))}
-            {filteredMods.length === 0 && (
-              <SearchListItem
-                key={0}
-                modName={"New Repo Tab"}
-                onClick={openMod}
-                isHighlighted={false}
-                highlightedRef={highlightedRef}
-              />
-            )}
-          </ul>
-        </div>
-      )}
-    </div>
+      <div
+        className="relative m-2 backdrop:backdrop-blur-3xl"
+        onFocus={() => setIsOpen(true)}
+        onKeyDown={(e) =>
+          handleKeyPress({
+            ...e,
+            target: highlightedRef.current,
+          })
+        }
+        ref={modSearchComponentRef}
+      >
+        <label
+          htmlFor="mod-list-select"
+          className="absolute left-0 ml-1 mt-0.5 cursor-pointer"
+        >
+          <Search size="20" />
+        </label>
+        <input
+          type="text"
+          name="mod-list-select"
+          id="mod-list-select"
+          className="bg-white pl-6 rounded-md w-48 pt-[0.2rem]"
+          value={query}
+          onChange={(e) => {
+            setIsOpen(true);
+            handleSearchInput(e.target.value);
+          }}
+          placeholder="Open New Manual"
+          autoComplete="off"
+          ref={inputRef}
+        />
+        {isOpen && (
+          <div className="bg-gray-200 p-2 border-2 border-black absolute top-7 rounded-md z-1">
+            <ul className="overflow-auto no-scrollbar max-h-[80vh]">
+              {filteredMods.slice(0, maxListSize).map((modName, i) => (
+                <SearchListItem
+                  key={modName}
+                  modName={modName}
+                  onClick={openMod}
+                  isHighlighted={i === bestMatchIndex}
+                  highlightedRef={highlightedRef}
+                />
+              ))}
+              {filteredMods.length === 0 && (
+                <SearchListItem
+                  key={0}
+                  modName={"New Repo Tab"}
+                  onClick={openMod}
+                  isHighlighted={false}
+                  highlightedRef={highlightedRef}
+                />
+              )}
+            </ul>
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 
@@ -279,7 +322,7 @@ const AlternativeManualItem = ({
 };
 
 const setDefaultManualUrl = (modName: string, manualUrl: string) => {
-  const defaultManuals = getLocalStorageMap("KTyNE:defaultManuals");
+  const defaultManuals = getLocalStorageMap<string>("KTyNE:defaultManuals");
   defaultManuals.set(modName, manualUrl);
   localStorage.setItem(
     "KTyNE:defaultManuals",
@@ -288,7 +331,7 @@ const setDefaultManualUrl = (modName: string, manualUrl: string) => {
 };
 
 const getDefaulManualUrl = (modName: string): string | undefined => {
-  const defaultManuals = getLocalStorageMap("KTyNE:defaultManuals");
+  const defaultManuals = getLocalStorageMap<string>("KTyNE:defaultManuals");
   return defaultManuals.get(modName);
 };
 
@@ -316,6 +359,16 @@ const getBestMatchIndex = (list: string[], queryTerm: string) => {
   const startsWithQuery = lowerCaseList.find((item) => item.startsWith(query));
   if (startsWithQuery) return lowerCaseList.indexOf(startsWithQuery);
   return 0;
+};
+
+const getFinalModName = (modName: string, openModList: string[]): string => {
+  if (!openModList.includes(modName)) return modName;
+
+  let firstAvailableNumber = 2;
+  while (openModList.includes(`${modName} (${firstAvailableNumber})`))
+    firstAvailableNumber++;
+
+  return `${modName} (${firstAvailableNumber})`;
 };
 
 export default ModSearch;

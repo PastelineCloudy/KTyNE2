@@ -5,11 +5,12 @@ import Notepad from "./Notepad";
 import Header from "./Header";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { getLocalStorageMap } from "../Utils/LocalStorageUtils";
+import { OpenManual } from "../Utils/Types";
 
 function App() {
   const [currentManual, setCurrentManual] = useState<string | null>(null);
-  const [openManuals, setOpenManuals] = useState<Map<string, string>>(() =>
-    getLocalStorageMap("KTyNE:openManuals")
+  const [openManuals, setOpenManuals] = useState<Map<string, OpenManual>>(() =>
+    getLocalStorageMap<OpenManual>("KTyNE:openManuals")
   );
   const [iframeCovered, setIframeCovered] = useState<boolean>(false);
 
@@ -26,7 +27,7 @@ function App() {
         setCurrentManual(null);
       }
 
-      const newManualList = new Map<string, string>(openManuals);
+      const newManualList = new Map<string, OpenManual>(openManuals);
       if (newManualList.delete(modToClose)) {
         setOpenManuals(newManualList);
       }
@@ -36,7 +37,7 @@ function App() {
 
   const closeAllMods = () => {
     setCurrentManual(null);
-    setOpenManuals(new Map<string, string>());
+    setOpenManuals(new Map<string, OpenManual>());
   };
 
   const memoizedHandleModChange = useCallback(
@@ -54,10 +55,6 @@ function App() {
   ) => {
     const modLimit = 250;
     const modsOpen = openManuals.size;
-    const finalModName = getFinalModName(
-      modName,
-      Array.from(openManuals.keys())
-    );
     if (modsOpen >= modLimit) {
       const lastVal = openManuals.keys().next().value;
       let warnMessage = "Mod limit reached.";
@@ -69,11 +66,14 @@ function App() {
       }
       console.warn(warnMessage);
     }
-    const newOpenManuals = new Map<string, string>(openManuals).set(
-      finalModName,
-      manualUrl
+    const newOpenManuals = new Map<string, OpenManual>(openManuals).set(
+      modName,
+      {
+        id: String(crypto.randomUUID()),
+        manualUrl: manualUrl,
+      }
     );
-    if (changeCurrent) setCurrentManual(finalModName);
+    if (changeCurrent) setCurrentManual(modName);
     setOpenManuals(newOpenManuals);
   };
 
@@ -82,6 +82,7 @@ function App() {
       <Header
         handleOpenMod={handleOpenMod}
         setIframeCovered={setIframeCovered}
+        openManuals={Array.from(openManuals.keys())}
       />
       <main className="flex h-[calc(100vh-75px)] bg-(--color-bg)">
         <Sidebar
@@ -111,15 +112,5 @@ function App() {
     </div>
   );
 }
-
-const getFinalModName = (modName: string, openModList: string[]): string => {
-  if (!openModList.includes(modName)) return modName;
-
-  let firstAvailableNumber = 2;
-  while (openModList.includes(`${modName} (${firstAvailableNumber})`))
-    firstAvailableNumber++;
-
-  return `${modName} (${firstAvailableNumber})`;
-};
 
 export default App;
