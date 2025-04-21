@@ -1,4 +1,3 @@
-import { isNumber } from "mathjs";
 import { useCallback, useEffect } from "react";
 
 const OptionPopup = ({
