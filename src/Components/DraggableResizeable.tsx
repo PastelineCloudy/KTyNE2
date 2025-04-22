@@ -2,21 +2,21 @@ import { ReactNode, useEffect, useRef } from "react";
 import { Rnd } from "react-rnd";
 
 const DraggableResizeable = ({
+  children,
+  setIframeCovered,
   isOpen = true,
   corner = "top-left",
   disableResize = false,
-  children,
   xOffset = 0,
   yOffset = 0,
-  setIframeCovered,
 }: {
+  children: string | ReactNode;
+  setIframeCovered: (newVal: boolean) => void;
   isOpen?: boolean;
   corner?: "top-left" | "top-right" | "bottom-right" | "bottom-left";
   disableResize?: boolean;
-  children: string | ReactNode;
   xOffset?: number;
   yOffset?: number;
-  setIframeCovered: (newVal: boolean) => void;
 }) => {
   const rndRef = useRef<Rnd>(null);
 

@@ -3,6 +3,7 @@ import Calculator from "./Calculator";
 import EdgeworkModal from "./EdgeworkModal";
 import Alphabet from "./Alphabet";
 import { Menu, MenuItem } from "./Menu";
+import BaseConverter from "./BaseConverter";
 
 const Popups = ({
   setEdgework,
@@ -13,6 +14,8 @@ const Popups = ({
 }) => {
   const [calcIsOpen, setCalcIsOpen] = useState<boolean>(false);
   const [alphaIsOpen, setAlphaIsOpen] = useState<boolean>(false);
+  const [baseConverterIsOpen, setBaseConverterIsOpen] =
+    useState<boolean>(false);
   const [edgeworkModalIsOpen, setEdgeworkModalIsOpen] =
     useState<boolean>(false);
 
@@ -23,6 +26,11 @@ const Popups = ({
           case "a": {
             event.preventDefault();
             setAlphaIsOpen(!alphaIsOpen);
+            break;
+          }
+          case "b": {
+            event.preventDefault();
+            setBaseConverterIsOpen(!baseConverterIsOpen);
             break;
           }
           case "c": {
@@ -38,7 +46,7 @@ const Popups = ({
     return () => {
       window.removeEventListener("keydown", handleShortcut);
     };
-  }, [alphaIsOpen, calcIsOpen, edgeworkModalIsOpen]);
+  }, [alphaIsOpen, baseConverterIsOpen, calcIsOpen, edgeworkModalIsOpen]);
   return (
     <>
       <div className="flex flex-wrap justify-around gap-2">
@@ -49,11 +57,21 @@ const Popups = ({
           <MenuItem underlineFirst onClick={() => setAlphaIsOpen(!alphaIsOpen)}>
             Alphabet
           </MenuItem>
+          <MenuItem
+            underlineFirst
+            onClick={() => setBaseConverterIsOpen(!baseConverterIsOpen)}
+          >
+            Base Converter
+          </MenuItem>
           <MenuItem underlineFirst onClick={() => setCalcIsOpen(!calcIsOpen)}>
             Calculator
           </MenuItem>
         </Menu>
         <Alphabet isOpen={alphaIsOpen} setIframeCovered={setIframeCovered} />
+        <BaseConverter
+          isOpen={baseConverterIsOpen}
+          setIframeCovered={setIframeCovered}
+        />
         <Calculator isOpen={calcIsOpen} setIframeCovered={setIframeCovered} />
         <EdgeworkModal
           edgeworkModalIsOpen={edgeworkModalIsOpen}

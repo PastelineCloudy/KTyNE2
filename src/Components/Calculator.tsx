@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { evaluate } from "mathjs";
 import DraggableResizeable from "./DraggableResizeable";
 
@@ -10,7 +10,12 @@ const Calculator = ({
   setIframeCovered: (newVal: boolean) => void;
 }) => {
   const [calcInput, setCalcInput] = useState<string>("");
-
+  const firstInputRef = useRef<HTMLTextAreaElement>(null);
+  useEffect(() => {
+    if (firstInputRef.current) {
+      firstInputRef.current.select();
+    }
+  }, [isOpen]);
   return (
     <DraggableResizeable
       isOpen={isOpen}
@@ -34,6 +39,7 @@ const Calculator = ({
           value={calcInput}
           onChange={(e) => setCalcInput(e.target.value)}
           className="cancel-drag resize-none bg-bg mb-2 p-1 text-jet grow"
+          ref={firstInputRef}
         ></textarea>
         <div className="w-fit pr-10 cancel-drag cursor-text">
           Output: {<span>{evalInput(calcInput)}</span>}

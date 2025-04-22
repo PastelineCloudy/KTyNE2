@@ -25,11 +25,11 @@ export const Menu = ({
 
 export const MenuItem = ({
   onClick,
-  underlineFirst,
+  underlineFirst = false,
   children,
 }: {
   onClick: () => void;
-  underlineFirst: boolean;
+  underlineFirst?: boolean;
   children: string;
 }) => {
   return (
