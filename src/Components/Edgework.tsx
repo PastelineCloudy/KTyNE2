@@ -1,35 +1,10 @@
+import { Ind, Port } from "../Utils/EdgeworkUtils";
 import {
   BatteryWidget,
   IndWidget,
   PortPlateWidget,
   SerialWidget,
 } from "./Widgets";
-
-export const INDS = [
-  "bob",
-  "car",
-  "clr",
-  "frk",
-  "frq",
-  "ind",
-  "msa",
-  "nsa",
-  "sig",
-  "snd",
-  "trn",
-] as const;
-export type Ind = (typeof INDS)[number];
-
-export const PORTS = [
-  "rj",
-  "ps2",
-  "dvi",
-  "rca",
-  "parallel",
-  "serial",
-  "",
-] as const;
-export type Port = (typeof PORTS)[number];
 
 export type EdgeworkInfo = {
   batteries?: number;
@@ -85,9 +60,10 @@ const Edgework = ({
     );
   });
 
-  edgeworkChildren.push(
-    <SerialWidget key={edgeworkKey++} sn={serial.toUpperCase()} />
-  );
+  if (serial)
+    edgeworkChildren.push(
+      <SerialWidget key={edgeworkKey++} sn={serial.toUpperCase()} />
+    );
 
   return (
     <div className="flex bg-jet max-w-80vw flex-wrap justify-center">

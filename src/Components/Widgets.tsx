@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { Ind } from "./Edgework";
+import { Ind } from "../Utils/EdgeworkUtils";
 
 export const SerialWidget = ({ sn: serial }: { sn: string }) => {
   return (

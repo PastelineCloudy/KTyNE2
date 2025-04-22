@@ -1,6 +1,7 @@
-import { ReactNode, SyntheticEvent, useState } from "react";
-import Edgework, { Ind, INDS, Port, PORTS } from "./Edgework";
-import CustomDialog from "./CustomDialog";
+import { ReactNode, Ref, SyntheticEvent, useRef, useState } from "react";
+import Edgework from "./Edgework";
+import CustomDialog, { CustomDialogButton } from "./CustomDialog";
+import { parseInds, parsePorts } from "../Utils/EdgeworkUtils";
 
 const EdgeworkModal = ({
   edgeworkModalIsOpen,
@@ -11,20 +12,22 @@ const EdgeworkModal = ({
   setEdgeworkModalIsOpen: (newVal: boolean) => void;
   setEdgework: (newVal: ReactNode) => void;
 }) => {
-  const [batteries, setBatteries] = useState("");
-  const [holders, setHolders] = useState("");
+  const [batteries, setBatteries] = useState<number | null>(null);
+  const [holders, setHolders] = useState<number | null>(null);
   const [litInds, setLitInds] = useState<string>("");
   const [unlitInds, setUnlitInds] = useState<string>("");
   const [portPlates, setPortPlates] = useState<string>("");
   const [serial, setSerial] = useState("");
+
+  const firstInputRef = useRef<HTMLInputElement>(null);
 
   const handleFormSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
     setEdgeworkModalIsOpen(false);
     setEdgework(
       <Edgework
-        batteries={parseInt(batteries) ?? 0}
-        holders={parseInt(holders) ?? 0}
+        batteries={batteries || 0}
+        holders={holders || 0}
         litInds={parseInds(litInds)}
         unlitInds={parseInds(unlitInds)}
         portPlates={parsePorts(portPlates)}
@@ -34,17 +37,18 @@ const EdgeworkModal = ({
   };
 
   const resetEdgework = () => {
-    setBatteries("");
-    setHolders("");
+    setBatteries(null);
+    setHolders(null);
     setLitInds("");
     setUnlitInds("");
     setPortPlates("");
     setSerial("");
     setEdgework(null);
+    firstInputRef.current?.focus();
   };
 
   const widgetCount =
-    (parseInt(holders) | 0) +
+    (holders || 0) +
     parseInds(litInds).length +
     parseInds(unlitInds).length +
     parsePorts(portPlates).length;
@@ -58,6 +62,7 @@ const EdgeworkModal = ({
         <h1 className="text-4xl text-center">Edgework</h1>
         <div className="flex justify-center gap-2">
           <LabelInput
+            ref={firstInputRef}
             labelText="Batteries"
             id="battery-input"
             placeholder="0"
@@ -65,11 +70,17 @@ const EdgeworkModal = ({
             width="w-32"
             min={0}
             max={10}
-            autoFocus={true}
             value={batteries}
-            setValue={(newVal) =>
-              setBatteries(parseInt(newVal) > 10 ? "10" : newVal)
-            }
+            autoFocus={true}
+            setValue={(newVal) => {
+              const val = parseInt(newVal);
+              if (val > 10) {
+                // Safe gaurd for if tab is hit after holders input
+                setHolders(Math.floor(val / 10));
+              } else {
+                setBatteries(val);
+              }
+            }}
           />
           <LabelInput
             labelText="Holders"
@@ -81,7 +92,7 @@ const EdgeworkModal = ({
             min={0}
             max={10}
             setValue={(newVal) =>
-              setHolders(parseInt(newVal) > 5 ? "5" : newVal)
+              setHolders(parseInt(newVal) > 5 ? 5 : parseInt(newVal))
             }
           />
         </div>
@@ -129,18 +140,17 @@ const EdgeworkModal = ({
             : "Exactly 5 widgets"}
         </p>
         <div className="pt-2 flex gap-2">
-          <DialogButton
-            text="Close"
-            onClick={() => setEdgeworkModalIsOpen(false)}
-          />
-          <DialogButton text="Reset" onClick={resetEdgework} />
-          <DialogButton text="Submit" type="submit" />
+          <CustomDialogButton onClick={() => setEdgeworkModalIsOpen(false)}>
+            Close
+          </CustomDialogButton>
+          <CustomDialogButton onClick={resetEdgework}>Reset</CustomDialogButton>
+          <CustomDialogButton type="submit">Submit</CustomDialogButton>
         </div>
-        <div className="mt-2 p-4 pt-2 bg-jet w-full h-40">
+        <div className="mt-2 p-4 pt-2 bg-jet w-115 h-40">
           {
             <Edgework
-              batteries={parseInt(batteries) ?? 0}
-              holders={parseInt(holders) ?? 0}
+              batteries={batteries || 0}
+              holders={holders || 0}
               litInds={parseInds(litInds)}
               unlitInds={parseInds(unlitInds)}
               portPlates={parsePorts(portPlates)}
@@ -153,71 +163,10 @@ const EdgeworkModal = ({
   );
 };
 
-const parsePorts = (portString: string): Port[][] => {
-  if (portString == "") return [];
-
-  const replacedInput = portString
-    .toLowerCase()
-    .replace(/dvid|dvi-d/g, "dvi")
-    .replace(/parallel|para/g, "parallel")
-    .replace("ps/2", "ps2")
-    .replace(/rj-45|rj45/g, "rj")
-    .replace(/stereo-rca|stereo rca|stereo|ster/g, "rca")
-    .replace(/all2|sp/g, "serial parallel")
-    .replace(/all4/g, "dvi rca rj ps2")
-    .replace("()", "(empty)")
-    .replace(",", " ")
-    .replace("  ", " ")
-    .trim();
-  const plateInputs = replacedInput.match(/[([]([A-za-z0-9 ,-]+)+/g);
-  const plateStrings = plateInputs
-    ? plateInputs.map((plate) => plate.replace(/[[(]/g, ""))
-    : [];
-
-  const ports: string[][] = plateStrings.map((plateString) =>
-    plateString
-      .split(" ")
-      .map((port) => (PORTS.includes(port as Port) ? port : ""))
-  );
-  return ports as Port[][];
-};
-
-const parseInds = (indList: string): Ind[] => {
-  return indList
-    .split(" ")
-    .map((ind) => ind.toLowerCase())
-    .filter((ind) => isValidInd(ind))
-    .map((ind) => ind as Ind);
-};
-
-function isValidInd(value: string): value is Ind {
-  return INDS.includes(value as Ind);
-}
-
-const DialogButton = ({
-  text,
-  onClick,
-  type = "button",
-}: {
-  text: string;
-  onClick?: () => void;
-  type?: "button" | "submit" | "reset" | undefined;
-}) => {
-  return (
-    <button
-      type={type}
-      onClick={onClick}
-      className="border-2 border-black w-fit cursor-pointer p-1 rounded-md hover:bg-gray-200"
-    >
-      {text}
-    </button>
-  );
-};
-
 const LabelInput = ({
   labelText,
   id,
-  value = undefined,
+  value,
   setValue,
   placeholder,
   name,
@@ -229,10 +178,11 @@ const LabelInput = ({
   maxlength,
   required,
   autoFocus = false,
+  ref,
 }: {
   labelText: string;
   id: string;
-  value?: string | number | undefined;
+  value?: string | number | null;
   setValue: (newVal: string) => void;
   placeholder?: string;
   name?: string;
@@ -244,6 +194,7 @@ const LabelInput = ({
   maxlength?: number;
   required?: boolean;
   autoFocus?: boolean;
+  ref?: Ref<HTMLInputElement>;
 }) => {
   if (!name) name = id;
   return (
@@ -257,7 +208,7 @@ const LabelInput = ({
         id={id}
         className={`leading-8 border-2 border-black pl-1 ${width} hover:bg-gray-200 focus:border-blue-200`}
         placeholder={placeholder}
-        value={value}
+        value={value || ""}
         onChange={(e) => setValue(e.target.value)}
         minLength={minlength}
         maxLength={maxlength}
@@ -266,6 +217,7 @@ const LabelInput = ({
         min={min}
         max={max}
         autoFocus={autoFocus}
+        ref={ref}
       />
     </div>
   );

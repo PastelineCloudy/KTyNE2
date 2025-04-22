@@ -1,5 +1,5 @@
 import { useCallback, useEffect } from "react";
-import CustomDialog from "./CustomDialog";
+import CustomDialog, { CustomDialogButton } from "./CustomDialog";
 
 const OptionPopup = ({
   triggerState,
@@ -44,15 +44,11 @@ const OptionPopup = ({
         <p className="mb-8 text-xl">{popupMessage}</p>
         <div className="flex justify-center gap-2">
           {options.map((option, index) => (
-            <button
-              key={option}
-              className="border-2 border-black cursor-pointer hover:bg-gray-200 p-1 rounded-md"
-              onClick={() => doCallback(index)}
-            >
+            <CustomDialogButton onClick={() => doCallback(index)}>
               <span>
                 {index + 1}: {option}
               </span>
-            </button>
+            </CustomDialogButton>
           ))}
         </div>
       </div>
