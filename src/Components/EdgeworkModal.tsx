@@ -1,5 +1,6 @@
-import { ReactNode, SyntheticEvent, useEffect, useRef, useState } from "react";
+import { ReactNode, SyntheticEvent, useState } from "react";
 import Edgework, { Ind, INDS, Port, PORTS } from "./Edgework";
+import CustomDialog from "./CustomDialog";
 
 const EdgeworkModal = ({
   edgeworkModalIsOpen,
@@ -16,16 +17,6 @@ const EdgeworkModal = ({
   const [unlitInds, setUnlitInds] = useState<string>("");
   const [portPlates, setPortPlates] = useState<string>("");
   const [serial, setSerial] = useState("");
-
-  const dialogRef = useRef<HTMLDialogElement>(null);
-
-  useEffect(() => {
-    if (edgeworkModalIsOpen) {
-      dialogRef.current?.showModal();
-    } else {
-      dialogRef.current?.close();
-    }
-  }, [edgeworkModalIsOpen, setEdgeworkModalIsOpen]);
 
   const handleFormSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
@@ -59,108 +50,106 @@ const EdgeworkModal = ({
     parsePorts(portPlates).length;
 
   return (
-    <>
-      <dialog className="m-auto p-8 border-2 rounded-2xl w-150" ref={dialogRef}>
-        <form
-          onSubmit={handleFormSubmit}
-          className="flex flex-col items-center"
-        >
-          <h1 className="text-4xl text-center">Edgework</h1>
-          <div className="flex justify-center gap-2">
-            <LabelInput
-              labelText="Batteries"
-              id="battery-input"
-              placeholder="0"
-              type="number"
-              width="w-32"
-              min={0}
-              max={10}
-              autoFocus={true}
-              value={batteries}
-              setValue={(newVal) =>
-                setBatteries(parseInt(newVal) > 10 ? "10" : newVal)
-              }
-            />
-            <LabelInput
-              labelText="Holders"
-              id="battery-holder-input"
-              placeholder="0"
-              type="number"
-              width="w-32"
-              value={holders}
-              min={0}
-              max={10}
-              setValue={(newVal) =>
-                setHolders(parseInt(newVal) > 5 ? "5" : newVal)
-              }
-            />
-          </div>
-          <div className="flex justify-center gap-2 w-125">
-            <LabelInput
-              labelText="Lit Indicators"
-              id="lit-inds"
-              placeholder="ex: FRK CLR"
-              value={litInds}
-              setValue={(newVal) => setLitInds(newVal)}
-            />
-            <LabelInput
-              labelText="Unlit Indicators"
-              id="unlit-inds"
-              placeholder="ex: SIG NSA"
-              value={unlitInds}
-              setValue={(newVal) => setUnlitInds(newVal)}
-            />
-          </div>
+    <CustomDialog
+      open={edgeworkModalIsOpen}
+      onClose={() => setEdgeworkModalIsOpen(false)}
+    >
+      <form onSubmit={handleFormSubmit} className="flex flex-col items-center">
+        <h1 className="text-4xl text-center">Edgework</h1>
+        <div className="flex justify-center gap-2">
           <LabelInput
-            labelText="Ports"
-            id="ports-input"
-            placeholder="ex: (dvi ps2) (para serial) (empty)"
-            width="w-125"
-            value={portPlates}
-            setValue={(newVal) => setPortPlates(newVal)}
-          />
-          <LabelInput
-            labelText="Serial Number"
-            id="serial-input"
-            width="w-20"
-            value={serial}
-            setValue={(newVal) => setSerial(newVal)}
-            minlength={6}
-            maxlength={6}
-            required={true}
-          />
-          <p
-            className={`${
-              widgetCount === 5 ? "text-green-600" : "text-red-500"
-            } mt-2`}
-          >
-            {widgetCount !== 5
-              ? `Warning: ${widgetCount < 5 ? "Less" : "More"} than 5 widgets. `
-              : "Exactly 5 widgets"}
-          </p>
-          <div className="pt-2 flex gap-2">
-            <DialogButton
-              text="Close"
-              onClick={() => setEdgeworkModalIsOpen(false)}
-            />
-            <DialogButton text="Reset" onClick={resetEdgework} />
-            <DialogButton text="Submit" type="submit" />
-          </div>
-          <div className="mt-2 p-4 pt-2 bg-jet w-full h-40">
-            {
-              <Edgework
-                batteries={parseInt(batteries) ?? 0}
-                holders={parseInt(holders) ?? 0}
-                litInds={parseInds(litInds)}
-                unlitInds={parseInds(unlitInds)}
-                portPlates={parsePorts(portPlates)}
-                serial={serial}
-              />
+            labelText="Batteries"
+            id="battery-input"
+            placeholder="0"
+            type="number"
+            width="w-32"
+            min={0}
+            max={10}
+            autoFocus={true}
+            value={batteries}
+            setValue={(newVal) =>
+              setBatteries(parseInt(newVal) > 10 ? "10" : newVal)
             }
-          </div>
-        </form>
-      </dialog>
-    </>
+          />
+          <LabelInput
+            labelText="Holders"
+            id="battery-holder-input"
+            placeholder="0"
+            type="number"
+            width="w-32"
+            value={holders}
+            min={0}
+            max={10}
+            setValue={(newVal) =>
+              setHolders(parseInt(newVal) > 5 ? "5" : newVal)
+            }
+          />
+        </div>
+        <div className="flex justify-center gap-2 w-125">
+          <LabelInput
+            labelText="Lit Indicators"
+            id="lit-inds"
+            placeholder="ex: FRK CLR"
+            value={litInds}
+            setValue={(newVal) => setLitInds(newVal)}
+          />
+          <LabelInput
+            labelText="Unlit Indicators"
+            id="unlit-inds"
+            placeholder="ex: SIG NSA"
+            value={unlitInds}
+            setValue={(newVal) => setUnlitInds(newVal)}
+          />
+        </div>
+        <LabelInput
+          labelText="Ports"
+          id="ports-input"
+          placeholder="ex: (dvi ps2) (para serial) (empty)"
+          width="w-125"
+          value={portPlates}
+          setValue={(newVal) => setPortPlates(newVal)}
+        />
+        <LabelInput
+          labelText="Serial Number"
+          id="serial-input"
+          width="w-20"
+          value={serial}
+          setValue={(newVal) => setSerial(newVal)}
+          minlength={6}
+          maxlength={6}
+          required={true}
+        />
+        <p
+          className={`${
+            widgetCount === 5 ? "text-green-600" : "text-red-500"
+          } mt-2`}
+        >
+          {widgetCount !== 5
+            ? `Warning: ${widgetCount < 5 ? "Less" : "More"} than 5 widgets. `
+            : "Exactly 5 widgets"}
+        </p>
+        <div className="pt-2 flex gap-2">
+          <DialogButton
+            text="Close"
+            onClick={() => setEdgeworkModalIsOpen(false)}
+          />
+          <DialogButton text="Reset" onClick={resetEdgework} />
+          <DialogButton text="Submit" type="submit" />
+        </div>
+        <div className="mt-2 p-4 pt-2 bg-jet w-full h-40">
+          {
+            <Edgework
+              batteries={parseInt(batteries) ?? 0}
+              holders={parseInt(holders) ?? 0}
+              litInds={parseInds(litInds)}
+              unlitInds={parseInds(unlitInds)}
+              portPlates={parsePorts(portPlates)}
+              serial={serial}
+            />
+          }
+        </div>
+      </form>
+    </CustomDialog>
   );
 };
 

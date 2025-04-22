@@ -59,8 +59,6 @@ const Popups = ({
         />
         <Calculator isOpen={calcIsOpen} setIframeCovered={setIframeCovered} />
         <Alphabet isOpen={alphaIsOpen} setIframeCovered={setIframeCovered} />
-      </div>
-      <div className="ml-auto absolute flex flex-wrap content-center ">
         <EdgeworkModal
           edgeworkModalIsOpen={edgeworkModalIsOpen}
           setEdgeworkModalIsOpen={setEdgeworkModalIsOpen}

@@ -1,4 +1,5 @@
 import { useCallback, useEffect } from "react";
+import CustomDialog from "./CustomDialog";
 
 const OptionPopup = ({
   triggerState,
@@ -38,29 +39,24 @@ const OptionPopup = ({
   }, [closeCallback, doCallback, optionCallbacks, triggerState]);
 
   return (
-    triggerState && (
-      <div
-        className="fixed z-1 w-full h-full top-0 left-0 bg-black/50 flex"
-        onClick={() => closeCallback()}
-      >
-        <div className="m-auto p-8 border-black border-2 rounded-md z-1 bg-white">
-          <p className="mb-8">{popupMessage}</p>
-          <div className="flex justify-around">
-            {options.map((option, index) => (
-              <button
-                key={option}
-                className="border-2 border-black cursor-pointer hover:bg-gray-200 p-1 rounded-md"
-                onClick={() => doCallback(index)}
-              >
-                <span>
-                  {index + 1}: {option}
-                </span>
-              </button>
-            ))}
-          </div>
+    <CustomDialog open={triggerState} onClose={closeCallback}>
+      <div className="text-center">
+        <p className="mb-8 text-xl">{popupMessage}</p>
+        <div className="flex justify-center gap-2">
+          {options.map((option, index) => (
+            <button
+              key={option}
+              className="border-2 border-black cursor-pointer hover:bg-gray-200 p-1 rounded-md"
+              onClick={() => doCallback(index)}
+            >
+              <span>
+                {index + 1}: {option}
+              </span>
+            </button>
+          ))}
         </div>
       </div>
-    )
+    </CustomDialog>
   );
 };
 
