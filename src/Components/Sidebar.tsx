@@ -63,7 +63,7 @@ ${sidebarOpen ? "" : "rotate-180"}`}
           )}
 
           <OptionPopup
-            triggerState={closingAll}
+            isOpen={closingAll}
             popupMessage="Are you sure you want to close all open manuals?"
             options={["Cancel", "Yes, I'm sure"]}
             optionCallbacks={[

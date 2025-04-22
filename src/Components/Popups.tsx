@@ -1,7 +1,6 @@
 import { ReactNode, useEffect, useState } from "react";
 import Calculator from "./Calculator";
 import EdgeworkModal from "./EdgeworkModal";
-import HeaderButton from "./HeaderButton";
 import Alphabet from "./Alphabet";
 
 const Popups = ({
@@ -43,20 +42,23 @@ const Popups = ({
     <>
       <div className="flex flex-wrap justify-around gap-2">
         <HeaderButton
-          text="Edgework"
           underlineFirst={false}
           onClick={() => setEdgeworkModalIsOpen(true)}
-        />
+        >
+          Edgework
+        </HeaderButton>
         <HeaderButton
-          text="Calculator"
           underlineFirst={true}
           onClick={() => setCalcIsOpen(!calcIsOpen)}
-        />
+        >
+          Calculator
+        </HeaderButton>
         <HeaderButton
-          text="Alphabet"
           underlineFirst={true}
           onClick={() => setAlphaIsOpen(!alphaIsOpen)}
-        />
+        >
+          Alphabet
+        </HeaderButton>
         <Calculator isOpen={calcIsOpen} setIframeCovered={setIframeCovered} />
         <Alphabet isOpen={alphaIsOpen} setIframeCovered={setIframeCovered} />
         <EdgeworkModal
@@ -66,6 +68,28 @@ const Popups = ({
         />
       </div>
     </>
+  );
+};
+
+const HeaderButton = ({
+  children,
+  underlineFirst,
+  onClick,
+}: {
+  children: string;
+  underlineFirst: boolean;
+  onClick?: () => void;
+}) => {
+  return (
+    <button
+      className="cursor-pointer text-white border-2 p-2 border-white rounded-md h-fit hover:text-gray-400 hover:border-gray-400"
+      onClick={onClick}
+    >
+      <span className={`${underlineFirst ? "underline" : ""}`}>
+        {children.slice(0, 1)}
+      </span>
+      {children.slice(1)}
+    </button>
   );
 };
 

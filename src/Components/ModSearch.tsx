@@ -131,7 +131,7 @@ const ModSearch = ({
   return (
     <>
       <OptionPopup
-        triggerState={tryingToOpen != null}
+        isOpen={tryingToOpen != null}
         popupMessage={`"${tryingToOpen?.modName}" is already open. What would you like to do?`}
         options={["Replace", "Open Another"]}
         optionCallbacks={[

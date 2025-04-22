@@ -57,6 +57,7 @@ const EdgeworkModal = ({
     <CustomDialog
       open={edgeworkModalIsOpen}
       onClose={() => setEdgeworkModalIsOpen(false)}
+      closeOnEscape={false}
     >
       <form onSubmit={handleFormSubmit} className="flex flex-col items-center">
         <h1 className="text-4xl text-center">Edgework</h1>

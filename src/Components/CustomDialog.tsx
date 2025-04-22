@@ -1,16 +1,31 @@
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 
 const CustomDialog = ({
   open,
   onClose,
   children,
+  closeOnEscape = true,
   className,
 }: {
   open: boolean;
   onClose: () => void;
   children: ReactNode;
+  closeOnEscape?: boolean;
   className?: string;
 }) => {
+  useEffect(() => {
+    if (!closeOnEscape || !open) return;
+    const escapePress = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+
+    window.addEventListener("keydown", escapePress);
+
+    return () => {
+      window.removeEventListener("keydown", escapePress);
+    };
+  }, [closeOnEscape, onClose, open]);
+
   return (
     open && (
       <div

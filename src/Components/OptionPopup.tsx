@@ -2,13 +2,13 @@ import { useCallback, useEffect } from "react";
 import CustomDialog, { CustomDialogButton } from "./CustomDialog";
 
 const OptionPopup = ({
-  triggerState,
+  isOpen,
   popupMessage,
   options,
   optionCallbacks,
   closeCallback,
 }: {
-  triggerState: boolean;
+  isOpen: boolean;
   popupMessage: string;
   options: string[];
   optionCallbacks: (() => void)[];
@@ -24,9 +24,8 @@ const OptionPopup = ({
   );
 
   useEffect(() => {
-    if (!triggerState) return;
+    if (!isOpen) return;
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") closeCallback();
       if (!e.key || !(isFinite(parseInt(e.key)) && e.key !== " ")) return;
       doCallback(parseInt(e.key) - 1);
     };
@@ -36,15 +35,15 @@ const OptionPopup = ({
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [closeCallback, doCallback, optionCallbacks, triggerState]);
+  }, [closeCallback, doCallback, optionCallbacks, isOpen]);
 
   return (
-    <CustomDialog open={triggerState} onClose={closeCallback}>
+    <CustomDialog open={isOpen} onClose={closeCallback}>
       <div className="text-center">
         <p className="mb-8 text-xl">{popupMessage}</p>
         <div className="flex justify-center gap-2">
           {options.map((option, index) => (
-            <CustomDialogButton onClick={() => doCallback(index)}>
+            <CustomDialogButton key={index} onClick={() => doCallback(index)}>
               <span>
                 {index + 1}: {option}
               </span>
