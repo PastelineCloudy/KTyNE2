@@ -133,10 +133,9 @@ const ModSearch = ({
       <OptionPopup
         isOpen={tryingToOpen != null}
         popupMessage={`"${tryingToOpen?.modName}" is already open. What would you like to do?`}
-        options={["Replace", "Open Another"]}
-        optionCallbacks={[
-          () => handleOpenOption(true),
-          () => handleOpenOption(false),
+        options={[
+          { text: "Replace", callback: () => handleOpenOption(true) },
+          { text: "Open Another", callback: () => handleOpenOption(false) },
         ]}
         closeCallback={() => setTryingToOpen(null)}
       />
