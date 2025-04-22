@@ -8,7 +8,7 @@ export const Menu = ({
   text: string;
   children?: string | ReactNode;
 }) => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   return (
     <div className="flex flex-col z-1" onClick={() => setOpen(!open)}>
       <HeaderButton>{text}</HeaderButton>
