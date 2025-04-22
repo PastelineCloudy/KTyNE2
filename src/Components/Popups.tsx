@@ -2,6 +2,7 @@ import { ReactNode, useEffect, useState } from "react";
 import Calculator from "./Calculator";
 import EdgeworkModal from "./EdgeworkModal";
 import Alphabet from "./Alphabet";
+import { Menu, MenuItem } from "./Menu";
 
 const Popups = ({
   setEdgework,
@@ -41,24 +42,17 @@ const Popups = ({
   return (
     <>
       <div className="flex flex-wrap justify-around gap-2">
-        <HeaderButton
-          underlineFirst={false}
-          onClick={() => setEdgeworkModalIsOpen(true)}
-        >
+        <HeaderButton onClick={() => setEdgeworkModalIsOpen(true)}>
           Edgework
         </HeaderButton>
-        <HeaderButton
-          underlineFirst={true}
-          onClick={() => setAlphaIsOpen(!alphaIsOpen)}
-        >
-          Alphabet
-        </HeaderButton>
-        <HeaderButton
-          underlineFirst={true}
-          onClick={() => setCalcIsOpen(!calcIsOpen)}
-        >
-          Calculator
-        </HeaderButton>
+        <Menu text="Tools">
+          <MenuItem underlineFirst onClick={() => setAlphaIsOpen(!alphaIsOpen)}>
+            Alphabet
+          </MenuItem>
+          <MenuItem underlineFirst onClick={() => setCalcIsOpen(!calcIsOpen)}>
+            Calculator
+          </MenuItem>
+        </Menu>
         <Alphabet isOpen={alphaIsOpen} setIframeCovered={setIframeCovered} />
         <Calculator isOpen={calcIsOpen} setIframeCovered={setIframeCovered} />
         <EdgeworkModal
@@ -71,18 +65,18 @@ const Popups = ({
   );
 };
 
-const HeaderButton = ({
+export const HeaderButton = ({
   children,
-  underlineFirst,
+  underlineFirst = false,
   onClick,
 }: {
   children: string;
-  underlineFirst: boolean;
+  underlineFirst?: boolean;
   onClick?: () => void;
 }) => {
   return (
     <button
-      className="cursor-pointer text-white border-2 p-2 border-white rounded-md h-fit hover:text-gray-400 hover:border-gray-400"
+      className="cursor-pointer text-white border-2 p-2 border-white rounded-md h-fit hover:text-gray-400 hover:border-gray-400 max-w-fit"
       onClick={onClick}
     >
       <span className={`${underlineFirst ? "underline" : ""}`}>
