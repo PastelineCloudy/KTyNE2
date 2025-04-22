@@ -4,6 +4,7 @@ import EdgeworkModal from "./EdgeworkModal";
 import Alphabet from "./Alphabet";
 import { Menu, MenuItem } from "./Menu";
 import BaseConverter from "./BaseConverter";
+import TimerPopup from "./Timer";
 
 const Popups = ({
   setEdgework,
@@ -16,6 +17,7 @@ const Popups = ({
   const [baseConverterIsOpen, setBaseConverterIsOpen] =
     useState<boolean>(false);
   const [calcIsOpen, setCalcIsOpen] = useState<boolean>(false);
+  const [timerIsOpen, setTimerIsOpen] = useState<boolean>(false);
   const [edgeworkModalIsOpen, setEdgeworkModalIsOpen] =
     useState<boolean>(false);
 
@@ -38,6 +40,11 @@ const Popups = ({
             setCalcIsOpen(!calcIsOpen);
             break;
           }
+          case "t": {
+            event.preventDefault();
+            setTimerIsOpen(!timerIsOpen);
+            break;
+          }
         }
       }
     };
@@ -46,7 +53,13 @@ const Popups = ({
     return () => {
       window.removeEventListener("keydown", handleShortcut);
     };
-  }, [alphaIsOpen, baseConverterIsOpen, calcIsOpen, edgeworkModalIsOpen]);
+  }, [
+    alphaIsOpen,
+    baseConverterIsOpen,
+    calcIsOpen,
+    edgeworkModalIsOpen,
+    timerIsOpen,
+  ]);
   return (
     <>
       <div className="flex flex-wrap justify-around gap-2">
@@ -66,6 +79,9 @@ const Popups = ({
           <MenuItem underlineFirst onClick={() => setCalcIsOpen(!calcIsOpen)}>
             Calculator
           </MenuItem>
+          <MenuItem underlineFirst onClick={() => setTimerIsOpen(!timerIsOpen)}>
+            Timer
+          </MenuItem>
         </Menu>
         <Alphabet isOpen={alphaIsOpen} setIframeCovered={setIframeCovered} />
         <BaseConverter
@@ -73,6 +89,7 @@ const Popups = ({
           setIframeCovered={setIframeCovered}
         />
         <Calculator isOpen={calcIsOpen} setIframeCovered={setIframeCovered} />
+        <TimerPopup isOpen={timerIsOpen} setIframeCovered={setIframeCovered} />
         <EdgeworkModal
           edgeworkModalIsOpen={edgeworkModalIsOpen}
           setEdgeworkModalIsOpen={setEdgeworkModalIsOpen}
