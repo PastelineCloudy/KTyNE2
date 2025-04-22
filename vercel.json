@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/monitor/:match*",
+      "destination": "https://https://ktyne.vercel.app/_vercel/:match*"
+    }
+  ]
+}
