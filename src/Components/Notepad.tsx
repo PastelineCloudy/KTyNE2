@@ -5,29 +5,29 @@ import { handleTabPress } from "../Utils/NotepadUtils";
 const Notepad = () => {
   return (
     <PanelGroup
-      direction="horizontal"
+      direction="vertical"
       autoSaveId="notepads-hor"
       className="relative"
     >
-      <Panel minSize={8} collapsible>
-        <PanelGroup direction="vertical" autoSaveId="notepads-left">
-          <Panel defaultSize={100} minSize={8} collapsible>
+      <Panel defaultSize={75} minSize={10}>
+        <PanelGroup direction="horizontal" autoSaveId="notepads-left">
+          <Panel defaultSize={50} minSize={5}>
             <Notearea position="tl" />
           </Panel>
-          <PanelResizeHandle className={"border-t-1 border-black"} />
-          <Panel defaultSize={0} minSize={8} collapsible>
+          <PanelResizeHandle className={"border-l-1 border-black"} />
+          <Panel defaultSize={50} minSize={5} collapsible>
             <Notearea position="bl" />
           </Panel>
         </PanelGroup>
       </Panel>
-      <PanelResizeHandle className={"border-l-1 border-black"} />
-      <Panel minSize={8} collapsible>
-        <PanelGroup direction="vertical" autoSaveId="notepads-right">
-          <Panel minSize={8} collapsible>
+      <PanelResizeHandle className={"border-t-1 border-black"} />
+      <Panel defaultSize={25} minSize={10} collapsible>
+        <PanelGroup direction="horizontal" autoSaveId="notepads-right">
+          <Panel defaultSize={100} minSize={5}>
             <Notearea position="tr" />
           </Panel>
-          <PanelResizeHandle className={"border-t-1 border-black"} />
-          <Panel minSize={8} collapsible>
+          <PanelResizeHandle className={"border-l-1 border-black"} />
+          <Panel defaultSize={0} minSize={5} collapsible>
             <Notearea position="br" />
           </Panel>
         </PanelGroup>
@@ -50,10 +50,10 @@ const Notearea = ({
     case "tl":
       arrowCss = "bottom-0 right-0 rotate-180";
       break;
-    case "bl":
+    case "tr":
       arrowCss = "top-0 right-0 rotate-90";
       break;
-    case "tr":
+    case "bl":
       arrowCss = "bottom-0 left-0 rotate-270";
       break;
     case "br":
