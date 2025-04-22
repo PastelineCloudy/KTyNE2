@@ -14,19 +14,19 @@ const Notepad = () => {
           <Panel defaultSize={50} minSize={5}>
             <Notearea position="tl" />
           </Panel>
-          <PanelResizeHandle className={"border-l-1 border-black"} />
+          <PanelResizeHandle className={"border-l-2 border-black"} />
           <Panel defaultSize={50} minSize={5} collapsible>
             <Notearea position="bl" />
           </Panel>
         </PanelGroup>
       </Panel>
-      <PanelResizeHandle className={"border-t-1 border-black"} />
+      <PanelResizeHandle className={"border-t-2 border-black"} />
       <Panel defaultSize={25} minSize={10} collapsible>
         <PanelGroup direction="horizontal" autoSaveId="notepads-right">
           <Panel defaultSize={100} minSize={5}>
             <Notearea position="tr" />
           </Panel>
-          <PanelResizeHandle className={"border-l-1 border-black"} />
+          <PanelResizeHandle className={"border-l-2 border-black"} />
           <Panel defaultSize={0} minSize={5} collapsible>
             <Notearea position="br" />
           </Panel>

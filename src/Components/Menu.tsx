@@ -13,7 +13,7 @@ export const Menu = ({
     <div className="flex flex-col z-1" onClick={() => setOpen(!open)}>
       <HeaderButton>{text}</HeaderButton>
       {open && (
-        <div className="h-0 ">
+        <div className="h-0">
           <ul className="mt-1 bg-gray-200 rounded-md border-2 border-black flex flex-col">
             {children}
           </ul>
