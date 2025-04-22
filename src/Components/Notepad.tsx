@@ -9,25 +9,25 @@ const Notepad = () => {
       autoSaveId="notepads-hor"
       className="relative"
     >
-      <Panel minSize={10}>
+      <Panel defaultSize={75} minSize={10}>
         <PanelGroup direction="horizontal" autoSaveId="notepads-left">
-          <Panel defaultSize={100} minSize={5}>
+          <Panel defaultSize={50} minSize={5}>
             <Notearea position="tl" />
           </Panel>
           <PanelResizeHandle className={"border-l-1 border-black"} />
-          <Panel defaultSize={0} minSize={5} collapsible>
+          <Panel defaultSize={50} minSize={5} collapsible>
             <Notearea position="bl" />
           </Panel>
         </PanelGroup>
       </Panel>
       <PanelResizeHandle className={"border-t-1 border-black"} />
-      <Panel minSize={10} collapsible>
+      <Panel defaultSize={25} minSize={10} collapsible>
         <PanelGroup direction="horizontal" autoSaveId="notepads-right">
-          <Panel minSize={5}>
+          <Panel defaultSize={100} minSize={5}>
             <Notearea position="tr" />
           </Panel>
           <PanelResizeHandle className={"border-l-1 border-black"} />
-          <Panel minSize={5} collapsible>
+          <Panel defaultSize={0} minSize={5} collapsible>
             <Notearea position="br" />
           </Panel>
         </PanelGroup>
