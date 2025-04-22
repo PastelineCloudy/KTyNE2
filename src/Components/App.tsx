@@ -35,9 +35,22 @@ function App() {
     [openManuals]
   );
 
-  const closeAllMods = () => {
+  const closeAllManuals = () => {
     setCurrentManual(null);
     setOpenManuals(new Map<string, OpenManual>());
+  };
+
+  const resetAllManuals = () => {
+    setCurrentManual(null);
+    const newOpenManuals = new Map<string, OpenManual>();
+    openManuals.forEach((value, key) => {
+      newOpenManuals.set(key, {
+        id: String(crypto.randomUUID()),
+        manualUrl: value.manualUrl,
+      });
+    });
+    setCurrentManual(null);
+    setOpenManuals(newOpenManuals);
   };
 
   const memoizedHandleModChange = useCallback(
@@ -90,7 +103,8 @@ function App() {
           currentManual={currentManual}
           handleModChange={memoizedHandleModChange}
           handleModClose={memoizedHandleModClose}
-          closeAllMods={closeAllMods}
+          closeAllManuals={closeAllManuals}
+          resetAllManuals={resetAllManuals}
         />
         <PanelGroup direction="horizontal" autoSaveId="main-ktyne">
           <Panel

@@ -12,10 +12,10 @@ const Popups = ({
   setEdgework: (newVal: ReactNode) => void;
   setIframeCovered: (newVal: boolean) => void;
 }) => {
-  const [calcIsOpen, setCalcIsOpen] = useState<boolean>(false);
   const [alphaIsOpen, setAlphaIsOpen] = useState<boolean>(false);
   const [baseConverterIsOpen, setBaseConverterIsOpen] =
     useState<boolean>(false);
+  const [calcIsOpen, setCalcIsOpen] = useState<boolean>(false);
   const [edgeworkModalIsOpen, setEdgeworkModalIsOpen] =
     useState<boolean>(false);
 

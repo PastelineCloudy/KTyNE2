@@ -9,17 +9,20 @@ const Sidebar = ({
   currentManual,
   handleModChange,
   handleModClose,
-  closeAllMods,
+  closeAllManuals,
+  resetAllManuals,
 }: {
   openModList: string[];
   currentManual: string | null;
   handleModChange: (modName: string, isCurrent: boolean) => void;
   handleModClose: (modName: string, isCurrent: boolean) => void;
-  closeAllMods: () => void;
+  closeAllManuals: () => void;
+  resetAllManuals: () => void;
 }) => {
   const [filter, setFilter] = useState<string>("");
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
   const [closingAll, setClosingAll] = useState<boolean>(false);
+  const [resetingAll, setResetingAll] = useState<boolean>(false);
   return (
     <div className="relative">
       <PanelLeftClose
@@ -52,7 +55,7 @@ ${sidebarOpen ? "" : "rotate-180"}`}
             ))}
         </ul>
         <div
-          className={`mt-auto flex justify-center border-t-2 p-2 m-2 ${
+          className={`mt-auto flex justify-center border-t-2 p-2 gap-1 mb-2 ${
             sidebarOpen ? "" : "hidden"
           }`}
         >
@@ -65,14 +68,27 @@ ${sidebarOpen ? "" : "rotate-180"}`}
           <OptionPopup
             isOpen={closingAll}
             popupMessage="Are you sure you want to close all open manuals?"
-            options={["Cancel", "Yes, I'm sure"]}
-            optionCallbacks={[
-              () => {},
-              () => {
-                closeAllMods();
-              },
-            ]}
             closeCallback={() => setClosingAll(false)}
+            options={[
+              { text: "Cancel" },
+              { text: "Yes, I'm sure", callback: closeAllManuals },
+            ]}
+          />
+
+          {openModList.length > 0 && (
+            <button className="heartbeat" onClick={() => setResetingAll(true)}>
+              Reset all
+            </button>
+          )}
+
+          <OptionPopup
+            isOpen={resetingAll}
+            popupMessage="Are you sure you want to reset all open manuals?"
+            closeCallback={() => setResetingAll(false)}
+            options={[
+              { text: "Cancel" },
+              { text: "Yes, I'm sure", callback: resetAllManuals },
+            ]}
           />
         </div>
       </div>

@@ -1,33 +1,29 @@
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import CustomDialog, { CustomDialogButton } from "./CustomDialog";
+
+type Option = {
+  text: string;
+  callback?: () => void;
+};
 
 const OptionPopup = ({
   isOpen,
   popupMessage,
-  options,
-  optionCallbacks,
   closeCallback,
+  options = [{ text: "Close" }],
 }: {
   isOpen: boolean;
   popupMessage: string;
-  options: string[];
-  optionCallbacks: (() => void)[];
   closeCallback: () => void;
+  options?: Option[];
 }) => {
-  const doCallback = useCallback(
-    (index: number) => {
-      if (index < 0 || index > optionCallbacks.length) return;
-      else optionCallbacks[index]();
-      closeCallback();
-    },
-    [closeCallback, optionCallbacks]
-  );
-
   useEffect(() => {
     if (!isOpen) return;
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!e.key || !(isFinite(parseInt(e.key)) && e.key !== " ")) return;
-      doCallback(parseInt(e.key) - 1);
+      const index = parseInt(e.key) - 1;
+      if (options[index].callback) options[index].callback();
+      closeCallback();
     };
 
     window.addEventListener("keydown", handleKeyDown);
@@ -35,7 +31,7 @@ const OptionPopup = ({
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [closeCallback, doCallback, optionCallbacks, isOpen]);
+  }, [closeCallback, isOpen, options]);
 
   return (
     <CustomDialog open={isOpen} onClose={closeCallback}>
@@ -43,9 +39,15 @@ const OptionPopup = ({
         <p className="mb-8 text-xl">{popupMessage}</p>
         <div className="flex justify-center gap-2">
           {options.map((option, index) => (
-            <CustomDialogButton key={index} onClick={() => doCallback(index)}>
+            <CustomDialogButton
+              key={index}
+              onClick={() => {
+                if (option.callback) option.callback();
+                closeCallback();
+              }}
+            >
               <span>
-                {index + 1}: {option}
+                {index + 1}: {option.text}
               </span>
             </CustomDialogButton>
           ))}
