@@ -6,7 +6,6 @@ import Header from "./Header";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { getLocalStorageMap } from "../Utils/LocalStorageUtils";
 import { OpenManual } from "../Utils/Types";
-import { Analytics } from "@vercel/analytics/react";
 
 function App() {
   const [currentManual, setCurrentManual] = useState<string | null>(null);
@@ -80,7 +79,6 @@ function App() {
 
   return (
     <div className="h-[100vh] flex flex-col font-[special-elite] relative overflow-hidden">
-      <Analytics />
       <Header
         handleOpenMod={handleOpenMod}
         setIframeCovered={setIframeCovered}
@@ -106,7 +104,7 @@ function App() {
             />
           </Panel>
           <PanelResizeHandle />
-          <Panel>
+          <Panel minSize={1} maxSize={95}>
             <Notepad />
           </Panel>
         </PanelGroup>
