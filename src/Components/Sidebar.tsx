@@ -10,16 +10,19 @@ const Sidebar = ({
   handleModChange,
   handleModClose,
   closeAllMods,
+  resetBomb,
 }: {
   openModList: string[];
   currentManual: string | null;
   handleModChange: (modName: string, isCurrent: boolean) => void;
   handleModClose: (modName: string, isCurrent: boolean) => void;
   closeAllMods: () => void;
+  resetBomb: () => void;
 }) => {
   const [filter, setFilter] = useState<string>("");
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
   const [closingAll, setClosingAll] = useState<boolean>(false);
+  const [resetBombState, setResetBombState] = useState<boolean>(false);
   return (
     <div className="relative">
       <PanelLeftClose
@@ -52,13 +55,21 @@ ${sidebarOpen ? "" : "rotate-180"}`}
             ))}
         </ul>
         <div
-          className={`mt-auto flex justify-center border-t-2 p-2 m-2 ${
+          className={`mt-auto flex justify-center border-t-2 gap-2 p-2 m-2 ${
             sidebarOpen ? "" : "hidden"
           }`}
         >
           {openModList.length > 0 && (
             <button className="heartbeat" onClick={() => setClosingAll(true)}>
               Close all
+            </button>
+          )}
+          {openModList.length > 0 && (
+            <button
+              className="heartbeat"
+              onClick={() => setResetBombState(true)}
+            >
+              Reset Bomb
             </button>
           )}
 
@@ -73,6 +84,18 @@ ${sidebarOpen ? "" : "rotate-180"}`}
               },
             ]}
             closeCallback={() => setClosingAll(false)}
+          />
+          <OptionPopup
+            isOpen={resetBombState}
+            popupMessage="Are you sure you want to close all manuals and reset edgework?"
+            options={["Cancel", "Yes, I'm sure"]}
+            optionCallbacks={[
+              () => {},
+              () => {
+                resetBomb();
+              },
+            ]}
+            closeCallback={() => setResetBombState(false)}
           />
         </div>
       </div>

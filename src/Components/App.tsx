@@ -1,11 +1,12 @@
 import Sidebar from "./Sidebar";
-import { useCallback, useEffect, useState } from "react";
+import { ReactNode, useCallback, useEffect, useState } from "react";
 import Manuals from "./Manuals";
 import Notepad from "./Notepad";
-import Header from "./Header";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { getLocalStorageMap } from "../Utils/LocalStorageUtils";
 import { OpenManual } from "../Utils/Types";
+import ModSearch from "./ModSearch";
+import Popups from "./Popups";
 
 function App() {
   const [currentManual, setCurrentManual] = useState<string | null>(null);
@@ -13,6 +14,7 @@ function App() {
     getLocalStorageMap<OpenManual>("KTyNE:openManuals")
   );
   const [iframeCovered, setIframeCovered] = useState<boolean>(false);
+  const [edgework, setEdgework] = useState<ReactNode>(null);
 
   useEffect(() => {
     localStorage.setItem(
@@ -48,6 +50,19 @@ function App() {
     []
   );
 
+  const resetBomb = () => {
+    const newOpenManuals = new Map<string, OpenManual>();
+    openManuals.forEach((value, key) => {
+      newOpenManuals.set(key, {
+        id: String(crypto.randomUUID()),
+        manualUrl: value.manualUrl,
+      });
+    });
+    setCurrentManual(null);
+    setOpenManuals(newOpenManuals);
+    setEdgework(null);
+  };
+
   const handleOpenMod = (
     modName: string,
     manualUrl: string,
@@ -79,11 +94,15 @@ function App() {
 
   return (
     <div className="h-[100vh] flex flex-col font-[special-elite] relative overflow-hidden">
-      <Header
-        handleOpenMod={handleOpenMod}
-        setIframeCovered={setIframeCovered}
-        openManuals={Array.from(openManuals.keys())}
-      />
+      <header className="min-h-[85px] bg-jet flex items-center p-2">
+        <ModSearch
+          handleOpenMod={handleOpenMod}
+          setIframeCovered={setIframeCovered}
+          openManuals={Array.from(openManuals.keys())}
+        />
+        <Popups setEdgework={setEdgework} setIframeCovered={setIframeCovered} />
+        <div className="ml-auto flex content-center flex-wrap">{edgework}</div>
+      </header>
       <main className="flex h-[calc(100vh-75px)] bg-(--color-bg)">
         <Sidebar
           openModList={Array.from(openManuals.keys()).sort()}
@@ -91,6 +110,7 @@ function App() {
           handleModChange={memoizedHandleModChange}
           handleModClose={memoizedHandleModClose}
           closeAllMods={closeAllMods}
+          resetBomb={resetBomb}
         />
         <PanelGroup direction="horizontal" autoSaveId="main-ktyne">
           <Panel
