@@ -15,7 +15,7 @@ const Calculator = ({
     <DraggableResizeable
       isOpen={isOpen}
       corner={"bottom-right"}
-      yOffset={120}
+      yOffset={130}
       setIframeCovered={setIframeCovered}
     >
       <div
@@ -23,7 +23,7 @@ const Calculator = ({
         border-2 border-bg rounded-2 p-[10px] text-bg
         flex flex-col`}
       >
-        <div className="">Text-Field Calculator</div>
+        <div>Text-Field Calculator</div>
         <textarea
           name="calc-input"
           id="calc-input"

@@ -255,7 +255,7 @@ const SearchListItem = ({
         )}
       </div>
       {dropDownEnabled && (
-        <ul className="">
+        <ul>
           {manualList.map((manual) => (
             <AlternativeManualItem
               key={manual}

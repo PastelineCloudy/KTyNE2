@@ -19,14 +19,14 @@ const Popups = ({
     const handleShortcut = (event: KeyboardEvent) => {
       if (event.altKey) {
         switch (event.key) {
-          case "c": {
-            event.preventDefault();
-            setCalcIsOpen(!calcIsOpen);
-            break;
-          }
           case "a": {
             event.preventDefault();
             setAlphaIsOpen(!alphaIsOpen);
+            break;
+          }
+          case "c": {
+            event.preventDefault();
+            setCalcIsOpen(!calcIsOpen);
             break;
           }
         }
@@ -49,18 +49,18 @@ const Popups = ({
         </HeaderButton>
         <HeaderButton
           underlineFirst={true}
-          onClick={() => setCalcIsOpen(!calcIsOpen)}
-        >
-          Calculator
-        </HeaderButton>
-        <HeaderButton
-          underlineFirst={true}
           onClick={() => setAlphaIsOpen(!alphaIsOpen)}
         >
           Alphabet
         </HeaderButton>
-        <Calculator isOpen={calcIsOpen} setIframeCovered={setIframeCovered} />
+        <HeaderButton
+          underlineFirst={true}
+          onClick={() => setCalcIsOpen(!calcIsOpen)}
+        >
+          Calculator
+        </HeaderButton>
         <Alphabet isOpen={alphaIsOpen} setIframeCovered={setIframeCovered} />
+        <Calculator isOpen={calcIsOpen} setIframeCovered={setIframeCovered} />
         <EdgeworkModal
           edgeworkModalIsOpen={edgeworkModalIsOpen}
           setEdgeworkModalIsOpen={setEdgeworkModalIsOpen}
