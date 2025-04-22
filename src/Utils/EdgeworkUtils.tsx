@@ -6,15 +6,16 @@ export const parsePorts = (portString: string): Port[][] => {
     .toLowerCase()
     .replace(/dvid|dvi-d/g, "dvi")
     .replace(/parallel|para/g, "parallel")
-    .replace("ps/2", "ps2")
+    .replace(/ps\/2/g, "ps2")
     .replace(/rj-45|rj45/g, "rj")
     .replace(/stereo-rca|stereo rca|stereo|ster/g, "rca")
     .replace(/all2|sp/g, "serial parallel")
     .replace(/all4/g, "dvi rca rj ps2")
-    .replace("()", "(empty)")
-    .replace(",", " ")
-    .replace("  ", " ")
+    .replace(/\(\)/g, "(empty)")
+    .replace(/,/g, " ")
+    .replace(/\s\s/g, " ")
     .trim();
+  console.log(replacedInput);
   const plateInputs = replacedInput.match(/[([]([A-za-z0-9 ,-]+)+/g);
   const plateStrings = plateInputs
     ? plateInputs.map((plate) => plate.replace(/[[(]/g, ""))
