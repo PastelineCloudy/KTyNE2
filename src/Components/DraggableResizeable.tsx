@@ -1,10 +1,12 @@
-import { ReactNode, useEffect, useRef } from "react";
+import { Minus } from "lucide-react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import { Rnd } from "react-rnd";
 
 const DraggableResizeable = ({
   children,
   setIframeCovered,
-  isOpen = true,
+  isOpen,
+  setIsOpen,
   corner = "top-left",
   disableResize = false,
   xOffset = 0,
@@ -12,16 +14,19 @@ const DraggableResizeable = ({
 }: {
   children: string | ReactNode;
   setIframeCovered: (newVal: boolean) => void;
-  isOpen?: boolean;
+  isOpen: boolean;
+  setIsOpen: (val: boolean) => void;
   corner?: "top-left" | "top-right" | "bottom-right" | "bottom-left";
   disableResize?: boolean;
   xOffset?: number;
   yOffset?: number;
 }) => {
   const rndRef = useRef<Rnd>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const [previouslyOpened, setPreviouslyOpened] = useState<boolean>(false);
 
   useEffect(() => {
-    const setBottomRightPosition = () => {
+    const updatePosition = () => {
       if (rndRef.current && rndRef.current.getSelfElement()) {
         const initialRect = rndRef.current
           .getSelfElement()!
@@ -63,28 +68,52 @@ const DraggableResizeable = ({
       }
     };
 
-    setBottomRightPosition();
-    window.addEventListener("resize", setBottomRightPosition);
+    if (!previouslyOpened && isOpen) {
+      setPreviouslyOpened(true);
+      updatePosition();
+    } else if (!previouslyOpened && !isOpen) {
+      // First run - Throws it off screen to prevent flash on first "show"
+      updatePosition();
+    }
+
+    window.addEventListener("resize", updatePosition);
 
     return () => {
-      window.removeEventListener("resize", setBottomRightPosition);
+      window.removeEventListener("resize", updatePosition);
     };
-  }, [isOpen, corner, xOffset, yOffset]);
+  }, [isOpen, corner, xOffset, yOffset, previouslyOpened]);
+
+  useEffect(() => {
+    if (!wrapperRef || !wrapperRef.current) return;
+    const firstInput =
+      wrapperRef.current.querySelector("input") ||
+      wrapperRef.current.querySelector("textarea");
+    if (firstInput) firstInput.select();
+  }, [isOpen]);
 
   return (
     <Rnd
-      style={{
-        display: isOpen ? "flex" : "none",
-        zIndex: 1,
-      }}
       ref={rndRef}
+      style={{
+        visibility: isOpen ? "visible" : "hidden",
+      }}
       bounds="window"
       cancel=".cancel-drag"
       enableResizing={disableResize ? resizeNone : resizeAll}
       onDragStart={() => setIframeCovered(true)}
       onDragStop={() => setIframeCovered(false)}
     >
-      {children}
+      <div
+        ref={wrapperRef}
+        className="w-full h-full bg-jet text-bg border-2 border-bg rounded-md p-2 pt-1"
+      >
+        <Minus
+          className="float-end hover:text-red-400 cursor-pointer"
+          onClick={() => setIsOpen(false)}
+          size={16}
+        />
+        {children}
+      </div>
     </Rnd>
   );
 };

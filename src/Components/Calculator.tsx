@@ -1,51 +1,26 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { evaluate } from "mathjs";
-import DraggableResizeable from "./DraggableResizeable";
 
-const Calculator = ({
-  isOpen,
-  setIframeCovered,
-}: {
-  isOpen: boolean;
-  setIframeCovered: (newVal: boolean) => void;
-}) => {
+const Calculator = () => {
   const [calcInput, setCalcInput] = useState<string>("");
-  const firstInputRef = useRef<HTMLTextAreaElement>(null);
-  useEffect(() => {
-    if (firstInputRef.current) {
-      firstInputRef.current.select();
-    }
-  }, [isOpen]);
   return (
-    <DraggableResizeable
-      isOpen={isOpen}
-      corner={"bottom-right"}
-      yOffset={130}
-      setIframeCovered={setIframeCovered}
-    >
-      <div
-        className={`bg-jet w-full h-full
-        border-2 border-bg rounded-2 p-[10px] text-bg
-        flex flex-col`}
-      >
-        <div>Text-Field Calculator</div>
-        <textarea
-          name="calc-input"
-          id="calc-input"
-          autoComplete="off"
-          autoCapitalize="off"
-          autoCorrect="off"
-          spellCheck={false}
-          value={calcInput}
-          onChange={(e) => setCalcInput(e.target.value)}
-          className="cancel-drag resize-none bg-bg mb-2 p-1 text-jet grow"
-          ref={firstInputRef}
-        ></textarea>
-        <div className="w-fit pr-10 cancel-drag cursor-text">
-          Output: {<span>{evalInput(calcInput)}</span>}
-        </div>
+    <div className={`w-full h-full flex flex-col`}>
+      <div>Text-Field Calculator</div>
+      <textarea
+        name="calc-input"
+        id="calc-input"
+        autoComplete="off"
+        autoCapitalize="off"
+        autoCorrect="off"
+        spellCheck={false}
+        value={calcInput}
+        onChange={(e) => setCalcInput(e.target.value)}
+        className="cancel-drag resize-none bg-bg mb-2 p-1 text-jet grow"
+      ></textarea>
+      <div className="w-fit pr-10 cancel-drag cursor-text">
+        Output: {<span>{evalInput(calcInput)}</span>}
       </div>
-    </DraggableResizeable>
+    </div>
   );
 };
 

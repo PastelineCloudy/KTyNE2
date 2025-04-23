@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useState } from "react";
 import Calculator from "./Calculator";
 import EdgeworkModal from "./EdgeworkModal";
 import Alphabet from "./Alphabet";
@@ -13,53 +13,9 @@ const Popups = ({
   setEdgework: (newVal: ReactNode) => void;
   setIframeCovered: (newVal: boolean) => void;
 }) => {
-  const [alphaIsOpen, setAlphaIsOpen] = useState<boolean>(false);
-  const [baseConverterIsOpen, setBaseConverterIsOpen] =
-    useState<boolean>(false);
-  const [calcIsOpen, setCalcIsOpen] = useState<boolean>(false);
-  const [timerIsOpen, setTimerIsOpen] = useState<boolean>(false);
   const [edgeworkModalIsOpen, setEdgeworkModalIsOpen] =
     useState<boolean>(false);
 
-  useEffect(() => {
-    const handleShortcut = (event: KeyboardEvent) => {
-      if (event.altKey) {
-        switch (event.key) {
-          case "a": {
-            event.preventDefault();
-            setAlphaIsOpen(!alphaIsOpen);
-            break;
-          }
-          case "b": {
-            event.preventDefault();
-            setBaseConverterIsOpen(!baseConverterIsOpen);
-            break;
-          }
-          case "x": {
-            event.preventDefault();
-            setCalcIsOpen(!calcIsOpen);
-            break;
-          }
-          case "t": {
-            event.preventDefault();
-            setTimerIsOpen(!timerIsOpen);
-            break;
-          }
-        }
-      }
-    };
-    window.addEventListener("keydown", handleShortcut);
-
-    return () => {
-      window.removeEventListener("keydown", handleShortcut);
-    };
-  }, [
-    alphaIsOpen,
-    baseConverterIsOpen,
-    calcIsOpen,
-    edgeworkModalIsOpen,
-    timerIsOpen,
-  ]);
   return (
     <>
       <div className="flex flex-wrap justify-around gap-2">
@@ -67,29 +23,45 @@ const Popups = ({
           Edgework
         </HeaderButton>
         <Menu text="Tools">
-          <MenuItem underlineFirst onClick={() => setAlphaIsOpen(!alphaIsOpen)}>
-            Alphabet
+          <MenuItem
+            underLineIndex={0}
+            buttonText="Alphabet"
+            setIframeCovered={setIframeCovered}
+            shortCutKey="a"
+            corner="bottom-right"
+          >
+            <Alphabet />
           </MenuItem>
           <MenuItem
-            underlineFirst
-            onClick={() => setBaseConverterIsOpen(!baseConverterIsOpen)}
+            underLineIndex={0}
+            buttonText="Base Converter"
+            setIframeCovered={setIframeCovered}
+            shortCutKey="b"
+            corner="bottom-right"
           >
-            Base Converter
+            <BaseConverter />
           </MenuItem>
-          <MenuItem onClick={() => setCalcIsOpen(!calcIsOpen)}>
-            Te<span className="underline">x</span>t-Field Calculator
+          <MenuItem
+            underLineIndex={2}
+            buttonText="Text-Field Calc."
+            setIframeCovered={setIframeCovered}
+            shortCutKey="x"
+            corner="bottom-right"
+            yOffset={140}
+          >
+            <Calculator />
           </MenuItem>
-          <MenuItem underlineFirst onClick={() => setTimerIsOpen(!timerIsOpen)}>
-            Timer
+          <MenuItem
+            underLineIndex={0}
+            buttonText="Timer"
+            setIframeCovered={setIframeCovered}
+            shortCutKey="t"
+            corner="top-right"
+            yOffset={85}
+          >
+            <TimerPopup />
           </MenuItem>
         </Menu>
-        <Alphabet isOpen={alphaIsOpen} setIframeCovered={setIframeCovered} />
-        <BaseConverter
-          isOpen={baseConverterIsOpen}
-          setIframeCovered={setIframeCovered}
-        />
-        <Calculator isOpen={calcIsOpen} setIframeCovered={setIframeCovered} />
-        <TimerPopup isOpen={timerIsOpen} setIframeCovered={setIframeCovered} />
         <EdgeworkModal
           edgeworkModalIsOpen={edgeworkModalIsOpen}
           setEdgeworkModalIsOpen={setEdgeworkModalIsOpen}

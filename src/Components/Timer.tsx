@@ -1,5 +1,4 @@
 import { useTimer } from "react-timer-hook";
-import DraggableResizeable from "./DraggableResizeable";
 import { Minus, Plus, SquarePlus, SquareX } from "lucide-react";
 import { useEffect, useState } from "react";
 import audioSound from "./../alarm.mp3";
@@ -11,13 +10,7 @@ type TimerInfo = {
 
 const timerAudio = new Audio(audioSound);
 
-const TimerPopup = ({
-  isOpen,
-  setIframeCovered,
-}: {
-  isOpen: boolean;
-  setIframeCovered: (val: boolean) => void;
-}) => {
+const TimerPopup = () => {
   const [timerInput, setTimerInput] = useState<string>("");
   const [timers, setTimers] = useState<TimerInfo[]>([]);
   const [strikeCount, setStrikeCount] = useState<number>(0);
@@ -27,88 +20,75 @@ const TimerPopup = ({
   };
 
   return (
-    <DraggableResizeable
-      isOpen={isOpen}
-      corner={"top-right"}
-      yOffset={85}
-      setIframeCovered={setIframeCovered}
-    >
-      <div
-        className={`bg-jet text-bg w-full h-full
-        border-2 border-bg rounded-2 p-[10px] 
-        place-items-center gap-2`}
-      >
-        <div className="border-b-2">
-          <p className="">Strikes</p>
-          <p className="flex justify-around">
-            {strikeCount >= 4 ? "4+" : strikeCount}
-            <Minus
-              size="16"
-              className="hover:text-red-500 cursor-pointer"
-              onClick={() =>
-                setStrikeCount(strikeCount - 1 >= 0 ? strikeCount - 1 : 0)
-              }
-            />
-            <Plus
-              size="16"
-              className="hover:text-red-500 cursor-pointer"
-              onClick={() =>
-                setStrikeCount(strikeCount + 1 > 4 ? 4 : strikeCount + 1)
-              }
-            />
-          </p>
-        </div>
-        <p>Set Timer</p>
-        <div>
-          <div className="flex gap-2 border-b-2 border-bg">
-            <input
-              type="text"
-              name="timer-input"
-              id="timer-input"
-              placeholder="5:00"
-              value={timerInput}
-              onChange={(e) => setTimerInput(e.target.value)}
-              className="border-bg bg-bg text-jet cancel-drag w-16 mb-2 pl-1"
-            />
-            <SquarePlus
-              className="hover:text-green-500 cancel-drag cursor-pointer"
-              onClick={() => {
-                const expiryTimestamp = getExpiryTimestamp(
-                  timerInput || "5:00",
-                  strikeCount
-                );
-                setTimers([
-                  ...timers,
-                  {
-                    id: crypto.randomUUID(),
-                    expiryTimestamp: expiryTimestamp,
-                  },
-                ]);
-                setTimerInput("");
-              }}
-            />
-          </div>
-        </div>
-        <div className="mt-2">
-          {timers.map((timerInfo) => (
-            <Timer
-              key={timerInfo.id}
-              expiryTimestamp={timerInfo.expiryTimestamp}
-              expireCallback={() => {
-                timerAudio.play();
-                setTimeout(() => {
-                  setTimers(
-                    timers.filter((timer) => timer.id !== timerInfo.id)
-                  );
-                }, 5000);
-              }}
-              cancelTimer={() => cancelTimer(timerInfo.id)}
-              strikeCount={strikeCount}
-            />
-          ))}
+    <div className={`w-full h-full place-items-center mt-4`}>
+      <div>
+        <p>Strikes</p>
+        <p className="flex justify-around">
+          {strikeCount >= 4 ? "4+" : strikeCount}
+          <Minus
+            size="16"
+            className="hover:text-red-500 cursor-pointer"
+            onClick={() =>
+              setStrikeCount(strikeCount - 1 >= 0 ? strikeCount - 1 : 0)
+            }
+          />
+          <Plus
+            size="16"
+            className="hover:text-red-500 cursor-pointer"
+            onClick={() =>
+              setStrikeCount(strikeCount + 1 > 4 ? 4 : strikeCount + 1)
+            }
+          />
+        </p>
+      </div>
+      <p>Set Timer</p>
+      <div>
+        <div className="flex gap-2 border-b-2 border-bg">
+          <input
+            type="text"
+            name="timer-input"
+            id="timer-input"
+            placeholder="5:00"
+            value={timerInput}
+            onChange={(e) => setTimerInput(e.target.value)}
+            className="border-bg bg-bg text-jet cancel-drag w-16 mb-2 pl-1"
+          />
+          <SquarePlus
+            className="hover:text-green-500 cancel-drag cursor-pointer"
+            onClick={() => {
+              const expiryTimestamp = getExpiryTimestamp(
+                timerInput || "5:00",
+                strikeCount
+              );
+              setTimers([
+                ...timers,
+                {
+                  id: crypto.randomUUID(),
+                  expiryTimestamp: expiryTimestamp,
+                },
+              ]);
+              setTimerInput("");
+            }}
+          />
         </div>
       </div>
-    </DraggableResizeable>
+      <div className="mt-2">
+        {timers.map((timerInfo) => (
+          <Timer
+            key={timerInfo.id}
+            expiryTimestamp={timerInfo.expiryTimestamp}
+            expireCallback={() => {
+              timerAudio.play();
+              setTimeout(() => {
+                setTimers(timers.filter((timer) => timer.id !== timerInfo.id));
+              }, 5000);
+            }}
+            cancelTimer={() => cancelTimer(timerInfo.id)}
+            strikeCount={strikeCount}
+          />
+        ))}
+      </div>
+    </div>
   );
 };
 
