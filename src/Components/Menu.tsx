@@ -30,14 +30,28 @@ export const MenuItem = ({
 }: {
   onClick: () => void;
   underlineFirst?: boolean;
-  children: string;
+  children: string | ReactNode;
 }) => {
   return (
     <li className="m-1 p-1 hover:bg-gray-400 cursor-pointer" onClick={onClick}>
-      {underlineFirst && (
-        <span className="underline">{children.slice(0, 1)}</span>
+      {typeof children === "string" ? (
+        underlineFirst ? (
+          <>
+            <span className="underline">{children.slice(0, 1)}</span>
+            <span>{children.slice(1)}</span>
+          </>
+        ) : (
+          <span>{children.slice(1)}</span>
+        )
+      ) : (
+        children
       )}
-      <span>{underlineFirst ? children.slice(1) : children}</span>
     </li>
+    // <li className="m-1 p-1 hover:bg-gray-400 cursor-pointer" onClick={onClick}>
+    //   {underlineFirst && (
+    //     <span className="underline">{children.slice(0, 1)}</span>
+    //   )}
+    //   <span>{underlineFirst ? children.slice(1) : children}</span>
+    // </li>
   );
 };

@@ -54,15 +54,16 @@ ${sidebarOpen ? "" : "rotate-180"}`}
       />
       <div className={`h-full flex flex-col ${sidebarOpen ? "m-2" : "w-0"}`}>
         <ul className="overflow-auto no-scrollbar mt-2 mb-2">
-          {manualList.map((modName) => (
-            <SidebarButton
-              key={modName}
-              modName={modName}
-              isCurrentManual={currentManual === modName}
-              handleModChange={handleModChange}
-              handleModClose={handleModClose}
-            />
-          ))}
+          {manualList &&
+            manualList.map((modName) => (
+              <SidebarButton
+                key={modName}
+                modName={modName}
+                isCurrentManual={currentManual === modName}
+                handleModChange={handleModChange}
+                handleModClose={handleModClose}
+              />
+            ))}
         </ul>
         <div className="flex mt-auto ">
           <input

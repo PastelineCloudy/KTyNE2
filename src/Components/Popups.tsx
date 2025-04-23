@@ -35,7 +35,7 @@ const Popups = ({
             setBaseConverterIsOpen(!baseConverterIsOpen);
             break;
           }
-          case "c": {
+          case "x": {
             event.preventDefault();
             setCalcIsOpen(!calcIsOpen);
             break;
@@ -76,8 +76,8 @@ const Popups = ({
           >
             Base Converter
           </MenuItem>
-          <MenuItem underlineFirst onClick={() => setCalcIsOpen(!calcIsOpen)}>
-            Calculator
+          <MenuItem onClick={() => setCalcIsOpen(!calcIsOpen)}>
+            Te<span className="underline">x</span>t-Field Calculator
           </MenuItem>
           <MenuItem underlineFirst onClick={() => setTimerIsOpen(!timerIsOpen)}>
             Timer
