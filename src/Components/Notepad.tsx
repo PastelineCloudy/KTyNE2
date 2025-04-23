@@ -90,6 +90,7 @@ const Notearea = ({
           contentEditable={
             <ContentEditable
               aria-placeholder={"Enter some text..."}
+              spellCheck="false"
               placeholder={<div>Enter some text...</div>}
               className={`p-1 w-full h-full bg-size-[100%_1.4em]
                 bg-local bg-linear-to-t from-[#85c1e9] from-[0.1em] to-[#d2d7df] to-[0.1em]
@@ -110,21 +111,6 @@ const Notearea = ({
         <AutoFocusPlugin />
         <TabIndentationPlugin />
       </LexicalComposer>
-      {/* <textarea
-        className={`p-1 w-full h-full bg-size-[100%_1.4em]
-        bg-local bg-linear-to-t from-[#85c1e9] from-[0.1em] to-[#d2d7df] to-[0.1em]
-        pt-[0.2rem]
-        pl-2
-        leading-[1.4]
-        font-[NotoSansMono]
-        outline-none
-        resize-none
-        ${className}`}
-        spellCheck="false"
-        onKeyDown={(e) => {
-          if (e.key == "Tab") handleTabPress(e);
-        }}
-      ></textarea> */}
 
       <ArrowDownRight
         size={12}

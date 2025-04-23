@@ -47,11 +47,5 @@ export const MenuItem = ({
         children
       )}
     </li>
-    // <li className="m-1 p-1 hover:bg-gray-400 cursor-pointer" onClick={onClick}>
-    //   {underlineFirst && (
-    //     <span className="underline">{children.slice(0, 1)}</span>
-    //   )}
-    //   <span>{underlineFirst ? children.slice(1) : children}</span>
-    // </li>
   );
 };
