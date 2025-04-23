@@ -10,13 +10,49 @@ type TimerInfo = {
 
 const timerAudio = new Audio(audioSound);
 
+// Global used so cancelled timers aren't re-added upon newer timer expiration
+const discardedTimers: string[] = [];
+
 const TimerPopup = () => {
   const [timerInput, setTimerInput] = useState<string>("");
   const [timers, setTimers] = useState<TimerInfo[]>([]);
   const [strikeCount, setStrikeCount] = useState<number>(0);
 
   const cancelTimer = (timerIdToCancel: string) => {
-    setTimers(timers.filter((timer) => timer.id !== timerIdToCancel));
+    discardedTimers.push(timerIdToCancel);
+    setTimers(
+      timers.filter(
+        (timer) =>
+          timer.id !== timerIdToCancel && !discardedTimers.includes(timer.id)
+      )
+    );
+  };
+
+  const createNewTimer = () => {
+    const expiryTimestamp = getExpiryTimestamp(
+      timerInput || "5:00",
+      strikeCount
+    );
+    setTimers([
+      ...timers,
+      {
+        id: crypto.randomUUID(),
+        expiryTimestamp: expiryTimestamp,
+      },
+    ]);
+    setTimerInput("");
+  };
+
+  const finishTimer = (timerId: string) => {
+    timerAudio.play();
+    discardedTimers.push(timerId);
+    setTimeout(() => {
+      setTimers(
+        timers.filter(
+          (timer) => timer.id !== timerId && !discardedTimers.includes(timer.id)
+        )
+      );
+    }, 5000);
   };
 
   return (
@@ -52,23 +88,13 @@ const TimerPopup = () => {
             value={timerInput}
             onChange={(e) => setTimerInput(e.target.value)}
             className="border-bg bg-bg text-jet cancel-drag w-16 mb-2 pl-1"
+            onKeyDown={(e) => {
+              if (e && e.key === "Enter") createNewTimer();
+            }}
           />
           <SquarePlus
             className="hover:text-green-500 cancel-drag cursor-pointer"
-            onClick={() => {
-              const expiryTimestamp = getExpiryTimestamp(
-                timerInput || "5:00",
-                strikeCount
-              );
-              setTimers([
-                ...timers,
-                {
-                  id: crypto.randomUUID(),
-                  expiryTimestamp: expiryTimestamp,
-                },
-              ]);
-              setTimerInput("");
-            }}
+            onClick={createNewTimer}
           />
         </div>
       </div>
@@ -77,12 +103,7 @@ const TimerPopup = () => {
           <Timer
             key={timerInfo.id}
             expiryTimestamp={timerInfo.expiryTimestamp}
-            expireCallback={() => {
-              timerAudio.play();
-              setTimeout(() => {
-                setTimers(timers.filter((timer) => timer.id !== timerInfo.id));
-              }, 5000);
-            }}
+            expireCallback={() => finishTimer(timerInfo.id)}
             cancelTimer={() => cancelTimer(timerInfo.id)}
             strikeCount={strikeCount}
           />
@@ -93,10 +114,15 @@ const TimerPopup = () => {
 };
 
 const getExpiryTimestamp = (timerInput: string, strikeCount: number): Date => {
-  const [minutes, seconds] = timerInput.split(":").slice(-2);
+  const splitInput = timerInput.split(":");
+  const [hours, minutes, seconds] =
+    splitInput.length === 3
+      ? splitInput.slice(-3)
+      : ["0", ...splitInput.slice(-2)];
   let timerLenInSec = 0;
-  if (!minutes && !seconds) timerLenInSec = 300;
-  if (minutes) timerLenInSec = parseInt(minutes) * 60;
+  if (!hours && !minutes && !seconds) timerLenInSec = 300;
+  if (hours) timerLenInSec += parseInt(hours) * 60 * 60;
+  if (minutes) timerLenInSec += parseInt(minutes) * 60;
   if (seconds) timerLenInSec += parseInt(seconds);
   const time = new Date();
   time.setSeconds(time.getSeconds() + timerLenInSec / (1 + strikeCount * 0.25));
