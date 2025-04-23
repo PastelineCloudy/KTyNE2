@@ -55,7 +55,7 @@ const ModSearch = ({
   useOutsideClickTracker(isOpen, setIsOpen, modSearchComponentRef);
 
   const handleSearchInput = (newQuery: string) => {
-    const newFilteredMods = getFilteredMods(modList, newQuery);
+    const newFilteredMods = getFilteredMods(modList, newQuery) || [];
     setQuery(newQuery);
     setBestMatchIndex(getBestMatchIndex(newFilteredMods, newQuery));
   };
@@ -81,7 +81,7 @@ const ModSearch = ({
       }
       case "ArrowDown": {
         if (
-          bestMatchIndex + 1 < filteredMods.length &&
+          bestMatchIndex + 1 < (filteredMods?.length || 0) &&
           bestMatchIndex + 1 < maxListSize
         )
           setBestMatchIndex(bestMatchIndex + 1);
@@ -173,16 +173,19 @@ const ModSearch = ({
         {isOpen && (
           <div className="bg-gray-200 p-2 border-2 border-black absolute top-7 rounded-md z-1">
             <ul className="overflow-auto no-scrollbar max-h-[80vh]">
-              {filteredMods.slice(0, maxListSize).map((modName, i) => (
-                <SearchListItem
-                  key={modName}
-                  modName={modName}
-                  onClick={openMod}
-                  isHighlighted={i === bestMatchIndex}
-                  highlightedRef={highlightedRef}
-                />
-              ))}
-              {filteredMods.length === 0 && (
+              {filteredMods &&
+                filteredMods
+                  .slice(0, maxListSize)
+                  .map((modName, i) => (
+                    <SearchListItem
+                      key={modName}
+                      modName={modName}
+                      onClick={openMod}
+                      isHighlighted={i === bestMatchIndex}
+                      highlightedRef={highlightedRef}
+                    />
+                  ))}
+              {filteredMods && filteredMods.length === 0 && (
                 <SearchListItem
                   key={0}
                   modName={"New Repo Tab"}
