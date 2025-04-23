@@ -15,7 +15,6 @@ export const parsePorts = (portString: string): Port[][] => {
     .replace(/,/g, " ")
     .replace(/\s\s/g, " ")
     .trim();
-  console.log(replacedInput);
   const plateInputs = replacedInput.match(/[([]([A-za-z0-9 ,-]+)+/g);
   const plateStrings = plateInputs
     ? plateInputs.map((plate) => plate.replace(/[[(]/g, ""))

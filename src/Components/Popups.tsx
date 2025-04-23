@@ -5,6 +5,7 @@ import Alphabet from "./Alphabet";
 import { Menu, MenuItem } from "./Menu";
 import BaseConverter from "./BaseConverter";
 import TimerPopup from "./Timer";
+import CaesarCipher from "./CaesarCipher";
 
 const Popups = ({
   setEdgework,
@@ -40,6 +41,13 @@ const Popups = ({
             corner="bottom-right"
           >
             <BaseConverter />
+          </MenuItem>
+          <MenuItem
+            buttonText="Caesar Cipher"
+            setIframeCovered={setIframeCovered}
+            corner="bottom-right"
+          >
+            <CaesarCipher />
           </MenuItem>
           <MenuItem
             underLineIndex={2}

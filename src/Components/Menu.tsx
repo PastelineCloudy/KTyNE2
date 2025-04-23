@@ -14,10 +14,7 @@ export const Menu = ({
     <div className="flex flex-col z-1" onClick={() => setOpen(!open)}>
       <HeaderButton>{text}</HeaderButton>
       <div className={`h-0 ${open ? "" : "overflow-hidden"}`}>
-        <ul
-          className="mt-1 bg-gray-200 rounded-md border-2 border-black flex flex-col"
-          onClick={(e) => e.stopPropagation()}
-        >
+        <ul className="mt-1 bg-gray-200 rounded-md border-2 border-black flex flex-col">
           {children}
         </ul>
       </div>
@@ -64,7 +61,7 @@ export const MenuItem = ({
         className="m-1 p-1 hover:bg-gray-400 cursor-pointer"
         onClick={() => setItemIsOpen(!itemIsOpen)}
       >
-        {underLineIndex ? (
+        {underLineIndex || underLineIndex === 0 ? (
           <>
             <span>{buttonText.slice(0, underLineIndex)}</span>
             <span className="underline">
@@ -76,16 +73,18 @@ export const MenuItem = ({
           <span>{buttonText}</span>
         )}
       </li>
-      <DraggableResizeable
-        isOpen={itemIsOpen}
-        setIsOpen={setItemIsOpen}
-        corner={corner}
-        setIframeCovered={setIframeCovered}
-        xOffset={xOffset}
-        yOffset={yOffset}
-      >
-        {children}
-      </DraggableResizeable>
+      <div onClick={(e) => e.stopPropagation()}>
+        <DraggableResizeable
+          isOpen={itemIsOpen}
+          setIsOpen={setItemIsOpen}
+          corner={corner}
+          setIframeCovered={setIframeCovered}
+          xOffset={xOffset}
+          yOffset={yOffset}
+        >
+          {children}
+        </DraggableResizeable>
+      </div>
     </>
   );
 };

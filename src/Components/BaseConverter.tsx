@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { LabelInput } from "./EdgeworkModal";
 import { ArrowRightLeft } from "lucide-react";
+import LabelInput from "./LabelInput";
 
 const BaseConverter = () => {
   const [input, setInput] = useState<string>("15");
-  const [fromBase, setFromBase] = useState<string>("10");
-  const [toBase, setToBase] = useState<string>("2");
+  const [fromBase, setFromBase] = useState<number>(10);
+  const [toBase, setToBase] = useState<number>(2);
 
   return (
     <div className="p-2 gap-2 flex">
@@ -19,17 +19,23 @@ const BaseConverter = () => {
       />
       <LabelInput
         labelText="Base"
+        type="tel"
         width="w-12"
         id="from-base-input"
+        inputClassName={`${
+          +fromBase < 2 || +fromBase > 32 ? "text-red-500" : ""
+        }`}
         darkMode
         value={fromBase}
-        setValue={(newVal) => setFromBase(newVal)}
+        setValue={(newVal) => {
+          if (!isNaN(+newVal)) setFromBase(+newVal);
+        }}
       />
       <span>
         <ArrowRightLeft
           className="text-bg hover:text-blue-500 cancel-drag cursor-pointer"
           onClick={() => {
-            setInput(convertBase(input, parseInt(fromBase), parseInt(toBase)));
+            setInput(convertBase(input, fromBase, toBase));
             setFromBase(toBase);
             setToBase(fromBase);
           }}
@@ -37,11 +43,15 @@ const BaseConverter = () => {
       </span>
       <LabelInput
         labelText="Base"
+        type="tel"
         width="w-12"
         id="to-base-input"
+        inputClassName={`${+toBase < 2 || +toBase > 32 ? "text-red-500" : ""}`}
         darkMode
         value={toBase}
-        setValue={(newVal) => setToBase(newVal)}
+        setValue={(newVal) => {
+          if (!isNaN(+newVal)) setToBase(+newVal);
+        }}
       />
       <LabelInput
         labelText="Output"
@@ -49,8 +59,8 @@ const BaseConverter = () => {
         id="to-input"
         disabled
         darkMode
-        inputClassName="cursor-text leading-8 border-2 pl-1"
-        value={convertBase(input, parseInt(fromBase), parseInt(toBase))}
+        inputClassName="cursor-text"
+        value={convertBase(input, fromBase, toBase)}
         setValue={() => {}}
       />
     </div>
@@ -59,12 +69,16 @@ const BaseConverter = () => {
 
 const convertBase = (
   input: string,
-  fromBase: number = 10,
-  toBase: number = 2
-) => {
-  if (fromBase < 2 || fromBase > 32) return "???";
-  if (toBase < 2 || toBase > 32) return "???";
-  return parseInt(input, fromBase).toString(toBase);
+  fromBase: number,
+  toBase: number
+): string => {
+  try {
+    if (fromBase < 2 || fromBase > 32) return "???";
+    if (toBase < 2 || toBase > 32) return "???";
+    return parseInt(input, fromBase).toString(toBase);
+  } catch {
+    return "???";
+  }
 };
 
 export default BaseConverter;
