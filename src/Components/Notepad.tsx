@@ -1,6 +1,13 @@
 import { ArrowDownRight } from "lucide-react";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
-import { handleTabPress } from "../Utils/NotepadUtils";
+
+import { AutoFocusPlugin } from "@lexical/react/LexicalAutoFocusPlugin";
+import { LexicalComposer } from "@lexical/react/LexicalComposer";
+import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
+import { ContentEditable } from "@lexical/react/LexicalContentEditable";
+import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
+import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
+import { TabIndentationPlugin } from "@lexical/react/LexicalTabIndentationPlugin";
 
 const Notepad = () => {
   return (
@@ -60,9 +67,50 @@ const Notearea = ({
       arrowCss = "top-0 left-0 rotate-0";
       break;
   }
+
+  const theme = {
+    width: "full",
+    height: "full",
+  };
+
+  function onError(error: Error) {
+    console.error(error);
+  }
+
+  const initialConfig = {
+    namespace: "MyEditor",
+    theme,
+    onError,
+  };
+
   return (
     <div className="relative w-full h-full">
-      <textarea
+      <LexicalComposer initialConfig={initialConfig}>
+        <RichTextPlugin
+          contentEditable={
+            <ContentEditable
+              aria-placeholder={"Enter some text..."}
+              placeholder={<div>Enter some text...</div>}
+              className={`p-1 w-full h-full bg-size-[100%_1.4em]
+                bg-local bg-linear-to-t from-[#85c1e9] from-[0.1em] to-[#d2d7df] to-[0.1em]
+                pt-[0.2rem]
+                pl-2
+                leading-[1.4]
+                font-[NotoSansMono]
+                outline-none
+                resize-none
+                overflow-scroll
+                no-scrollbar
+                ${className}`}
+            />
+          }
+          ErrorBoundary={LexicalErrorBoundary}
+        />
+        <HistoryPlugin />
+        <AutoFocusPlugin />
+        <TabIndentationPlugin />
+      </LexicalComposer>
+      {/* <textarea
         className={`p-1 w-full h-full bg-size-[100%_1.4em]
         bg-local bg-linear-to-t from-[#85c1e9] from-[0.1em] to-[#d2d7df] to-[0.1em]
         pt-[0.2rem]
@@ -76,7 +124,7 @@ const Notearea = ({
         onKeyDown={(e) => {
           if (e.key == "Tab") handleTabPress(e);
         }}
-      ></textarea>
+      ></textarea> */}
 
       <ArrowDownRight
         size={12}
