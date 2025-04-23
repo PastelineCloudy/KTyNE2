@@ -99,7 +99,7 @@ function App() {
       />
       <main className="flex h-[calc(100vh-75px)] bg-(--color-bg)">
         <Sidebar
-          openModList={Array.from(openManuals.keys()).sort()}
+          openModList={Array.from(openManuals.keys())}
           currentManual={currentManual}
           handleModChange={memoizedHandleModChange}
           handleModClose={memoizedHandleModClose}
