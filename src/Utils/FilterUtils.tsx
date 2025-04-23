@@ -1,11 +1,9 @@
 const getFilteredMods = (list: string[], queryTerm: string) => {
-  try {
-    return list.filter((mod) =>
-      mod.toLowerCase().includes(queryTerm.toLowerCase())
-    );
-  } catch {
-    console.log("something");
-  }
+  return list.filter(
+    (mod) =>
+      mod.toLowerCase().includes(queryTerm.toLowerCase()) ||
+      mod.toLowerCase().replace("’", "'").includes(queryTerm.toLowerCase())
+  );
 };
 
 export { getFilteredMods };
