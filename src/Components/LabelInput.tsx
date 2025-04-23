@@ -4,6 +4,7 @@ const LabelInput = ({
   labelText,
   id,
   value,
+  checked,
   setValue = () => {},
   placeholder,
   name,
@@ -11,6 +12,7 @@ const LabelInput = ({
   width = "w-full",
   labelClassName,
   inputClassName,
+  inputOnClick,
   min,
   max,
   minlength,
@@ -25,6 +27,7 @@ const LabelInput = ({
   labelText: string;
   id: string;
   value?: string | number | null;
+  checked?: boolean;
   setValue?: (newVal: string) => void;
   placeholder?: string;
   name?: string;
@@ -32,6 +35,7 @@ const LabelInput = ({
   width?: string;
   labelClassName?: string;
   inputClassName?: string;
+  inputOnClick?: () => void;
   min?: number;
   max?: number;
   minlength?: number;
@@ -59,7 +63,9 @@ const LabelInput = ({
         className={"leading-8 border-2 pl-1 " + inputLabelCSS}
         placeholder={placeholder}
         value={value || ""}
+        checked={checked}
         onChange={(e) => setValue(e.target.value)}
+        onClick={inputOnClick}
         minLength={minlength}
         maxLength={maxlength}
         required={required}

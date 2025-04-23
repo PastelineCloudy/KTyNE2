@@ -73,6 +73,7 @@ ${sidebarOpen ? "" : "rotate-180"}`}
           ${sidebarOpen ? "" : "hidden"} ${
               openModList.length === 0 ? "opacity-0" : ""
             }`}
+            id="open-manual-filter"
             placeholder="Filter Open Manuals"
             onChange={(e) => setFilter(e.target.value)}
           />

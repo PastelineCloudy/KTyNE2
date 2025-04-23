@@ -11,7 +11,7 @@ const CaesarCipher = () => {
       <LabelInput
         labelText="Input"
         width="w-30"
-        id="from-input"
+        id="cipher-input"
         darkMode
         value={input}
         setValue={(newVal) => setInput(newVal)}
@@ -20,7 +20,7 @@ const CaesarCipher = () => {
         labelText="Offset"
         type="number"
         width="w-16"
-        id="from-base-input"
+        id="offset-input"
         darkMode
         value={offset}
         setValue={(newVal) => setOffset(+newVal)}
@@ -31,7 +31,7 @@ const CaesarCipher = () => {
       <LabelInput
         labelText="Output"
         width="w-30"
-        id="to-input"
+        id="cipher-output"
         disabled
         darkMode
         inputClassName="cursor-text leading-8 border-2 pl-1"

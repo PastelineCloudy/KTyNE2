@@ -6,6 +6,7 @@ import { Menu, MenuItem } from "./Menu";
 import BaseConverter from "./BaseConverter";
 import TimerPopup from "./Timer";
 import CaesarCipher from "./CaesarCipher";
+import GridPopup from "./GridPopup";
 
 const Popups = ({
   setEdgework,
@@ -48,6 +49,17 @@ const Popups = ({
             corner="bottom-right"
           >
             <CaesarCipher />
+          </MenuItem>
+          <MenuItem
+            underLineIndex={0}
+            buttonText="Grid"
+            setIframeCovered={setIframeCovered}
+            shortCutKey="g"
+            corner="top-right"
+            xOffset={115}
+            yOffset={85}
+          >
+            <GridPopup />
           </MenuItem>
           <MenuItem
             underLineIndex={2}
