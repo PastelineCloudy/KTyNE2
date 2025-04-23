@@ -39,17 +39,20 @@ const DraggableResizeable = ({
         let [newX, newY] = [initialX, initialY];
         switch (corner) {
           case "top-left":
-            // Default Bahavior
+            newX = xOffset;
+            newY = yOffset;
             break;
           case "top-right":
-            newX = viewportWidth - elementWidth;
+            newX = viewportWidth - elementWidth - xOffset;
+            newY = yOffset;
             break;
           case "bottom-right":
             newX = viewportWidth - elementWidth - xOffset;
             newY = viewportHeight - elementHeight - yOffset;
             break;
           case "bottom-left":
-            newY = viewportHeight - elementHeight;
+            newX = xOffset;
+            newY = viewportHeight - elementHeight - yOffset;
             break;
         }
 
