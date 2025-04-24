@@ -91,13 +91,13 @@ function App() {
   };
 
   return (
-    <div className="h-[100vh] flex flex-col font-[special-elite] relative overflow-hidden">
+    <div className="h-screen flex flex-col font-[special-elite] relative overflow-x-hidden no-scrollbar">
       <Header
         handleOpenMod={handleOpenMod}
         setIframeCovered={setIframeCovered}
         openManuals={Array.from(openManuals.keys())}
       />
-      <main className="flex h-[calc(100vh-75px)] bg-(--color-bg)">
+      <main className="flex h-full bg-(--color-bg)">
         <Sidebar
           openModList={Array.from(openManuals.keys())}
           currentManual={currentManual}

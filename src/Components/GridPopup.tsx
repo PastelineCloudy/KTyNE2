@@ -26,7 +26,7 @@ const GridPopup = () => {
   const [rows, setRows] = useState(5);
   const [cols, setCols] = useState(5);
   const [currentColor, setCurrentColor] = useState("#000000");
-  const [cellSize, setCellSize] = useState<number>(4);
+  const [cellSize, setCellSize] = useState<number>(3);
   const [paintEnabled, setPaintEnabled] = useState<boolean>(true);
   const [paintOnHover, setPaintOnHover] = useState<boolean>(false);
   const [resetToggle, setResetToggle] = useState<boolean>(false);
@@ -99,7 +99,7 @@ const GridPopup = () => {
     cellArr.push(
       <IndexCell
         key={`index-col-${i}`}
-        index={i === 0 ? " " : `${numToLetter(i - 1)}(${i})`}
+        index={i === 0 ? " " : `${cellSize > 1 ? numToLetter(i - 1) : ""}`}
         size={cellSize}
       />
     );
@@ -107,7 +107,11 @@ const GridPopup = () => {
 
   for (let row = 1; row <= rows; row++) {
     cellArr.push(
-      <IndexCell key={`index-row-${row}`} index={String(row)} size={cellSize} />
+      <IndexCell
+        key={`index-row-${row}`}
+        index={cellSize > 1 ? String(row) : ""}
+        size={cellSize}
+      />
     );
     for (let col = 1; col <= cols; col++) {
       cellArr.push(

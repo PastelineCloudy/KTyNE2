@@ -8,7 +8,7 @@ const BaseConverter = () => {
   const [toBase, setToBase] = useState<number>(2);
 
   return (
-    <div className="p-2 gap-2 flex">
+    <div className="p-2 gap-2 flex flex-wrap">
       <LabelInput
         labelText="Input"
         width="w-30"

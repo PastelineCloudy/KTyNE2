@@ -30,7 +30,7 @@ const Popups = ({
             buttonText="Alphabet"
             setIframeCovered={setIframeCovered}
             shortCutKey="a"
-            corner="bottom-right"
+            disableResize
           >
             <Alphabet />
           </MenuItem>
@@ -39,14 +39,12 @@ const Popups = ({
             buttonText="Base Converter"
             setIframeCovered={setIframeCovered}
             shortCutKey="b"
-            corner="bottom-right"
           >
             <BaseConverter />
           </MenuItem>
           <MenuItem
             buttonText="Caesar Cipher"
             setIframeCovered={setIframeCovered}
-            corner="bottom-right"
           >
             <CaesarCipher />
           </MenuItem>
@@ -55,9 +53,7 @@ const Popups = ({
             buttonText="Grid"
             setIframeCovered={setIframeCovered}
             shortCutKey="g"
-            corner="top-right"
-            xOffset={115}
-            yOffset={85}
+            disableResize
           >
             <GridPopup />
           </MenuItem>
@@ -66,8 +62,6 @@ const Popups = ({
             buttonText="Text-Field Calc."
             setIframeCovered={setIframeCovered}
             shortCutKey="x"
-            corner="bottom-right"
-            yOffset={140}
           >
             <Calculator />
           </MenuItem>
@@ -76,8 +70,7 @@ const Popups = ({
             buttonText="Timer"
             setIframeCovered={setIframeCovered}
             shortCutKey="t"
-            corner="top-right"
-            yOffset={85}
+            disableResize
           >
             <TimerPopup />
           </MenuItem>

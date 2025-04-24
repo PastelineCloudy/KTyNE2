@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useCallback, useEffect, useState } from "react";
 import { HeaderButton } from "./Popups";
 import DraggableResizeable from "./DraggableResizeable";
 
@@ -13,8 +13,8 @@ export const Menu = ({
   return (
     <div className="flex flex-col z-1" onClick={() => setOpen(!open)}>
       <HeaderButton>{text}</HeaderButton>
-      <div className={`h-0 ${open ? "" : "overflow-hidden"}`}>
-        <ul className="mt-1 bg-gray-200 rounded-md border-2 border-black flex flex-col">
+      <div className={`h-0 w-0 ${open ? "" : "overflow-hidden"}`}>
+        <ul className="mt-1 bg-gray-200 rounded-md border-2 border-black flex flex-col w-max">
           {children}
         </ul>
       </div>
@@ -26,22 +26,28 @@ export const MenuItem = ({
   buttonText,
   children,
   setIframeCovered,
-  underLineIndex = 0,
+  underLineIndex,
   shortCutKey,
-  corner = "top-left",
-  xOffset = 0,
-  yOffset = 0,
+  disableResize,
 }: {
   buttonText: string;
   children: ReactNode;
   setIframeCovered: (val: boolean) => void;
   underLineIndex?: number;
   shortCutKey?: string;
-  corner?: "top-left" | "top-right" | "bottom-right" | "bottom-left";
-  xOffset?: number;
-  yOffset?: number;
+  disableResize?: boolean;
 }) => {
-  const [itemIsOpen, setItemIsOpen] = useState<boolean>(false);
+  const [itemIsOpen, _setItemIsOpen] = useState<boolean>(false);
+  const [previouslyOpened, setPreviouslyOpened] = useState<boolean>(false);
+
+  const setItemIsOpen = useCallback(
+    (val: boolean) => {
+      if (!previouslyOpened) setPreviouslyOpened(true);
+      _setItemIsOpen(val);
+    },
+    [previouslyOpened]
+  );
+
   useEffect(() => {
     const handleShortcut = (event: KeyboardEvent) => {
       if (event.altKey && event.key === shortCutKey) {
@@ -54,11 +60,11 @@ export const MenuItem = ({
     return () => {
       window.removeEventListener("keydown", handleShortcut);
     };
-  }, [itemIsOpen, shortCutKey]);
+  }, [itemIsOpen, setItemIsOpen, shortCutKey]);
   return (
-    <>
+    <div className="flex">
       <li
-        className="m-1 p-1 hover:bg-gray-400 cursor-pointer"
+        className="m-1 p-1 hover:bg-gray-400 cursor-pointer w-full"
         onClick={() => setItemIsOpen(!itemIsOpen)}
       >
         {underLineIndex || underLineIndex === 0 ? (
@@ -73,18 +79,18 @@ export const MenuItem = ({
           <span>{buttonText}</span>
         )}
       </li>
-      <div onClick={(e) => e.stopPropagation()}>
-        <DraggableResizeable
-          isOpen={itemIsOpen}
-          setIsOpen={setItemIsOpen}
-          corner={corner}
-          setIframeCovered={setIframeCovered}
-          xOffset={xOffset}
-          yOffset={yOffset}
-        >
-          {children}
-        </DraggableResizeable>
-      </div>
-    </>
+      {previouslyOpened && (
+        <div>
+          <DraggableResizeable
+            isOpen={itemIsOpen}
+            setIsOpen={setItemIsOpen}
+            setIframeCovered={setIframeCovered}
+            disableResize={disableResize}
+          >
+            {children}
+          </DraggableResizeable>
+        </div>
+      )}
+    </div>
   );
 };

@@ -48,19 +48,23 @@ const LabelInput = ({
   spellCheck?: boolean;
 }) => {
   if (!name) name = id;
-  const inputLabelCSS = darkMode
-    ? `${width} ${inputClassName} border-bg bg-bg text-jet cancel-drag`
-    : `${width} ${inputClassName} border-black hover:bg-gray-200 cancel-drag`;
+  const themeCss = darkMode ? `border-bg bg-bg` : `border-black`;
   return (
-    <div className="flex flex-col items-center w-full">
-      <label htmlFor={id} className={"text-xl mt-2 " + labelClassName}>
+    <div className="flex flex-col items-center w-fit">
+      <label
+        htmlFor={id}
+        className={"text-xl mt-2 " + (labelClassName ? labelClassName : "")}
+      >
         {labelText}
       </label>
       <input
         type={type}
         name={name}
         id={id}
-        className={"leading-8 border-2 pl-1 " + inputLabelCSS}
+        className={`leading-8 border-2 pl-1 focus:border-blue-600 focus:ring-0 focus:outline-0 cancel-drag 
+          ${themeCss} ${width ? width : null} ${
+          inputClassName ? inputClassName : ""
+        } ${disabled ? "text-gray-400" : "text-jet hover:border-blue-600"}`}
         placeholder={placeholder}
         value={value || ""}
         checked={checked}

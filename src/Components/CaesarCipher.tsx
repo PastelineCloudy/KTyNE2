@@ -7,7 +7,7 @@ const CaesarCipher = () => {
   const [offset, setOffset] = useState<number>(1);
 
   return (
-    <div className="p-2 gap-2 flex">
+    <div className="p-2 gap-2 flex flex-wrap">
       <LabelInput
         labelText="Input"
         width="w-30"
@@ -34,7 +34,7 @@ const CaesarCipher = () => {
         id="cipher-output"
         disabled
         darkMode
-        inputClassName="cursor-text leading-8 border-2 pl-1"
+        inputClassName="cursor-text leading-8 pl-1"
         value={applyCipher(input, offset)}
         setValue={() => {}}
       />

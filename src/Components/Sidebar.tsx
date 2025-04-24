@@ -52,7 +52,7 @@ const Sidebar = ({
 ${sidebarOpen ? "" : "rotate-180"}`}
         onClick={() => setSidebarOpen(!sidebarOpen)}
       />
-      <div className={`h-full flex flex-col ${sidebarOpen ? "m-2" : "w-0"}`}>
+      <div className={`h-full flex flex-col ${sidebarOpen ? "p-2" : "w-0"}`}>
         <ul className="overflow-auto no-scrollbar mt-2 mb-2">
           {manualList &&
             manualList.map((modName) => (
