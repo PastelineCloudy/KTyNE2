@@ -1,5 +1,5 @@
 import { getLocalStorageMap } from "./LocalStorageUtils";
-import fullModListRaw from "../fullList(Apr 20 2025).json";
+import fullModListRaw from "../fullList(Apr 24 2025).json";
 
 type ItemSelectEvent = {
   key?: string;
@@ -18,6 +18,10 @@ const fullModList: Map<string, string[]> = new Map(
   Object.entries(fullModListRaw)
 );
 
+const getFullModListKeys = () => {
+  return Array.from(fullModList.keys());
+};
+
 const setDefaultManualUrl = (modName: string, manualUrl: string) => {
   const defaultManuals = getLocalStorageMap<string>("KTyNE:defaultManuals");
   defaultManuals.set(modName, manualUrl);
@@ -25,6 +29,10 @@ const setDefaultManualUrl = (modName: string, manualUrl: string) => {
     "KTyNE:defaultManuals",
     JSON.stringify(Object.fromEntries(defaultManuals))
   );
+};
+
+const getAlternateManualList = (modName: string) => {
+  return fullModList.get(modName) || [];
 };
 
 const getDefaulManualUrl = (modName: string): string | undefined => {
@@ -75,5 +83,7 @@ export {
   parseAlternativeManualName,
   getBestMatchIndex,
   getFinalModName,
+  getFullModListKeys,
+  getAlternateManualList,
 };
 export type { ItemSelectEvent, ModInfo };

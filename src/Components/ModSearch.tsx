@@ -1,7 +1,6 @@
 import { ChevronDown, Search } from "lucide-react";
 import { Ref, useCallback, useRef, useState } from "react";
 import useOutsideClickTracker from "../Hooks/useOutsideClickTracker";
-import fullModListRaw from "../fullList(Apr 20 2025).json";
 import { getFilteredMods } from "../Utils/FilterUtils";
 import OptionPopup from "./OptionPopup";
 import {
@@ -12,13 +11,11 @@ import {
   ModInfo,
   parseAlternativeManualName,
   setDefaultManualUrl,
+  getFullModListKeys,
+  getAlternateManualList,
 } from "../Utils/ModSearchUtils";
 
-const fullModList: Map<string, string[]> = new Map(
-  Object.entries(fullModListRaw)
-);
-
-const modList = Array.from(fullModList.keys()).sort();
+const modList = getFullModListKeys().sort();
 const maxListSize = 100;
 
 const ModSearch = ({
@@ -225,7 +222,7 @@ const SearchListItem = ({
     setDefaultManualUrl(modName, manualUrl);
   };
 
-  const manualList: string[] = fullModList.get(modName) || [];
+  const manualList: string[] = getAlternateManualList(modName);
 
   return (
     <li
@@ -247,7 +244,7 @@ const SearchListItem = ({
         >
           {modName}
         </div>
-        {manualList.length > 0 && (
+        {manualList.length > 1 && (
           <ChevronDown
             onClick={handleDropDownClick}
             className={`${
