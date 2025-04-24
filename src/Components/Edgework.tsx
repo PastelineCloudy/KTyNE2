@@ -66,7 +66,7 @@ const Edgework = ({
     );
 
   return (
-    <div className="flex bg-jet max-w-80vw flex-wrap justify-center">
+    <div className="bg-jet flex flex-wrap justify-center gap-2 min-w-[380px]">
       {edgeworkChildren}
     </div>
   );

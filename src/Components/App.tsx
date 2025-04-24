@@ -91,7 +91,7 @@ function App() {
   };
 
   return (
-    <div className="h-screen flex flex-col font-[special-elite] relative overflow-x-hidden no-scrollbar">
+    <div className="h-screen w-min-[400px] flex flex-col font-[special-elite] relative overflow-x-hidden no-scrollbar">
       <Header
         handleOpenMod={handleOpenMod}
         setIframeCovered={setIframeCovered}
@@ -106,7 +106,7 @@ function App() {
           closeAllManuals={closeAllManuals}
           resetAllManuals={resetAllManuals}
         />
-        <PanelGroup direction="horizontal" autoSaveId="main-ktyne">
+        <PanelGroup direction="horizontal">
           <Panel
             defaultSize={55}
             className="border-l-2 border-r-2 border-black"
@@ -118,7 +118,7 @@ function App() {
             />
           </Panel>
           <PanelResizeHandle />
-          <Panel minSize={1} maxSize={95}>
+          <Panel collapsible minSize={5} maxSize={95}>
             <Notepad />
           </Panel>
         </PanelGroup>

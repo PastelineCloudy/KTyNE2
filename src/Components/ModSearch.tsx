@@ -129,7 +129,7 @@ const ModSearch = ({
   };
 
   return (
-    <>
+    <div className="z-3">
       <OptionPopup
         isOpen={tryingToOpen != null}
         popupMessage={`"${tryingToOpen?.modName}" is already open. What would you like to do?`}
@@ -140,7 +140,7 @@ const ModSearch = ({
         closeCallback={() => setTryingToOpen(null)}
       />
       <div
-        className="relative m-2 backdrop:backdrop-blur-3xl"
+        className="relative m-2 ml-0 backdrop:backdrop-blur-3xl"
         onFocus={() => setIsOpen(true)}
         onKeyDown={(e) =>
           handleKeyPress({
@@ -152,7 +152,7 @@ const ModSearch = ({
       >
         <label
           htmlFor="mod-list-select"
-          className="absolute left-0 ml-1 mt-0.5 cursor-pointer"
+          className="absolute left-0 ml-0.5 mt-0.5 cursor-pointer"
         >
           <Search size="20" />
         </label>
@@ -198,7 +198,7 @@ const ModSearch = ({
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 };
 

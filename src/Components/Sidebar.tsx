@@ -1,7 +1,7 @@
 import { useState } from "react";
 import SidebarButton from "./SidebarButton";
 import { getFilteredMods } from "../Utils/FilterUtils";
-import { ArrowDown01, ArrowDownAZ, PanelLeftClose } from "lucide-react";
+import { ArrowDown01, ArrowDownAZ } from "lucide-react";
 import OptionPopup from "./OptionPopup";
 
 const localStorageFilterPrefenceRaw = localStorage.getItem(
@@ -27,7 +27,6 @@ const Sidebar = ({
   resetAllManuals: () => void;
 }) => {
   const [filter, setFilter] = useState<string>("");
-  const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
   const [closingAll, setClosingAll] = useState<boolean>(false);
   const [resetingAll, setResetingAll] = useState<boolean>(false);
   const [filterAlpha, setFilterAlpha] = useState<boolean>(
@@ -46,13 +45,8 @@ const Sidebar = ({
     ? getFilteredMods(openModList, filter)?.sort()
     : getFilteredMods(openModList, filter);
   return (
-    <div className="relative">
-      <PanelLeftClose
-        className={`absolute -right-7 hover:text-gray-400 cursor-pointer
-${sidebarOpen ? "" : "rotate-180"}`}
-        onClick={() => setSidebarOpen(!sidebarOpen)}
-      />
-      <div className={`h-full flex flex-col ${sidebarOpen ? "p-2" : "w-0"}`}>
+    <div className="relative h-full">
+      <div className={`h-full flex flex-col p-2`}>
         <ul className="overflow-auto no-scrollbar mt-2 mb-2">
           {manualList &&
             manualList.map((modName) => (
@@ -69,10 +63,7 @@ ${sidebarOpen ? "" : "rotate-180"}`}
           <input
             type="text"
             value={filter}
-            className={`bg-white rounded-md pl-1 border-2 w-full mb-2
-          ${sidebarOpen ? "" : "hidden"} ${
-              openModList.length === 0 ? "opacity-0" : ""
-            }`}
+            className={`bg-white rounded-md pl-1 border-2 w-full mb-2`}
             id="open-manual-filter"
             placeholder="Filter Open Manuals"
             onChange={(e) => setFilter(e.target.value)}
@@ -89,11 +80,7 @@ ${sidebarOpen ? "" : "rotate-180"}`}
             />
           )}
         </div>
-        <div
-          className={`flex justify-center border-t-2 p-2 gap-1 mb-2 ${
-            sidebarOpen ? "" : "hidden"
-          }`}
-        >
+        <div className={`flex justify-center border-t-2 p-2 gap-1 mb-2`}>
           {openModList.length > 0 && (
             <button className="heartbeat" onClick={() => setClosingAll(true)}>
               Close all

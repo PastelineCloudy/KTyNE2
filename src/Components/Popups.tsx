@@ -20,7 +20,7 @@ const Popups = ({
 
   return (
     <>
-      <div className="flex flex-wrap justify-around gap-2">
+      <div className="flex flex-wrap justify-around gap-1">
         <HeaderButton onClick={() => setEdgeworkModalIsOpen(true)}>
           Edgework
         </HeaderButton>
