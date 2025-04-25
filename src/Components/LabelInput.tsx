@@ -9,7 +9,6 @@ const LabelInput = ({
   placeholder,
   name,
   type = "text",
-  width = "w-full",
   labelClassName,
   inputClassName,
   inputOnClick,
@@ -32,7 +31,6 @@ const LabelInput = ({
   placeholder?: string;
   name?: string;
   type?: string;
-  width?: string;
   labelClassName?: string;
   inputClassName?: string;
   inputOnClick?: () => void;
@@ -48,23 +46,19 @@ const LabelInput = ({
   spellCheck?: boolean;
 }) => {
   if (!name) name = id;
-  const themeCss = darkMode ? `border-bg bg-bg` : `border-black`;
   return (
     <div className="flex flex-col items-center w-fit">
-      <label
-        htmlFor={id}
-        className={"text-xl mt-2 " + (labelClassName ? labelClassName : "")}
-      >
+      <label htmlFor={id} className={labelClassName + " text-xl mt-2"}>
         {labelText}
       </label>
       <input
         type={type}
         name={name}
         id={id}
-        className={`leading-8 border-2 pl-1 focus:border-blue-600 focus:ring-0 focus:outline-0 cancel-drag 
-          ${themeCss} ${width ? width : null} ${
-          inputClassName ? inputClassName : ""
-        } ${disabled ? "text-gray-400" : "text-jet hover:border-blue-600"}`}
+        className={`${inputClassName} 
+          ${darkMode ? `border-bg bg-bg` : `border-black`} 
+          ${disabled ? "text-gray-500" : "text-jet hover:border-blue-600"} 
+          w-full leading-8 border-2 pl-1 focus:border-blue-600 focus:ring-0 focus:outline-0 cancel-drag `}
         placeholder={placeholder}
         value={value || ""}
         checked={checked}

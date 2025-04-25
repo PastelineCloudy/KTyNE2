@@ -69,7 +69,7 @@ const EdgeworkModal = ({
             id="battery-input"
             placeholder="0"
             type="number"
-            width="w-32"
+            inputClassName="!w-32"
             min={0}
             max={10}
             value={batteries}
@@ -81,7 +81,7 @@ const EdgeworkModal = ({
             id="battery-holder-input"
             placeholder="0"
             type="number"
-            width="w-32"
+            inputClassName="!w-32"
             value={holders}
             min={0}
             max={10}
@@ -108,14 +108,14 @@ const EdgeworkModal = ({
           labelText="Ports"
           id="ports-input"
           placeholder="ex: (dvi ps2) (para serial) (empty)"
-          width="w-125"
+          inputClassName="!w-125"
           value={portPlates}
           setValue={(newVal) => setPortPlates(newVal)}
         />
         <LabelInput
           labelText="Serial Number"
           id="serial-input"
-          width="w-20"
+          inputClassName="!w-20"
           value={serial}
           setValue={(newVal) => setSerial(newVal)}
           minlength={6}

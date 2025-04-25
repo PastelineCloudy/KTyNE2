@@ -11,7 +11,7 @@ const BaseConverter = () => {
     <div className="p-2 gap-2 flex flex-wrap">
       <LabelInput
         labelText="Input"
-        width="w-30"
+        inputClassName="!w-30"
         id="from-input"
         darkMode
         value={input}
@@ -20,11 +20,10 @@ const BaseConverter = () => {
       <LabelInput
         labelText="Base"
         type="tel"
-        width="w-12"
         id="from-base-input"
         inputClassName={`${
           +fromBase < 2 || +fromBase > 32 ? "text-red-500" : ""
-        }`}
+        } !w-12`}
         darkMode
         value={fromBase}
         setValue={(newVal) => {
@@ -44,9 +43,10 @@ const BaseConverter = () => {
       <LabelInput
         labelText="Base"
         type="tel"
-        width="w-12"
         id="to-base-input"
-        inputClassName={`${+toBase < 2 || +toBase > 32 ? "text-red-500" : ""}`}
+        inputClassName={`${
+          +toBase < 2 || +toBase > 32 ? "text-red-500" : ""
+        } !w-12`}
         darkMode
         value={toBase}
         setValue={(newVal) => {
@@ -55,11 +55,10 @@ const BaseConverter = () => {
       />
       <LabelInput
         labelText="Output"
-        width="w-30"
         id="to-input"
         disabled
         darkMode
-        inputClassName="cursor-text"
+        inputClassName="!cursor-text !w-30"
         value={convertBase(input, fromBase, toBase)}
         setValue={() => {}}
       />

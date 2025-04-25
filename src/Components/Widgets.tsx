@@ -3,7 +3,7 @@ import { Ind } from "../Utils/EdgeworkUtils";
 
 export const SerialWidget = ({ sn: serial }: { sn: string }) => {
   return (
-    <Widget extraClassName="bg-[url(/images/SerialNumber.png)] w-[100px] text-[24px] font-bold pt-[18px] pl-[11px] font-[anonymouspro]">
+    <Widget className="!bg-[url(/images/SerialNumber.png)] !w-[100px] !text-[24px] !font-bold !pt-[18px] !pl-[11px] !font-[anonymouspro]">
       {serial.toUpperCase()}
     </Widget>
   );
@@ -12,9 +12,9 @@ export const SerialWidget = ({ sn: serial }: { sn: string }) => {
 export const IndWidget = ({ ind, lit }: { ind: Ind; lit: boolean }) => {
   return (
     <Widget
-      extraClassName={`${
+      className={`${
         bgImgMap[lit ? "lit" : "unlit"]
-      } w-[115px] text-[30px] pt-[2px] pl-[50px] text-white font-[anonymouspro]`}
+      } !w-[115px] !text-[30px] !pt-[2px] !pl-[50px] !text-white !font-[anonymouspro]`}
     >
       {ind.toUpperCase()}
     </Widget>
@@ -22,12 +22,12 @@ export const IndWidget = ({ ind, lit }: { ind: Ind; lit: boolean }) => {
 };
 
 export const BatteryWidget = ({ type }: { type: "aa" | "d" }) => {
-  return <Widget extraClassName={`${bgImgMap[type]} w-[90px]`} />;
+  return <Widget className={`${bgImgMap[type]} !w-[90px]`} />;
 };
 
 export const PortPlateWidget = ({ ports }: { ports: string[] }) => {
   return (
-    <Widget extraClassName="w-[112px] relative bg-[url(/images/PortPlate.png)]">
+    <Widget className="!w-[112px] !relative !bg-[url(/images/PortPlate.png)]">
       <>
         {ports.map((port: string) => {
           return (
@@ -45,16 +45,16 @@ export const PortPlateWidget = ({ ports }: { ports: string[] }) => {
 };
 
 const Widget = ({
-  extraClassName,
+  className,
   children,
 }: {
-  extraClassName: string;
+  className: string;
   children?: string | ReactNode;
 }) => {
   return (
     <div
-      className={`h-[50px] inline-block mt-[12px] mb-[8px] bg-cover bg-center bg-no-repeat relative
-  ${extraClassName} `}
+      className={`${className} h-[50px] inline-block mt-[12px] mb-[8px] bg-cover bg-center 
+      bg-no-repeat relative`}
     >
       {children}
     </div>
@@ -66,14 +66,14 @@ type BgImgMap = {
 };
 const bgImgMap: BgImgMap = {
   // Full strings for Tailwind to be able to parse the url
-  dvi: "bg-[url(/images/PortDVI.png)]",
-  parallel: "bg-[url(/images/PortParallel.png)]",
-  ps2: "bg-[url(/images/PortPS2.png)]",
-  rca: "bg-[url(/images/PortRCA.png)]",
-  rj: "bg-[url(/images/PortRJ.png)]",
-  serial: "bg-[url(/images/PortSerial.png)]",
-  aa: "bg-[url(/images/BatteryAA.png)]",
-  d: "bg-[url(/images/BatteryD.png)]",
-  lit: "bg-[url(/images/LitIndicator.png)]",
-  unlit: "bg-[url(/images/UnlitIndicator.png)]",
+  dvi: "!bg-[url(/images/PortDVI.png)]",
+  parallel: "!bg-[url(/images/PortParallel.png)]",
+  ps2: "!bg-[url(/images/PortPS2.png)]",
+  rca: "!bg-[url(/images/PortRCA.png)]",
+  rj: "!bg-[url(/images/PortRJ.png)]",
+  serial: "!bg-[url(/images/PortSerial.png)]",
+  aa: "!bg-[url(/images/BatteryAA.png)]",
+  d: "!bg-[url(/images/BatteryD.png)]",
+  lit: "!bg-[url(/images/LitIndicator.png)]",
+  unlit: "!bg-[url(/images/UnlitIndicator.png)]",
 };

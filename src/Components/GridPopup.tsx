@@ -198,10 +198,9 @@ const GridPopup = () => {
             type="checkbox"
             id="paint-input"
             labelText="Paint?"
-            width="12"
             checked={paintEnabled}
             inputOnClick={() => setPaintEnabled(!paintEnabled)}
-            inputClassName="h-6 w-6 cursor-pointer"
+            inputClassName="!h-6 !cursor-pointer"
           />
           <kbd className="mt-4">(alt+key)</kbd>
         </div>
@@ -272,8 +271,8 @@ const IndexCell = ({ index, size }: { index: string; size: number }) => {
         backgroundColor: "transparent",
       }}
       className={`grid place-items-center border-bg 
-        caret-transparent font-[NotoSansMono] select-none
-      overflow-hidden text-[1em] break-all outline-0`}
+        caret-transparent font-[NotoSansMono] select-none 
+        overflow-hidden text-[1em] break-all outline-0`}
     >
       {index}
     </div>
@@ -305,8 +304,8 @@ const Cell = ({
         backgroundColor: bgColor,
         color: getFontColor(bgColor),
       }}
-      className={`border-2 cancel-drag cursor-pointer
-      grid place-items-center border-bg caret-transparent font-[NotoSansMono] select-none
+      className={`border-2 cancel-drag cursor-pointer 
+      grid place-items-center border-bg caret-transparent font-[NotoSansMono] select-none 
       overflow-hidden text-[1em] break-all outline-0`}
       onMouseDown={() => {
         if (paintEnabled) {

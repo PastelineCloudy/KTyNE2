@@ -192,9 +192,9 @@ const ModSearch = ({
             </ul>
           </div>
         )}
-        {altManualSelection && (
+        {altManualSelection && altManualSelection != "" && (
           <OptionPopup
-            isOpen={true}
+            isOpen={altManualSelection != "" && altManualSelection != ""}
             popupMessage={`Alternate Manuals for ${altManualSelection}`}
             closeCallback={() => {
               setAltManualSelection(null);
@@ -218,7 +218,7 @@ const ModSearch = ({
                     }
                   },
                   className:
-                    altManual === currentDefault ? "text-green-500" : "",
+                    altManual === currentDefault ? "!text-green-500" : "",
                 };
               }
             )}
@@ -228,7 +228,7 @@ const ModSearch = ({
         )}
         {differentFromDefault && differentFromDefault.manualUrl && (
           <OptionPopup
-            isOpen={true}
+            isOpen={differentFromDefault != null}
             popupMessage={`This is different from your default manual. What would you like to do?`}
             closeCallback={() => {
               setDifferentFromDefault(null);
@@ -265,31 +265,33 @@ const ModSearch = ({
           />
         )}
       </div>
-      <OptionPopup
-        isOpen={tryingToOpen != null}
-        popupMessage={`"${tryingToOpen?.modName}" is already open. What would you like to do?`}
-        options={[
-          {
-            text: "Replace",
-            callback: () => {
-              if (tryingToOpen) openMod(tryingToOpen, true);
+      {tryingToOpen && (
+        <OptionPopup
+          isOpen={tryingToOpen != null}
+          popupMessage={`"${tryingToOpen?.modName}" is already open. What would you like to do?`}
+          options={[
+            {
+              text: "Replace",
+              callback: () => {
+                if (tryingToOpen) openMod(tryingToOpen, true);
+              },
             },
-          },
-          {
-            text: "Open Another",
-            callback: () => {
-              if (tryingToOpen)
-                openMod({
-                  ...tryingToOpen,
-                  modName: getFinalModName(tryingToOpen.modName, openManuals),
-                });
+            {
+              text: "Open Another",
+              callback: () => {
+                if (tryingToOpen)
+                  openMod({
+                    ...tryingToOpen,
+                    modName: getFinalModName(tryingToOpen.modName, openManuals),
+                  });
+              },
             },
-          },
-        ]}
-        closeCallback={() => {
-          setTryingToOpen(null);
-        }}
-      />
+          ]}
+          closeCallback={() => {
+            setTryingToOpen(null);
+          }}
+        />
+      )}
     </div>
   );
 };

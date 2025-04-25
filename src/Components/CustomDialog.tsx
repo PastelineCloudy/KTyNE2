@@ -5,13 +5,11 @@ const CustomDialog = ({
   onClose,
   children,
   closeOnEscape = true,
-  className,
 }: {
   open: boolean;
   onClose: () => void;
   children: ReactNode;
   closeOnEscape?: boolean;
-  className?: string;
 }) => {
   useEffect(() => {
     if (!closeOnEscape || !open) return;
@@ -33,7 +31,7 @@ const CustomDialog = ({
         onMouseDown={onClose}
       >
         <div
-          className={`m-auto bg-white p-8 border-2 rounded-2xl ${className}`}
+          className={`m-auto bg-white p-8 border-2 rounded-2xl`}
           onMouseDown={(e) => e.stopPropagation()}
         >
           {children}
@@ -58,7 +56,7 @@ export const CustomDialogButton = ({
     <button
       type={type}
       onClick={onClick}
-      className={`border-2 border-black w-full cursor-pointer p-1 rounded-md hover:bg-gray-200 ${className}`}
+      className={`${className} border-2 border-black w-full cursor-pointer p-1 rounded-md hover:bg-gray-200`}
     >
       {children}
     </button>
