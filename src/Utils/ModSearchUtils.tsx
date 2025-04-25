@@ -79,7 +79,11 @@ const getFilteredMods = (
     finalList = list.filter(
       (mod) =>
         mod.toLowerCase().includes(queryTerm.toLowerCase()) ||
-        mod.toLowerCase().replace("’", "'").includes(queryTerm.toLowerCase())
+        mod.toLowerCase().replace("’", "'").includes(queryTerm.toLowerCase()) ||
+        mod.replace("❖", "nonverbal simon").includes(queryTerm.toLowerCase()) ||
+        mod
+          .replace("ƎNA Cipher", "ena cipher")
+          .includes(queryTerm.toLowerCase())
     );
   return sorted ? finalList.sort() : finalList;
 };
