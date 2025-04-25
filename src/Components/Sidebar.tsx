@@ -38,9 +38,6 @@ const Sidebar = ({
   const [filterAlpha, setFilterAlpha] = useState<boolean>(
     localStorageFilterPrefence
   );
-  const [manualList, setManualList] = useState<string[]>(
-    getFilteredMods(openModList, filter, filterAlpha)
-  );
 
   const handleFilterChange = (newVal: boolean) => {
     localStorage.setItem(
@@ -48,8 +45,9 @@ const Sidebar = ({
       JSON.stringify(newVal)
     );
     setFilterAlpha(newVal);
-    setManualList(getFilteredMods(openModList, filter, newVal));
   };
+
+  const manualList = getFilteredMods(openModList, filter, filterAlpha);
 
   return (
     <div
