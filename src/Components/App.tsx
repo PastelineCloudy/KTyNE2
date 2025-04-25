@@ -91,6 +91,11 @@ function App() {
     [currentManual, openManuals]
   );
 
+  console.log(
+    "Array.from(openManuals.keys()): ",
+    Array.from(openManuals.keys())
+  );
+
   return (
     <div className="h-screen flex flex-col font-[special-elite] relative overflow-hidden no-scrollbar">
       <Header
@@ -111,6 +116,7 @@ function App() {
           <Panel
             defaultSize={55}
             className="border-l-2 border-r-2 border-black"
+            id="manual-window"
           >
             <Manuals
               currentManual={currentManual}
@@ -119,7 +125,7 @@ function App() {
             />
           </Panel>
           <PanelResizeHandle />
-          <Panel collapsible minSize={5} maxSize={95}>
+          <Panel collapsible minSize={5} maxSize={95} id="notepad-window">
             <Notepad />
           </Panel>
         </PanelGroup>

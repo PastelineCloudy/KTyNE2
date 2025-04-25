@@ -24,6 +24,9 @@ const CustomDialog = ({
     };
   }, [closeOnEscape, onClose, open]);
 
+  const element = document.querySelector("#manual-window");
+  const elementRect = element?.getBoundingClientRect();
+
   return (
     open && (
       <div
@@ -31,10 +34,20 @@ const CustomDialog = ({
         onMouseDown={onClose}
       >
         <div
-          className={`m-auto bg-white p-8 border-2 rounded-2xl`}
-          onMouseDown={(e) => e.stopPropagation()}
+          style={{
+            marginTop: elementRect?.top,
+            marginLeft: elementRect?.left,
+            width: elementRect?.width,
+            height: elementRect?.height,
+          }}
+          className="flex justify-center items-center"
         >
-          {children}
+          <div
+            className={` bg-white p-8 border-2 rounded-2xl`}
+            onMouseDown={(e) => e.stopPropagation()}
+          >
+            {children}
+          </div>
         </div>
       </div>
     )

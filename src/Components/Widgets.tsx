@@ -53,7 +53,7 @@ const Widget = ({
 }) => {
   return (
     <div
-      className={`${className} h-[50px] inline-block mt-[12px] mb-[8px] bg-cover bg-center 
+      className={`${className} h-[50px] inline-block bg-cover bg-center 
       bg-no-repeat relative`}
     >
       {children}

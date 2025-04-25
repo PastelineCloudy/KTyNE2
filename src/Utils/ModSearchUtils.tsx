@@ -68,13 +68,20 @@ const getFinalModName = (modName: string, openModList: string[]): string => {
   return `${modName} (${firstAvailableNumber})`;
 };
 
-const getFilteredMods = (list: string[], queryTerm: string) => {
-  if (queryTerm === "") return list;
-  return list.filter(
-    (mod) =>
-      mod.toLowerCase().includes(queryTerm.toLowerCase()) ||
-      mod.toLowerCase().replace("’", "'").includes(queryTerm.toLowerCase())
-  );
+const getFilteredMods = (
+  list: string[],
+  queryTerm: string,
+  sorted: boolean = false
+) => {
+  let finalList;
+  if (queryTerm === "") finalList = [...list];
+  else
+    finalList = list.filter(
+      (mod) =>
+        mod.toLowerCase().includes(queryTerm.toLowerCase()) ||
+        mod.toLowerCase().replace("’", "'").includes(queryTerm.toLowerCase())
+    );
+  return sorted ? finalList.sort() : finalList;
 };
 
 export {

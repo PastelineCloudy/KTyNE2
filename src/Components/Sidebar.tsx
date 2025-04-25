@@ -1,6 +1,11 @@
 import { useState } from "react";
 import SidebarButton from "./SidebarButton";
-import { ArrowDown01, ArrowDownAZ, PanelLeftClose } from "lucide-react";
+import {
+  ArrowDown01,
+  ArrowDownAZ,
+  ArrowUp,
+  PanelLeftClose,
+} from "lucide-react";
 import OptionPopup from "./OptionPopup";
 import { getFilteredMods } from "../Utils/ModSearchUtils";
 
@@ -33,6 +38,9 @@ const Sidebar = ({
   const [filterAlpha, setFilterAlpha] = useState<boolean>(
     localStorageFilterPrefence
   );
+  const [manualList, setManualList] = useState<string[]>(
+    getFilteredMods(openModList, filter, filterAlpha)
+  );
 
   const handleFilterChange = (newVal: boolean) => {
     localStorage.setItem(
@@ -40,13 +48,15 @@ const Sidebar = ({
       JSON.stringify(newVal)
     );
     setFilterAlpha(newVal);
+    setManualList(getFilteredMods(openModList, filter, newVal));
   };
 
-  const manualList = filterAlpha
-    ? getFilteredMods(openModList, filter)?.sort()
-    : getFilteredMods(openModList, filter);
   return (
-    <div className="flex-1 relative flex flex-col w-60">
+    <div
+      className={`flex-1 relative flex flex-col ${
+        sidebarOpen ? "min-w-52" : "w-0"
+      }`}
+    >
       <PanelLeftClose
         className={`${
           sidebarOpen ? "" : "rotate-180"
@@ -56,7 +66,7 @@ const Sidebar = ({
       {sidebarOpen && (
         <div className={`flex-1 p-2 flex flex-col gap-2 overflow-hidden`}>
           <ul className="flex-1 overflow-scroll no-scrollbar">
-            {manualList &&
+            {manualList && manualList.length > 0 ? (
               manualList.map((modName) => (
                 <SidebarButton
                   key={modName}
@@ -65,7 +75,13 @@ const Sidebar = ({
                   handleModChange={handleModChange}
                   handleModClose={handleModClose}
                 />
-              ))}
+              ))
+            ) : (
+              <div className="text-center">
+                <ArrowUp className="ml-auto mr-auto" />
+                <p>Open a manual to get started</p>
+              </div>
+            )}
           </ul>
           <div className="flex mt-auto">
             <input
