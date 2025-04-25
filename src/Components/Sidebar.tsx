@@ -46,7 +46,7 @@ const Sidebar = ({
     ? getFilteredMods(openModList, filter)?.sort()
     : getFilteredMods(openModList, filter);
   return (
-    <div className="flex-1 relative flex flex-col">
+    <div className="flex-1 relative flex flex-col w-60">
       <PanelLeftClose
         className={`${
           sidebarOpen ? "" : "rotate-180"
@@ -54,7 +54,7 @@ const Sidebar = ({
         onClick={() => setSidebarOpen(!sidebarOpen)}
       />
       {sidebarOpen && (
-        <div className={`flex-1 p-2 flex flex-col overflow-hidden`}>
+        <div className={`flex-1 p-2 flex flex-col gap-2 overflow-hidden`}>
           <ul className="flex-1 overflow-scroll no-scrollbar">
             {manualList &&
               manualList.map((modName) => (
@@ -71,7 +71,7 @@ const Sidebar = ({
             <input
               type="text"
               value={filter}
-              className={`bg-white rounded-md pl-1 border-2 w-full mb-2`}
+              className={`bg-white rounded-md pl-1 border-2 w-0 flex-1`}
               id="open-manual-filter"
               placeholder="Filter Open Manuals"
               onChange={(e) => setFilter(e.target.value)}
@@ -88,7 +88,7 @@ const Sidebar = ({
               />
             )}
           </div>
-          <div className={`flex justify-center gap-1`}>
+          <div className={`flex justify-between gap-1`}>
             {openModList.length > 0 && (
               <button className="heartbeat" onClick={() => setClosingAll(true)}>
                 Close all

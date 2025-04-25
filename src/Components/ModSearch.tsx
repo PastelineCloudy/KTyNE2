@@ -94,7 +94,6 @@ const ModSearch = ({
     (e: MouseEvent) => {
       if (!e || !e.target) return;
       const htmlTarget = e.target as HTMLElement;
-      console.log(htmlTarget.dataset);
       const modName = htmlTarget.dataset.modName;
       const manualUrl = htmlTarget.dataset.manualUrl;
       if (modName && manualUrl) openMod({ modName, manualUrl });

@@ -117,7 +117,6 @@ const getExpiryTimestamp = (timerInput: string, strikeCount: number): Date => {
   const groupingRegex =
     /(?:(?:(\d+)[h])?(?:(\d+)[m])(?:(\d+)[s]?)?|(?:(\d+)[:])(?:(\d+)[:])(\d+)|()(?:(\d+)[:]){1}(\d+))|(\d+)/;
   const rMatch = timerInput.match(groupingRegex) || [0, 0, 0];
-  console.log(rMatch.length);
   const [hours, minutes, seconds] = [
     rMatch[1] || rMatch[4] || rMatch[7],
     rMatch[2] || rMatch[5] || rMatch[8] || rMatch[10],
