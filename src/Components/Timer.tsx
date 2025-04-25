@@ -84,7 +84,7 @@ const TimerPopup = () => {
             type="text"
             name="timer-input"
             id="timer-input"
-            placeholder="5:00"
+            placeholder="5m30s"
             value={timerInput}
             onChange={(e) => setTimerInput(e.target.value)}
             className="border-bg bg-bg text-jet cancel-drag w-16 mb-2 pl-1"
@@ -114,16 +114,20 @@ const TimerPopup = () => {
 };
 
 const getExpiryTimestamp = (timerInput: string, strikeCount: number): Date => {
-  const splitInput = timerInput.split(":");
-  const [hours, minutes, seconds] =
-    splitInput.length === 3
-      ? splitInput.slice(-3)
-      : ["0", ...splitInput.slice(-2)];
+  const groupingRegex =
+    /(?:(?:(\d+)[h])?(?:(\d+)[m])(?:(\d+)[s]?)?|(?:(\d+)[:])(?:(\d+)[:])(\d+)|()(?:(\d+)[:]){1}(\d+))|(\d+)/;
+  const rMatch = timerInput.match(groupingRegex) || [0, 0, 0];
+  console.log(rMatch.length);
+  const [hours, minutes, seconds] = [
+    rMatch[1] || rMatch[4] || rMatch[7],
+    rMatch[2] || rMatch[5] || rMatch[8] || rMatch[10],
+    rMatch[3] || rMatch[6] || rMatch[9],
+  ];
   let timerLenInSec = 0;
   if (!hours && !minutes && !seconds) timerLenInSec = 300;
-  if (hours) timerLenInSec += parseInt(hours) * 60 * 60;
-  if (minutes) timerLenInSec += parseInt(minutes) * 60;
-  if (seconds) timerLenInSec += parseInt(seconds);
+  if (hours) timerLenInSec += parseInt(String(hours)) * 60 * 60;
+  if (minutes) timerLenInSec += parseInt(String(minutes)) * 60;
+  if (seconds) timerLenInSec += parseInt(String(seconds));
   const time = new Date();
   time.setSeconds(time.getSeconds() + timerLenInSec / (1 + strikeCount * 0.25));
   return time;
