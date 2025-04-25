@@ -46,15 +46,16 @@ const Sidebar = ({
     ? getFilteredMods(openModList, filter)?.sort()
     : getFilteredMods(openModList, filter);
   return (
-    <div className="relative h-full">
+    <div className="flex-1 relative flex flex-col">
       <PanelLeftClose
-        className={`absolute -right-7 hover:text-gray-400 cursor-pointer
-${sidebarOpen ? "" : "rotate-180"}`}
+        className={`${
+          sidebarOpen ? "" : "rotate-180"
+        } absolute -right-7 hover:text-gray-400 cursor-pointer`}
         onClick={() => setSidebarOpen(!sidebarOpen)}
       />
       {sidebarOpen && (
-        <div className={`h-full flex flex-col p-2`}>
-          <ul className="overflow-auto no-scrollbar mt-2 mb-2">
+        <div className={`flex-1 p-2 flex flex-col overflow-hidden`}>
+          <ul className="flex-1 overflow-scroll no-scrollbar">
             {manualList &&
               manualList.map((modName) => (
                 <SidebarButton
@@ -66,7 +67,7 @@ ${sidebarOpen ? "" : "rotate-180"}`}
                 />
               ))}
           </ul>
-          <div className="flex mt-auto ">
+          <div className="flex mt-auto">
             <input
               type="text"
               value={filter}
@@ -87,7 +88,7 @@ ${sidebarOpen ? "" : "rotate-180"}`}
               />
             )}
           </div>
-          <div className={`flex justify-center border-t-2 p-2 gap-1 mb-2`}>
+          <div className={`flex justify-center gap-1`}>
             {openModList.length > 0 && (
               <button className="heartbeat" onClick={() => setClosingAll(true)}>
                 Close all

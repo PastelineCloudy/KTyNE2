@@ -92,13 +92,13 @@ function App() {
   );
 
   return (
-    <div className="h-screen w-min-[400px] flex flex-col font-[special-elite] relative overflow-hidden no-scrollbar">
+    <div className="h-screen flex flex-col font-[special-elite] relative overflow-hidden no-scrollbar">
       <Header
         handleOpenMod={handleOpenMod}
         setIframeCovered={setIframeCovered}
         openManuals={Array.from(openManuals.keys())}
       />
-      <main className="flex h-full bg-(--color-bg)">
+      <main className="flex-1 flex bg-(--color-bg) overflow-hidden">
         <Sidebar
           openModList={Array.from(openManuals.keys())}
           currentManual={currentManual}

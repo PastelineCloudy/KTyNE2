@@ -29,7 +29,7 @@ const Header = ({
           windowSize[0] < 975
             ? "grow justify-around"
             : windowSize[0] < 1175
-            ? "flex-col"
+            ? "flex-col-reverse items-center"
             : ""
         }`}
       >
