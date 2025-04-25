@@ -89,7 +89,7 @@ const Sidebar = ({
               value={filter}
               className={`bg-white rounded-md pl-1 border-2 w-0 flex-1`}
               id="open-manual-filter"
-              placeholder="Filter Open Manuals"
+              placeholder="Filter Opened"
               onChange={(e) => setFilter(e.target.value)}
             />
             {filterAlpha ? (
