@@ -11,7 +11,7 @@ const Header = ({
   handleOpenMod: (
     modName: string,
     manualUrl: string,
-    changeCurrent?: boolean
+    preventChange?: boolean
   ) => void;
   setIframeCovered: (bool: boolean) => void;
   openManuals: string[];

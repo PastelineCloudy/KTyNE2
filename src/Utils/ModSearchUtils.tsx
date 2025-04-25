@@ -1,17 +1,9 @@
 import { getLocalStorageMap } from "./LocalStorageUtils";
 import fullModListRaw from "../fullList(Apr 24 2025).json";
 
-type ItemSelectEvent = {
-  key?: string;
-  target: EventTarget | Element | null;
-  ctrlKey: boolean;
-  preventDefault: () => void;
-};
-
 type ModInfo = {
   modName: string;
   manualUrl: string;
-  changeCurrent?: boolean;
 };
 
 const fullModList: Map<string, string[]> = new Map(
@@ -76,6 +68,15 @@ const getFinalModName = (modName: string, openModList: string[]): string => {
   return `${modName} (${firstAvailableNumber})`;
 };
 
+const getFilteredMods = (list: string[], queryTerm: string) => {
+  if (queryTerm === "") return list;
+  return list.filter(
+    (mod) =>
+      mod.toLowerCase().includes(queryTerm.toLowerCase()) ||
+      mod.toLowerCase().replace("’", "'").includes(queryTerm.toLowerCase())
+  );
+};
+
 export {
   setDefaultManualUrl,
   getDefaulManualUrl,
@@ -85,5 +86,6 @@ export {
   getFinalModName,
   getFullModListKeys,
   getAlternateManualList,
+  getFilteredMods,
 };
-export type { ItemSelectEvent, ModInfo };
+export type { ModInfo };

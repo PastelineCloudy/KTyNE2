@@ -47,16 +47,18 @@ export const CustomDialogButton = ({
   children,
   onClick,
   type = "button",
+  className,
 }: {
   children: string | ReactNode;
   onClick?: () => void;
   type?: "button" | "submit" | "reset" | undefined;
+  className?: string;
 }) => {
   return (
     <button
       type={type}
       onClick={onClick}
-      className="border-2 border-black w-fit cursor-pointer p-1 rounded-md hover:bg-gray-200"
+      className={`border-2 border-black w-full cursor-pointer p-1 rounded-md hover:bg-gray-200 ${className}`}
     >
       {children}
     </button>

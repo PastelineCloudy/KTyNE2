@@ -6,6 +6,7 @@ import Header from "./Header";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { getLocalStorageMap } from "../Utils/LocalStorageUtils";
 import { OpenManual } from "../Utils/Types";
+import { getManualUrl } from "../Utils/ModSearchUtils";
 
 function App() {
   const [currentManual, setCurrentManual] = useState<string | null>(null);
@@ -61,37 +62,37 @@ function App() {
     []
   );
 
-  const handleOpenMod = (
-    modName: string,
-    manualUrl: string,
-    changeCurrent: boolean = true
-  ) => {
-    const modLimit = 250;
-    const modsOpen = openManuals.size;
-    if (modsOpen >= modLimit) {
-      const lastVal = openManuals.keys().next().value;
-      let warnMessage = "Mod limit reached.";
+  const handleOpenMod = useCallback(
+    (modName: string, manualUrl: string, preventChange: boolean = false) => {
+      if (!manualUrl) manualUrl = getManualUrl(modName);
+      const modLimit = 250;
+      const modsOpen = openManuals.size;
+      if (modsOpen >= modLimit) {
+        const lastVal = openManuals.keys().next().value;
+        let warnMessage = "Mod limit reached.";
 
-      if (lastVal) {
-        if (currentManual === lastVal) setCurrentManual(null);
-        if (openManuals.delete(lastVal))
-          warnMessage += ` Closing oldest mod (${lastVal})`;
+        if (lastVal) {
+          if (currentManual === lastVal) setCurrentManual(null);
+          if (openManuals.delete(lastVal))
+            warnMessage += ` Closing oldest mod (${lastVal})`;
+        }
+        console.warn(warnMessage);
       }
-      console.warn(warnMessage);
-    }
-    const newOpenManuals = new Map<string, OpenManual>(openManuals).set(
-      modName,
-      {
-        id: String(crypto.randomUUID()),
-        manualUrl: manualUrl,
-      }
-    );
-    if (changeCurrent) setCurrentManual(modName);
-    setOpenManuals(newOpenManuals);
-  };
+      const newOpenManuals = new Map<string, OpenManual>(openManuals).set(
+        modName,
+        {
+          id: String(crypto.randomUUID()),
+          manualUrl: manualUrl,
+        }
+      );
+      if (!preventChange) setCurrentManual(modName);
+      setOpenManuals(newOpenManuals);
+    },
+    [currentManual, openManuals]
+  );
 
   return (
-    <div className="h-screen w-min-[400px] flex flex-col font-[special-elite] relative overflow-x-hidden no-scrollbar">
+    <div className="h-screen w-min-[400px] flex flex-col font-[special-elite] relative overflow-hidden no-scrollbar">
       <Header
         handleOpenMod={handleOpenMod}
         setIframeCovered={setIframeCovered}
