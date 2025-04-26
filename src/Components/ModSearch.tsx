@@ -110,11 +110,9 @@ const ModSearch = ({
         break;
       }
       case "Enter": {
-        const modName = filteredMods
-          ? filteredMods[bestMatchIndex]
-          : "New Repo Tab";
+        const modName = filteredMods[bestMatchIndex];
         const manualUrl = getManualUrl(modName);
-        openMod({ modName, manualUrl });
+        if (modName && manualUrl) openMod({ modName, manualUrl });
         break;
       }
       case "ArrowDown": {
@@ -133,7 +131,7 @@ const ModSearch = ({
   };
 
   return (
-    <div className="z-3">
+    <div>
       <div
         className="relative m-2 ml-0 backdrop:backdrop-blur-3xl"
         onKeyDown={handleKeyPress}

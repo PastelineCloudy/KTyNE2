@@ -27,23 +27,33 @@ const CustomDialog = ({
   const element = document.querySelector("#manual-window");
   const elementRect = element?.getBoundingClientRect();
 
+  const centerPopups = true; // TODO: Add off center option for popups (for powertools full screen)
+
   return (
     open && (
       <div
-        className="fixed left-0 top-0 z-2 w-full h-full flex place-self-center bg-black/50"
+        className="fixed left-0 top-0 z-1 w-full h-full flex bg-black/50"
         onMouseDown={onClose}
       >
         <div
-          style={{
-            marginTop: elementRect?.top,
-            marginLeft: elementRect?.left,
-            width: elementRect?.width,
-            height: elementRect?.height,
-          }}
-          className="flex justify-center items-center"
+          style={
+            centerPopups
+              ? {
+                  margin: "auto",
+                }
+              : {
+                  marginTop: elementRect?.top,
+                  marginLeft: elementRect?.left,
+                  width: elementRect?.width,
+                  height: elementRect?.height,
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }
+          }
         >
           <div
-            className={` bg-white p-8 border-2 rounded-2xl`}
+            className={`bg-white p-8 border-2 rounded-2xl`}
             onMouseDown={(e) => e.stopPropagation()}
           >
             {children}

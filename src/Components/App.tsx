@@ -91,11 +91,6 @@ function App() {
     [currentManual, openManuals]
   );
 
-  console.log(
-    "Array.from(openManuals.keys()): ",
-    Array.from(openManuals.keys())
-  );
-
   return (
     <div className="h-screen flex flex-col font-[special-elite] relative overflow-hidden no-scrollbar">
       <Header
