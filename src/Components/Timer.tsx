@@ -115,12 +115,12 @@ const TimerPopup = () => {
 
 const getExpiryTimestamp = (timerInput: string, strikeCount: number): Date => {
   const groupingRegex =
-    /(?:(?:(\d+)[h])?(?:(\d+)[m])(?:(\d+)[s]?)?|(?:(\d+)[:])(?:(\d+)[:])(\d+)|()(?:(\d+)[:]){1}(\d+))|(\d+)/;
+    /(?:(?:(\d+)[h])?(?:(\d+)[m])(?:(\d+)[s]?)?|(?:(\d+)[:])(?:(\d+)[:])(\d+)|()(?:(\d+)[:]){1}(\d+))|(\d+s)|(\d+)/;
   const rMatch = timerInput.match(groupingRegex) || [0, 0, 0];
   const [hours, minutes, seconds] = [
     rMatch[1] || rMatch[4] || rMatch[7],
-    rMatch[2] || rMatch[5] || rMatch[8] || rMatch[10],
-    rMatch[3] || rMatch[6] || rMatch[9],
+    rMatch[2] || rMatch[5] || rMatch[8] || rMatch[11],
+    rMatch[3] || rMatch[6] || rMatch[9] || rMatch[10],
   ];
   let timerLenInSec = 0;
   if (!hours && !minutes && !seconds) timerLenInSec = 300;
