@@ -1,6 +1,7 @@
-import { ReactNode, useCallback, useEffect, useState } from "react";
+import { ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import { HeaderButton } from "./Popups";
 import DraggableResizeable from "./DraggableResizeable";
+import useOutsideClickTracker from "../Hooks/useOutsideClickTracker";
 
 export const Menu = ({
   text,
@@ -10,8 +11,15 @@ export const Menu = ({
   children?: string | ReactNode;
 }) => {
   const [open, setOpen] = useState(false);
+
+  const menuRef = useRef<HTMLDivElement>(null);
+  useOutsideClickTracker(open, setOpen, menuRef);
   return (
-    <div className="flex flex-col z-1" onClick={() => setOpen(!open)}>
+    <div
+      className="flex flex-col z-1"
+      onClick={() => setOpen(!open)}
+      ref={menuRef}
+    >
       <HeaderButton>{text}</HeaderButton>
       <div className={`h-0 w-0 ${open ? "" : "overflow-hidden"}`}>
         <ul className="mt-1 bg-gray-200 rounded-md border-2 border-black flex flex-col w-max">

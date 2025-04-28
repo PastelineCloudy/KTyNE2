@@ -54,11 +54,11 @@ const ModSearch = ({
   const [differentFromDefault, setDifferentFromDefault] =
     useState<ModInfo | null>(null);
 
-  const modSearchComponentRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const filteredMods = getFilteredMods(modList, query);
 
+  const modSearchComponentRef = useRef<HTMLDivElement>(null);
   useOutsideClickTracker(isOpen, setIsOpen, modSearchComponentRef);
 
   const handleSearchInput = (newQuery: string) => {
