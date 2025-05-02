@@ -2,6 +2,8 @@ import { useState } from "react";
 import { ArrowRightLeft } from "lucide-react";
 import LabelInput from "./LabelInput";
 
+const MAX_BASE = 36;
+
 const BaseConverter = () => {
   const [input, setInput] = useState<string>("15");
   const [fromBase, setFromBase] = useState<number>(10);
@@ -22,7 +24,7 @@ const BaseConverter = () => {
         type="tel"
         id="from-base-input"
         inputClassName={`${
-          +fromBase < 2 || +fromBase > 32 ? "text-red-500" : ""
+          +fromBase < 2 || +fromBase > MAX_BASE ? "text-red-500" : ""
         } !w-12`}
         darkMode
         value={fromBase}
@@ -45,7 +47,7 @@ const BaseConverter = () => {
         type="tel"
         id="to-base-input"
         inputClassName={`${
-          +toBase < 2 || +toBase > 32 ? "text-red-500" : ""
+          +toBase < 2 || +toBase > MAX_BASE ? "text-red-500" : ""
         } !w-12`}
         darkMode
         value={toBase}
@@ -72,8 +74,8 @@ const convertBase = (
   toBase: number
 ): string => {
   try {
-    if (fromBase < 2 || fromBase > 32) return "???";
-    if (toBase < 2 || toBase > 32) return "???";
+    if (fromBase < 2 || fromBase > MAX_BASE) return "???";
+    if (toBase < 2 || toBase > MAX_BASE) return "???";
     return parseInt(input, fromBase).toString(toBase);
   } catch {
     return "???";
