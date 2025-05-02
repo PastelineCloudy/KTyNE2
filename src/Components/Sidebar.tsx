@@ -80,77 +80,81 @@ const Sidebar = ({
         setIframeCovered={setIframeCovered}
         openManuals={openManuals}
       />
-      {(sidebarOpen || sidebarTempOpen) && (
-        <div
-          className="hover:text-gray-400 cursor-pointer absolute top-2.5 right-2.5"
-          onClick={() => setSidebarOpen(!sidebarOpen)}
-        >
-          {sidebarOpen ? <Pin /> : <PinOff />}
-        </div>
-      )}
+      <div
+        className={`hover:text-gray-400 cursor-pointer absolute top-2.5 right-2.5
+          transition-all delay-100 ${
+            sidebarOpen || sidebarTempOpen ? "" : "opacity-0"
+          }`}
+        onClick={() => setSidebarOpen(!sidebarOpen)}
+      >
+        {sidebarOpen ? <Pin /> : <PinOff />}
+      </div>
 
-      {(sidebarOpen || sidebarTempOpen) && (
-        <div className="flex-1 m-2 mt-0 flex flex-col gap-2 overflow-hidden">
-          <ul className="flex-1 overflow-scroll no-scrollbar">
-            {manualList && manualList.length > 0 ? (
-              manualList.map((modName) => (
-                <SidebarButton
-                  key={modName}
-                  modName={modName}
-                  isCurrentManual={currentManual === modName}
-                  handleModChange={handleModChange}
-                  handleModClose={handleModClose}
-                />
-              ))
-            ) : (
-              <div className="text-center">
-                <ArrowUp className="ml-auto mr-auto" />
-                <p>Open a manual to get started</p>
-              </div>
-            )}
-          </ul>
-          <div className="flex mt-auto">
-            <input
-              type="text"
-              value={filter}
-              className={`bg-white rounded-md pl-1 border-2 w-0 flex-1`}
-              id="open-manual-filter"
-              placeholder="Filter Opened"
-              onChange={(e) => setFilter(e.target.value)}
+      <div
+        className={`flex-1 m-2 mt-0 flex flex-col gap-2 overflow-hidden 
+          transition-all delay-100 ${
+            sidebarOpen || sidebarTempOpen ? "" : "opacity-0"
+          }`}
+      >
+        <ul className="flex-1 overflow-scroll no-scrollbar">
+          {manualList && manualList.length > 0 ? (
+            manualList.map((modName) => (
+              <SidebarButton
+                key={modName}
+                modName={modName}
+                isCurrentManual={currentManual === modName}
+                handleModChange={handleModChange}
+                handleModClose={handleModClose}
+              />
+            ))
+          ) : (
+            <div className="text-center">
+              <ArrowUp className="ml-auto mr-auto" />
+              <p>Open a manual to get started</p>
+            </div>
+          )}
+        </ul>
+        <div className="flex mt-auto">
+          <input
+            type="text"
+            value={filter}
+            className={`bg-white rounded-md pl-1 border-2 w-0 flex-1`}
+            id="open-manual-filter"
+            placeholder="Filter Opened"
+            onChange={(e) => setFilter(e.target.value)}
+          />
+          {filterAlpha ? (
+            <ArrowDownAZ
+              className="cursor-pointer hover:text-gray-500"
+              onClick={() => handleFilterChange(false)}
             />
-            {filterAlpha ? (
-              <ArrowDownAZ
-                className="cursor-pointer hover:text-gray-500"
-                onClick={() => handleFilterChange(false)}
-              />
-            ) : (
-              <ArrowDown01
-                className="cursor-pointer hover:text-gray-500"
-                onClick={() => handleFilterChange(true)}
-              />
-            )}
-          </div>
-          <div className={`flex justify-between`}>
-            {openManuals.length > 0 && (
-              <button
-                className="heartbeat whitespace-nowrap"
-                onClick={() => setClosingAll(true)}
-              >
-                Close all
-              </button>
-            )}
-
-            {openManuals.length > 0 && (
-              <button
-                className="heartbeat whitespace-nowrap"
-                onClick={() => setResetingAll(true)}
-              >
-                Reset all
-              </button>
-            )}
-          </div>
+          ) : (
+            <ArrowDown01
+              className="cursor-pointer hover:text-gray-500"
+              onClick={() => handleFilterChange(true)}
+            />
+          )}
         </div>
-      )}
+        <div className={`flex justify-between`}>
+          {openManuals.length > 0 && (
+            <button
+              className="heartbeat whitespace-nowrap"
+              onClick={() => setClosingAll(true)}
+            >
+              Close all
+            </button>
+          )}
+
+          {openManuals.length > 0 && (
+            <button
+              className="heartbeat whitespace-nowrap"
+              onClick={() => setResetingAll(true)}
+            >
+              Reset all
+            </button>
+          )}
+        </div>
+      </div>
       <>
         <OptionPopup
           isOpen={closingAll}
