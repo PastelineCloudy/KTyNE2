@@ -4,9 +4,9 @@ export const parsePorts = (portString: string): Port[][] => {
 
   const replacedInput = portString
     .toLowerCase()
-    .replace(/dvid|dvi-d/g, "dvi")
-    .replace(/parallel|para/g, "parallel")
-    .replace(/ps\/2/g, "ps2")
+    .replace(/dvid|dvi-d|dvi/g, "dvi")
+    .replace(/parallel|para|par/g, "parallel")
+    .replace(/ps\/2|ps2|ps/g, "ps2")
     .replace(/rj-45|rj45/g, "rj")
     .replace(/stereo-rca|stereo rca|stereo|ster/g, "rca")
     .replace(/all2|sp/g, "serial parallel")
