@@ -93,14 +93,12 @@ function App() {
 
   return (
     <div className="h-screen flex flex-col font-[special-elite] relative overflow-hidden no-scrollbar">
-      <Header
-        handleOpenMod={handleOpenMod}
-        setIframeCovered={setIframeCovered}
-        openManuals={Array.from(openManuals.keys())}
-      />
+      <Header setIframeCovered={setIframeCovered} />
       <main className="flex-1 flex bg-(--color-bg) overflow-hidden">
         <Sidebar
-          openModList={Array.from(openManuals.keys())}
+          handleOpenMod={handleOpenMod}
+          setIframeCovered={setIframeCovered}
+          openManuals={Array.from(openManuals.keys())}
           currentManual={currentManual}
           handleModChange={memoizedHandleModChange}
           handleModClose={memoizedHandleModClose}

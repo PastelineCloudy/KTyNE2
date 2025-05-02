@@ -138,7 +138,7 @@ const EdgeworkModal = ({
           <CustomDialogButton onClick={resetEdgework}>Reset</CustomDialogButton>
           <CustomDialogButton type="submit">Submit</CustomDialogButton>
         </div>
-        <div className="mt-2 p-4 pt-2 bg-jet w-115 h-40">
+        <div className="mt-2 p-4 pt-2 bg-jet w-115 min-h-40 max-h-80 overflow-auto overflow-x-hidden">
           {
             <Edgework
               batteries={batteries || 0}

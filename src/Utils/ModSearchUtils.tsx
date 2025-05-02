@@ -49,7 +49,9 @@ const parseAlternativeManualName = (text: string) => {
 };
 
 const getBestMatchIndex = (list: string[], queryTerm: string) => {
-  const lowerCaseList = list.map((item) => item.toLowerCase());
+  const lowerCaseList = list.map((item) =>
+    item.toLowerCase().replace("’", "'")
+  );
   const query = queryTerm.toLowerCase().trim();
 
   if (lowerCaseList.includes(query)) return lowerCaseList.indexOf(query);
@@ -74,6 +76,7 @@ const getFilteredMods = (
   sorted: boolean = false
 ) => {
   let finalList;
+  if (list.length < 2) return list;
   if (queryTerm === "") finalList = [...list];
   else
     finalList = list.filter(
@@ -81,6 +84,7 @@ const getFilteredMods = (
         mod.toLowerCase().includes(queryTerm.toLowerCase()) ||
         mod.toLowerCase().replace("’", "'").includes(queryTerm.toLowerCase()) ||
         mod.replace("❖", "nonverbal simon").includes(queryTerm.toLowerCase()) ||
+        mod.replace("×", "x").includes(queryTerm.toLowerCase()) ||
         mod
           .replace("ƎNA Cipher", "ena cipher")
           .includes(queryTerm.toLowerCase())

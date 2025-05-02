@@ -3,7 +3,9 @@ import {
   KeyboardEvent,
   memo,
   MouseEvent,
+  Ref,
   useCallback,
+  useEffect,
   useRef,
   useState,
 } from "react";
@@ -130,138 +132,143 @@ const ModSearch = ({
     }
   };
 
+  const bestMatchRef = useRef<HTMLLIElement>(null);
+  useEffect(() => {
+    bestMatchRef.current?.scrollIntoView({
+      block: "end", // Must be end to prevent screen scrolling
+    });
+  }, [bestMatchIndex]);
+
   return (
-    <div>
-      <div
-        className="relative m-2 ml-0 backdrop:backdrop-blur-3xl"
-        onKeyDown={handleKeyPress}
-        ref={modSearchComponentRef}
+    <div
+      className="relative flex flex-col shrink m-2 overflow-hidden"
+      onKeyDown={handleKeyPress}
+      ref={modSearchComponentRef}
+    >
+      <label
+        htmlFor="mod-list-select"
+        className="absolute left-0 ml-0.5 mt-1 cursor-pointer"
       >
-        <label
-          htmlFor="mod-list-select"
-          className="absolute left-0 ml-0.5 mt-0.5 cursor-pointer"
-        >
-          <Search size="20" />
-        </label>
-        <input
-          type="text"
-          name="mod-list-select"
-          id="mod-list-select"
-          className="bg-white pl-6 rounded-md w-48 pt-[0.2rem]"
-          value={query}
-          onChange={(e) => {
-            setIsOpen(true);
-            handleSearchInput(e.target.value);
-          }}
-          onClick={() => setIsOpen(true)}
-          placeholder="Open New Manual"
-          autoComplete="off"
-          ref={inputRef}
-        />
-        {isOpen && (
-          <div className="bg-gray-200 p-2 border-2 border-black absolute top-7 rounded-md z-1">
-            <ul className="overflow-auto no-scrollbar max-h-[80vh]">
-              {filteredMods && filteredMods.length > 0 ? (
-                filteredMods
-                  .slice(0, maxListSize)
-                  .map((modName, i) => (
-                    <SearchListItem
-                      key={modName}
-                      modName={modName}
-                      onClick={handleSearchListItemClick}
-                      isHighlighted={i === bestMatchIndex}
-                      setAltManualSelection={setAltManualSelection}
-                    />
-                  ))
-              ) : (
-                <SearchListItem
-                  key={0}
-                  modName={"New Repo Tab"}
-                  onClick={() =>
-                    openMod({
-                      modName: "New Repo Tab",
-                      manualUrl: "https://ktane.timwi.de/",
-                    })
-                  }
-                  isHighlighted={false}
-                />
-              )}
-            </ul>
-          </div>
-        )}
-        {altManualSelection && altManualSelection != "" && (
-          <OptionPopup
-            isOpen={altManualSelection != "" && altManualSelection != ""}
-            popupMessage={`Alternate Manuals for ${altManualSelection}`}
-            closeCallback={() => {
-              setAltManualSelection(null);
-            }}
-            options={getAlternateManualList(altManualSelection).map(
-              (altManual) => {
-                const currentDefault = getManualUrl(altManualSelection);
-                return {
-                  text: parseAlternativeManualName(altManual),
-                  callback: () => {
-                    if (altManual === currentDefault) {
-                      openMod({
-                        modName: altManualSelection,
-                        manualUrl: altManual,
-                      });
-                    } else {
-                      setDifferentFromDefault({
-                        modName: altManualSelection,
-                        manualUrl: altManual,
-                      });
-                    }
-                  },
-                  className:
-                    altManual === currentDefault ? "!text-green-500" : "",
-                };
-              }
+        <Search size="20" />
+      </label>
+      <input
+        type="text"
+        name="mod-list-select"
+        id="mod-list-select"
+        className="bg-white pl-5 border-2 border-black rounded-md max-w-[85%] pt-[0.2rem]"
+        value={query}
+        onChange={(e) => {
+          setIsOpen(true);
+          handleSearchInput(e.target.value);
+        }}
+        onClick={() => setIsOpen(true)}
+        placeholder="Open New Manual"
+        autoComplete="off"
+        ref={inputRef}
+      />
+      {isOpen && (
+        <div className="flex flex-col flex-1 bg-gray-200 mt-1 p-2 border-2 border-black rounded-md overflow-hidden">
+          <p className="text-gray-400 overflow-hidden">Select a Manual</p>
+          <ul className="flex-1 overflow-scroll no-scrollbar">
+            {filteredMods && filteredMods.length > 0 ? (
+              filteredMods
+                .slice(0, maxListSize)
+                .map((modName, i) => (
+                  <SearchListItem
+                    key={modName}
+                    modName={modName}
+                    onClick={handleSearchListItemClick}
+                    bestMatchRef={i === bestMatchIndex ? bestMatchRef : null}
+                    setAltManualSelection={setAltManualSelection}
+                  />
+                ))
+            ) : (
+              <SearchListItem
+                key={0}
+                modName={"New Repo Tab"}
+                onClick={() =>
+                  openMod({
+                    modName: "New Repo Tab",
+                    manualUrl: "https://ktane.timwi.de/",
+                  })
+                }
+              />
             )}
-            optionShortcuts={false}
-            listStyle
-          />
-        )}
-        {differentFromDefault && differentFromDefault.manualUrl && (
-          <OptionPopup
-            isOpen={differentFromDefault != null}
-            popupMessage={`This is different from your default manual. What would you like to do?`}
-            closeCallback={() => {
-              setDifferentFromDefault(null);
-            }}
-            options={[
-              {
-                text: "Open",
+          </ul>
+        </div>
+      )}
+      {altManualSelection && altManualSelection != "" && (
+        <OptionPopup
+          isOpen={altManualSelection != "" && altManualSelection != ""}
+          popupMessage={`Alternate Manuals for ${altManualSelection}`}
+          closeCallback={() => {
+            setAltManualSelection(null);
+          }}
+          options={getAlternateManualList(altManualSelection).map(
+            (altManual) => {
+              const currentDefault = getManualUrl(altManualSelection);
+              return {
+                text: parseAlternativeManualName(altManual),
                 callback: () => {
-                  openMod(differentFromDefault);
+                  if (altManual === currentDefault) {
+                    openMod({
+                      modName: altManualSelection,
+                      manualUrl: altManual,
+                    });
+                  } else {
+                    setDifferentFromDefault({
+                      modName: altManualSelection,
+                      manualUrl: altManual,
+                    });
+                  }
                 },
+                className:
+                  altManual === currentDefault ? "!text-green-500" : "",
+              };
+            }
+          )}
+          optionShortcuts={false}
+          listStyle
+        />
+      )}
+      {differentFromDefault && differentFromDefault.manualUrl && (
+        <OptionPopup
+          isOpen={differentFromDefault != null}
+          popupMessage={`This is different from your default manual. What would you like to do?`}
+          closeCallback={() => {
+            setDifferentFromDefault(null);
+          }}
+          options={[
+            {
+              text: "Open",
+              callback: () => {
+                openMod(differentFromDefault);
               },
-              {
-                text: "Set As Default",
-                callback: () => {
-                  if (differentFromDefault.manualUrl)
-                    setDefaultManualUrl(
-                      differentFromDefault.modName,
-                      differentFromDefault.manualUrl
-                    );
-                },
+            },
+            {
+              text: "Set As Default",
+              callback: () => {
+                if (differentFromDefault.manualUrl)
+                  setDefaultManualUrl(
+                    differentFromDefault.modName,
+                    differentFromDefault.manualUrl
+                  );
               },
-              {
-                text: "Both",
-                callback: () => {
-                  if (differentFromDefault.manualUrl)
-                    setDefaultManualUrl(
-                      differentFromDefault.modName,
-                      differentFromDefault.manualUrl
-                    );
-                  openMod(differentFromDefault);
-                },
+            },
+            {
+              text: "Both",
+              callback: () => {
+                if (differentFromDefault.manualUrl)
+                  setDefaultManualUrl(
+                    differentFromDefault.modName,
+                    differentFromDefault.manualUrl
+                  );
+                openMod(differentFromDefault);
               },
-            ]}
-          />
-        )}
-      </div>
+            },
+          ]}
+        />
+      )}
       {tryingToOpen && (
         <OptionPopup
           isOpen={tryingToOpen != null}
@@ -297,28 +304,31 @@ const SearchListItem = memo(
   ({
     modName,
     onClick,
-    isHighlighted = false,
     setAltManualSelection,
+    bestMatchRef,
   }: {
     modName: string;
     onClick: (e: MouseEvent) => void;
-    isHighlighted?: boolean;
     setAltManualSelection?: (val: string) => void;
+    bestMatchRef?: Ref<HTMLLIElement>;
   }) => {
     const manualList: string[] = getAlternateManualList(modName);
 
     return (
-      <li className="cursor-pointer">
+      <li
+        className="cursor-pointer border-b-1 border-gray-400"
+        ref={bestMatchRef ? bestMatchRef : null}
+      >
         <div
-          className={`flex justify-between  hover:bg-gray-400 ${
-            isHighlighted ? "bg-blue-300" : ""
+          className={`flex justify-between hover:bg-gray-400 ${
+            bestMatchRef ? "bg-blue-300" : ""
           }`}
         >
           <div
             onClick={onClick}
             data-mod-name={modName}
             data-manual-url={getManualUrl(modName)}
-            className={`flex justify-between grow whitespace-nowrap`}
+            className="grow"
           >
             {modName}
           </div>
@@ -327,7 +337,7 @@ const SearchListItem = memo(
               onClick={() => {
                 if (setAltManualSelection) setAltManualSelection(modName);
               }}
-              className="hover:text-white"
+              className="hover:text-white shrink-0"
             />
           )}
         </div>
