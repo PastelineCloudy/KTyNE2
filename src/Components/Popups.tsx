@@ -7,6 +7,8 @@ import BaseConverter from "./BaseConverter";
 import TimerPopup from "./Timer";
 import CaesarCipher from "./CaesarCipher";
 import GridPopup from "./GridPopup";
+import Faq from "./Faq";
+import CustomDialog, { CustomDialogButton } from "./CustomDialog";
 
 const Popups = ({
   setEdgework,
@@ -17,6 +19,7 @@ const Popups = ({
 }) => {
   const [edgeworkModalIsOpen, setEdgeworkModalIsOpen] =
     useState<boolean>(false);
+  const [faqModalIsOpen, setfaqModalIsOpen] = useState<boolean>(false);
 
   return (
     <>
@@ -75,11 +78,26 @@ const Popups = ({
             <TimerPopup />
           </MenuItem>
         </Menu>
+        <HeaderButton onClick={() => setfaqModalIsOpen(true)}>FAQ</HeaderButton>
         <EdgeworkModal
           edgeworkModalIsOpen={edgeworkModalIsOpen}
           setEdgeworkModalIsOpen={setEdgeworkModalIsOpen}
           setEdgework={setEdgework}
         />
+        <CustomDialog
+          open={faqModalIsOpen}
+          onClose={() => setfaqModalIsOpen(false)}
+        >
+          <Faq />
+          <div className="text-center">
+            <CustomDialogButton
+              onClick={() => setfaqModalIsOpen(false)}
+              className="max-w-fit"
+            >
+              Close
+            </CustomDialogButton>
+          </div>
+        </CustomDialog>
       </div>
     </>
   );
