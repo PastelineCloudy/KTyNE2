@@ -58,7 +58,11 @@ export const MenuItem = ({
 
   useEffect(() => {
     const handleShortcut = (event: KeyboardEvent) => {
-      if (event.altKey && event.key === shortCutKey) {
+      if (
+        event.altKey &&
+        shortCutKey &&
+        event.key.toLowerCase() === shortCutKey.toLowerCase()
+      ) {
         event.preventDefault();
         setItemIsOpen(!itemIsOpen);
       }

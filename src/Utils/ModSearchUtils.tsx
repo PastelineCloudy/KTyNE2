@@ -1,5 +1,5 @@
 import { getLocalStorageMap } from "./LocalStorageUtils";
-import fullModListRaw from "../fullList(May 15 2025).json";
+import fullModListRaw from "../fullList(May 17 2025).json";
 
 type ModInfo = {
   modName: string;
