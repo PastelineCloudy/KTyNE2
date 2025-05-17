@@ -43,7 +43,7 @@ const Faq = () => {
       <Answer>See Previous Question.</Answer>
       <Question>How do I use alternate manuals?</Question>
       <Answer>
-        What searching for a new manual to open click the arrow icon next to the
+        When searching for a new manual to open click the arrow icon next to the
         mod name.
       </Answer>
       <Question>How do I change the default manual?</Question>
