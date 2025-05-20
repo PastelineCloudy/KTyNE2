@@ -1,6 +1,9 @@
 import { ReactNode, SyntheticEvent, useRef, useState } from "react";
 import Edgework from "./Edgework";
-import CustomDialog, { CustomDialogButton } from "./CustomDialog";
+import CustomDialog, {
+  CustomDialogButton,
+  CustomDialogTitle,
+} from "./CustomDialog";
 import { parseInds, parsePorts } from "../Utils/EdgeworkUtils";
 import LabelInput from "./LabelInput";
 
@@ -61,8 +64,8 @@ const EdgeworkModal = ({
       closeOnEscape={false}
     >
       <form onSubmit={handleFormSubmit} className="flex flex-col items-center">
-        <h1 className="text-4xl text-center">Edgework</h1>
-        <div className="flex justify-center gap-2">
+        <CustomDialogTitle>Edgework</CustomDialogTitle>
+        <div className="flex justify-center gap-2 -mt-4">
           <LabelInput
             ref={firstInputRef}
             labelText="Batteries"

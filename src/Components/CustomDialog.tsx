@@ -86,4 +86,12 @@ export const CustomDialogButton = ({
   );
 };
 
+export const CustomDialogTitle = ({
+  children,
+}: {
+  children: string | ReactNode;
+}) => {
+  return <div className="text-3xl text-center mb-8">{children}</div>;
+};
+
 export default CustomDialog;

@@ -3,9 +3,6 @@ import { ReactNode } from "react";
 const Faq = () => {
   return (
     <div className="mb-8 max-w-200 max-h-[80vh] overflow-auto border-b-2 border-black ">
-      <div className="text-2xl text-center mb-8">
-        Frequently Asked Questions
-      </div>
       <Question>Is this site legal to use for challenge bombs?</Question>
       <Answer>
         <span>

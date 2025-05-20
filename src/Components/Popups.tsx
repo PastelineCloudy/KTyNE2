@@ -8,7 +8,10 @@ import TimerPopup from "./Timer";
 import CaesarCipher from "./CaesarCipher";
 import GridPopup from "./GridPopup";
 import Faq from "./Faq";
-import CustomDialog, { CustomDialogButton } from "./CustomDialog";
+import CustomDialog, {
+  CustomDialogButton,
+  CustomDialogTitle,
+} from "./CustomDialog";
 
 const Popups = ({
   setEdgework,
@@ -88,6 +91,7 @@ const Popups = ({
           open={faqModalIsOpen}
           onClose={() => setfaqModalIsOpen(false)}
         >
+          <CustomDialogTitle>Frequently Asked Questions</CustomDialogTitle>
           <Faq />
           <div className="text-center">
             <CustomDialogButton

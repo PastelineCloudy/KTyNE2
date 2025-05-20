@@ -7,6 +7,9 @@ import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { getLocalStorageMap } from "../Utils/LocalStorageUtils";
 import { OpenManual } from "../Utils/Types";
 import { getManualUrl } from "../Utils/ModSearchUtils";
+import { Settings } from "lucide-react";
+import CustomDialog, { CustomDialogTitle } from "./CustomDialog";
+import SettingsPopup from "./SettingsPopup";
 
 function App() {
   const [currentManual, setCurrentManual] = useState<string | null>(null);
@@ -22,12 +25,17 @@ function App() {
     );
   }, [openManuals]);
 
+  // Confirmation before page close
   useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-      event.preventDefault();
-      // Next 2 lines are for legacy methods (Better browser support)
-      event.returnValue = "";
-      return "";
+      if (
+        localStorage.getItem("KTyNE:setting-pageCloseConfirmation") === "true"
+      ) {
+        event.preventDefault();
+        // Next 2 lines are for legacy methods (Better browser support)
+        event.returnValue = "";
+        return "";
+      }
     };
 
     window.addEventListener("beforeunload", handleBeforeUnload);
@@ -106,9 +114,24 @@ function App() {
     [currentManual, openManuals]
   );
 
+  const [settingsDialog, setSettingsDialog] = useState(false);
+
   return (
     <div className="h-screen flex flex-col font-[special-elite] relative overflow-hidden no-scrollbar">
       <Header setIframeCovered={setIframeCovered} />
+      <Settings
+        className="absolute fill-white top-1 right-1 opacity-15 hover:opacity-100 hover:cursor-pointer"
+        onClick={() => setSettingsDialog(true)}
+      />
+      <CustomDialog
+        open={settingsDialog}
+        onClose={() => setSettingsDialog(false)}
+      >
+        <div>
+          <CustomDialogTitle>Settings</CustomDialogTitle>
+          <SettingsPopup />
+        </div>
+      </CustomDialog>
       <main className="flex-1 flex bg-(--color-bg) overflow-hidden">
         <Sidebar
           handleOpenMod={handleOpenMod}

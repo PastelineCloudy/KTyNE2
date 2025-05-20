@@ -1,5 +1,8 @@
 import { useEffect } from "react";
-import CustomDialog, { CustomDialogButton } from "./CustomDialog";
+import CustomDialog, {
+  CustomDialogButton,
+  CustomDialogTitle,
+} from "./CustomDialog";
 
 type Option = {
   text: string;
@@ -41,7 +44,7 @@ const OptionPopup = ({
   return (
     <CustomDialog open={isOpen} onClose={closeCallback}>
       <div className="text-center max-h-[80vh] overflow-scroll no-scrollbar">
-        <p className="mb-8 text-xl">{popupMessage}</p>
+        <CustomDialogTitle>{popupMessage}</CustomDialogTitle>
         <ul
           className={`flex justify-center gap-2 ${
             listStyle && "flex-col items-center"
