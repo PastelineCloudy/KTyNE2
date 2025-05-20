@@ -22,6 +22,21 @@ function App() {
     );
   }, [openManuals]);
 
+  useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+      // Next 2 lines are for legacy methods (Better browser support)
+      event.returnValue = "";
+      return "";
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
   const memoizedHandleModClose = useCallback(
     (modToClose: string, isCurrent: boolean) => {
       if (isCurrent) {
