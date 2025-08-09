@@ -53,9 +53,7 @@ const Faq = () => {
         Something isn't working correctly! How can I let you know it needs
         fixed?
       </Question>
-      <Answer>
-        Send me an email (typiesco@gmail.com) or discord message (Maloviz).
-      </Answer>
+      <Answer>You can send me an email: typiesco@gmail.com</Answer>
     </div>
   );
 };
