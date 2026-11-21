@@ -43,6 +43,31 @@ const Sidebar = ({
   const [filterAlpha, setFilterAlpha] = useState<boolean>(
     localStorageFilterPrefence
   );
+  const [customNames, setCustomNames] = useState<Record<string, string>>(() => {
+    try {
+      const raw = localStorage.getItem("KTyNE:customManualNames");
+      return raw ? JSON.parse(raw) : {};
+    } catch {
+      return {};
+    }
+  });
+
+  const handleRenameMod = (modName: string, newName: string) => {
+    setCustomNames((prev) => {
+      const next = { ...prev };
+      if (newName) {
+        next[modName] = newName;
+      } else {
+        delete next[modName];
+      }
+      try {
+        localStorage.setItem("KTyNE:customManualNames", JSON.stringify(next));
+      } catch {
+        // ignore storage errors
+      }
+      return next;
+    });
+  };
 
   const handleFilterChange = (newVal: boolean) => {
     localStorage.setItem(
@@ -102,9 +127,11 @@ const Sidebar = ({
               <SidebarButton
                 key={modName}
                 modName={modName}
+                customName={customNames[modName]}
                 isCurrentManual={currentManual === modName}
                 handleModChange={handleModChange}
                 handleModClose={handleModClose}
+                onRename={handleRenameMod}
               />
             ))
           ) : (
